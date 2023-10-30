@@ -6,17 +6,6 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Dashboard</Text>
-
-      <Link href="/workout" asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.text}>Begin Workout</Text>
-        </Pressable>
-      </Link>
-      <Link href="/workoutplan" asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.text}>View Workout Plan</Text>
-        </Pressable>
-      </Link>
     </View>
   );
 }

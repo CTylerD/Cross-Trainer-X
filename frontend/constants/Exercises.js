@@ -1,6 +1,6 @@
 export const exercises = [
                            {
-                             "id": 1,
+                             "_id": 1,
                              "name": "Bench Press",
                              "type": "Strength Training",
                              "description": "A reclined barbell exercise",
@@ -9,7 +9,7 @@ export const exercises = [
                              "user": "auth0|6486842ce70d24cefd414c3b",
                            },
                            {
-                            "id" : 2,
+                            "e_id" : 2,
                              "name": "Push Up",
                              "type": "Strength Training",
                              "description": "A bodyweight exercise performed on the floor",
@@ -18,7 +18,7 @@ export const exercises = [
                              "user": "auth0|6486842ce70d24cefd414c3b",
                            },
                            {
-                             "id": 3,
+                             "e_id": 3,
                              "name": "Triceps Pushdown",
                              "type": "Strength Training",
                              "description": "A standing cable exercise",
@@ -27,7 +27,7 @@ export const exercises = [
                              "user": "",
                            },
                            {
-                              "id": 4,
+                              "e_id": 4,
                               "name": "Lateral Raises",
                               "type": "Strength Training",
                               "description": "A standing dumbbell exercise",
@@ -36,7 +36,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 5,
+                              "e_id": 5,
                               "name": "Barbell Row",
                               "type": "Strength Training",
                               "description": "A bent over barbell exercise",
@@ -45,7 +45,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 6,
+                              "e_id": 6,
                               "name": "Dumbbell Curls",
                               "type": "Strength Training",
                               "description": "A standing dumbbell exercise",
@@ -54,7 +54,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 7,
+                              "e_id": 7,
                               "name": "Lat Pulldown",
                               "type": "Strength Training",
                               "description": "A seated cable exercise",
@@ -63,7 +63,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 8,
+                              "e_id": 8,
                               "name": "Preacher Curls",
                               "type": "Strength Training",
                               "description": "A seated or standing barbell or dumbbell exercise",
@@ -72,7 +72,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 9,
+                              "e_id": 9,
                               "name": "Barbell Squat",
                               "type": "Strength Training",
                               "description": "A standing/squatting barbell exercise",
@@ -81,7 +81,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 10,
+                              "e_id": 10,
                               "name": "Walking Lunges",
                               "type": "Strength Training",
                               "description": "A walking lunge dumbbell exercise",
@@ -90,7 +90,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 11,
+                              "e_id": 11,
                               "name": "Romanian Deadlifts",
                               "type": "Strength Training",
                               "description": "A standing to bent over barbell or dumbbell exercise",
@@ -99,7 +99,7 @@ export const exercises = [
                               "user": "",
                            },
                            {
-                              "id": 12,
+                              "e_id": 12,
                               "name": "Leg Extensions",
                               "type": "Strength Training",
                               "description": "A seated machine exercise",

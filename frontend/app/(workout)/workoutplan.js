@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, Pressable, useWindowDimensions, Dimensions, ScrollView } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { Link } from 'expo-router';
 import { workouts } from '../../constants/Workouts';
@@ -40,6 +40,7 @@ const SecondRoute = () => (
   </View>
 );
 const ThirdRoute = () => (
+
   <View style={[styles.container]} >
     <View style={styles.card_template}>
       <Text style={[styles.title]} >{exercises[8].name}</Text>
@@ -54,6 +55,7 @@ const ThirdRoute = () => (
       <Text style={[styles.title]} >{exercises[11].name}</Text>
     </View>
   </View>
+
 );
 
 const renderScene = SceneMap({
@@ -81,15 +83,18 @@ export default function TabViewExample() {
   ]);
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-    />
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={renderTabBar}
+      />
+
   );
 }
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -133,5 +138,4 @@ const styles = StyleSheet.create({
   tab_bar:{
     backgroundColor: 'black'
   }
-  
 });
