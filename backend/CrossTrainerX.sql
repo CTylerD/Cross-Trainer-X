@@ -2,9 +2,16 @@ SET
     FOREIGN_KEY_CHECKS = 0;
 
 
+    -- Create the State table if it doesn't exist, or replace an existing table with the same name
+CREATE OR REPLACE TABLE State (
+    state_id VARCHAR(255) NOT NULL PRIMARY KEY,       --"sub" from id token
+    user_data JSON NOT NULL
+);
+
+
 -- Create the Users table if it doesn't exist, or replace an existing table with the same name
 CREATE OR REPLACE TABLE Users (
-    user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL PRIMARY KEY,       --"sub" from id token
     user_data JSON NOT NULL -- user’s profile data
 );
 
