@@ -45,7 +45,7 @@ export default function NavScreen() {
 
       <Link href="/workout" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Workout Plan</Text>
+          <Text style={styles.text}>Workout</Text>
         </Pressable>
       </Link>
     </View>
