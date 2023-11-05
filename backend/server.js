@@ -1,11 +1,11 @@
-const Auth = require("./auth/auth");
-const User = require("./auth/user");
-const Auth0 = require("./auth/auth0_constants");
+const Auth = require("src/auth/auth");
+const User = require("src/auth/user");
+const Auth0 = require("src/auth/auth0_constants");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
-const db = require("./database/db-connector");
+const db = require("src/database/db-connector");
 
 const app = express();
 app.use(express.json());
