@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, ScrollView, Dimensions} from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { exercises } from '../../constants/Exercises';
-import DeleteModal from '../../components/DelteModal';
+import DeleteModal from '../../components/DeleteModal';
 
 export default function EditPlanScreen() {
   return (
