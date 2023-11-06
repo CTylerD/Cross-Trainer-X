@@ -1,12 +1,59 @@
-import { StyleSheet, Pressable} from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { StyleSheet, Pressable, Text} from 'react-native';
+import { View } from '../../components/Themed';
 import { Link } from 'expo-router';
+import { Card, ListItem, Button, Icon } from 'react-native-elements';
 
 export default function DashboardScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
+
+  <View style={styles.container}>
+    <Text style={styles.title}>Dashboard</Text>
+
+    <View style={styles.rowContainer}>
+        <Card>
+        <Card.Title>Workout Title Card</Card.Title>
+        <Card.Divider/>
+          <Text style={styles.text}>Text</Text>
+        </Card>
+
+        <Card>
+        <Card.Title>Day in the week card</Card.Title>
+        <Card.Divider/>
+          <Text style={styles.text}>Text</Text>
+        </Card>
     </View>
+    
+    <View style={styles.rowContainer}>
+        <Card>
+        <Card.Title>Statistics Info Card</Card.Title>
+        <Card.Divider/>
+          <Text style={styles.text}>Text</Text>
+        </Card>
+
+        <Card>
+        <Card.Title>Additional Info Card</Card.Title>
+        <Card.Divider/>
+          <Text style={styles.text}>Text</Text>
+        </Card>
+    </View>
+
+  <Card>
+  <Card.Title>Maybe card gets a title here</Card.Title>
+  <Card.Divider/>
+  <Text style={{marginBottom: 10,}}>
+    Click this blue button!
+  </Text>
+
+  <Button
+   // icon={<Icon name='code' color='#ffffff' />}
+    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+    title='START WORKOUT' />
+  </Card>
+  
+  </View>
+
+
+
   );
 }
 
@@ -16,9 +63,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  rowContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  card: {
+    
   },
   text: {
     fontSize: 16,

@@ -59,6 +59,11 @@ export default function NavScreen() {
         <Pressable style={styles.button}>
           <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Workout</Text>
         </Pressable>
+        </Link>
+      <Link href="/tabs" asChild>
+      <Pressable style={styles.button}>
+        <Text style={styles.text}>Bottom Tabs</Text>
+      </Pressable>
       </Link>
 
     </View>

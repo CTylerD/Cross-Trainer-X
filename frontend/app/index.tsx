@@ -21,6 +21,7 @@ export default function WelcomeScreen() {
       <Link href="/nav">
         <Text>Nav Links For Dev</Text>
       </Link>
+
     </View>
   );
 }
