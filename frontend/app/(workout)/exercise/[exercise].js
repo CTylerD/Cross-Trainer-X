@@ -2,16 +2,15 @@ import { useLocalSearchParams } from 'expo-router';
 import { Text, View } from '../../../components/Themed';
 import { exercises } from '../../../constants/Exercises';
 import { StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Page() {
   const { exercise } = useLocalSearchParams();
-
   const currExercise = exercises[exercise];
 
-  const toggleTask = id => {
-    dispatch({ type: 'TOGGLE_TASK', payload: id });
-  };
-
+  const [data, setData] = useState('')
 
   return (
     <View style={styles.container}>

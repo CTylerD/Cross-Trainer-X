@@ -3,6 +3,7 @@ import { Text, View } from '../components/Themed'
 import React, {useState} from 'react';
 import { exercises } from '../constants/Exercises';
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
