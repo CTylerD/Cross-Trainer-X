@@ -1,53 +1,71 @@
-import { StyleSheet, Pressable} from 'react-native';
+import { StyleSheet, Pressable, Text, View, TouchableOpacity} from 'react-native';
 import { Link } from 'expo-router';
-import { Text, View } from '../components/Themed';
+// import { Text, View } from '../components/Themed';
+import Theme from '../components/Themes';
+import { useContext } from 'react';
+import ThemeContext from '../contexts/ThemeContext';
+import ThemeSwitcher from '../components/ThemeSwitcher';
+
+
 
 export default function NavScreen() {
+
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Nav Links for Dev{'\n'}</Text>
+    <View style={[{backgroundColor:themed.color},styles.container]}>
+      
+      <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.title]}>Nav Links for Dev{'\n'}</Text>
+      <ThemeSwitcher/>
 
       <Link href="/" asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.text}>Welcome Screen</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.button}>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Welcome Screen</Text>
+        </TouchableOpacity>
       </Link>
 
       <Link href="/login" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Login</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Login</Text>
         </Pressable>
       </Link>
 
       <Link href="/create" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Create Account</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Create Account</Text>
         </Pressable>
       </Link>
 
       <Link href="/dashboard" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Dashboard</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Dashboard</Text>
         </Pressable>
       </Link>
 
       <Link href="/editplan" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Edit Fitness Plan</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Edit Fitness Plan</Text>
         </Pressable>
       </Link>
 
       <Link href="/workoutplan" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Workout Plan</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Workout Plan</Text>
         </Pressable>
       </Link>
 
       <Link href="/workout" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.text}>Workout Plan</Text>
+          <Text style={[{fontFamily:themed.font.fontFamily, color:themed.font.color},styles.text]}>Workout</Text>
         </Pressable>
+        </Link>
+      <Link href="/tabs" asChild>
+      <Pressable style={styles.button}>
+        <Text style={styles.text}>Bottom Tabs</Text>
+      </Pressable>
       </Link>
+
     </View>
   );
 }
@@ -83,6 +101,6 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: 'black',
+    color: 'black'
   }
 });
