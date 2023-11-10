@@ -1,4 +1,4 @@
-const Auth0 = require("./auth0_constants");
+const Auth0 = require("./auth0Constants");
 const jwtParser = require("jsonwebtoken");
 const axios = require("axios");
 
@@ -56,10 +56,12 @@ async function retrieveJwt(code) {
 }
 
 // extract the sub value from the JWT for use as user IDs
-function extractSubFromJwt(token) {
+function extractSubFromJwt(auth_header) {
   try {
-    const decoded_token = jwtParser.decode(token);
-    return decoded_token.sub;
+    const token = auth_header.includes("Bearer") ? auth_header.slice(7) : auth_header;
+    const decodedToken = jwtParser.decode(token);
+    const subValue = decodedToken.sub.slice(6);
+    return subValue;
   } catch (e) {
     throw e;
   }
@@ -68,59 +70,10 @@ function extractSubFromJwt(token) {
 // check whether or not a state entity exists in the database
 async function stateExists(givenState) {
   try {
-    // retrieve all states to validate the current state
     return true;
   } catch (e) {
     throw e;
   }
-}
-
-function requestMIMEInvalid(contentTypeVal) {
-  return (
-    contentTypeVal &&
-    contentTypeVal != "*/*" &&
-    !contentTypeVal.includes("application/json") &&
-    !contentTypeVal.includes("text/html")
-  );
-}
-
-function responseMIMEInvalid(acceptVal) {
-  return (
-    acceptVal &&
-    acceptVal != "*/*" &&
-    !acceptVal.includes("application/json") &&
-    !acceptVal.includes("text/html")
-  );
-}
-
-// determine whether or not the Content Type and Accept headers are valid
-function headerValidation(acceptVal, contentTypeVal) {
-  let output = {
-    acceptValid: true,
-    contentTypeValid: true,
-    status_code: null,
-    error_msg: null,
-  };
-
-  if (!acceptVal && !contentTypeVal) {
-    return output;
-  }
-
-  if (requestMIMEInvalid(contentTypeVal)) {
-    output.contentTypeValid = false;
-    output.error_msg = {
-      Error: "The request MIME type is not supported by this endpoint",
-    };
-    output.status_code = 415;
-  } else if (responseMIMEInvalid(acceptVal)) {
-    output.acceptValid = false;
-    output.error_msg = {
-      Error:
-        "The requested response MIME type is not supported by this endpoint",
-    };
-    output.status_code = 406;
-  }
-  return output;
 }
 
 module.exports = {
@@ -129,6 +82,5 @@ module.exports = {
   storeUser,
   extractSubFromJwt,
   stateExists,
-  headerValidation,
   retrieveJwt,
 };

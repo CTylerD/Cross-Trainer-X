@@ -1,7 +1,8 @@
 class Workout {
-  constructor(id, exercises) {
+  constructor(id, exercises, date_completed) {
     this.id = id;
     this.exercises = exercises;
+    this.date_completed = date_completed;
   }
 
   // Method to convert the workout object to JSON
@@ -9,6 +10,7 @@ class Workout {
     return {
       id: this.id,
       exercises: this.exercises,
+      date_completed: this.date_completed
     };
   }
 }
