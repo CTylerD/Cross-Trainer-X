@@ -1,17 +1,23 @@
-import { StyleSheet, SafeAreaView, ScrollView, Dimensions} from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { StyleSheet, SafeAreaView, ScrollView, Dimensions, Text, View} from 'react-native';
 import { exercises } from '../../constants/Exercises';
 import DeleteModal from '../../components/DeleteModal';
+import {useContext} from 'react';
+import Theme from '../../components/Themes';
+import ThemeContext from '../../contexts/ThemeContext';
 
 export default function EditPlanScreen() {
+
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Edit Fitness Plan</Text>
-      <ScrollView style={styles.scrollView}>
+    <SafeAreaView style={[styles.container, themed.container]}>
+      <Text style={[styles.largetext, themed.text]}>Edit Fitness Plan</Text>
+      <ScrollView style={[themed.container, styles.scrollView]}>
       {Object.values(exercises).map((exercise) => {
         return (
           <View style={styles.card_template} key={exercise.e_id}>
-            <Text style={{flex:4}}>{exercise.name}{`\n`}{exercise.description}</Text>
+            <Text style={[{flex:4}, themed.text]}>{exercise.name}{`\n`}{exercise.description}</Text>
             <DeleteModal style={{flex:1}} exercise={exercise.name}/>
           </View>
         )
@@ -30,18 +36,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scrollView: {
-    backgroundColor: 'white',
     marginHorizontal: 0,
     width: screenWidth
-
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
   },
   largetext: {
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 30,
   },
   card_template:{
     width: '100&',

@@ -1,11 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import React, {useState} from "react";
 import ThemeContext from '../contexts/ThemeContext';
+import ExerciseContext from '../contexts/ExerciseContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,14 +47,19 @@ export default function RootLayout() {
 
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
 
   const [theme, setTheme] = useState("default");
   const value = { theme, setTheme };
+  const [workout, setWorkout] = useState({intro:true});
+  const value1 = { workout, setWorkout };
 
   return (
+    
     <ThemeContext.Provider value={value}>
-      <Stack />
+      <ExerciseContext.Provider value={value1}>
+        <Stack screenOptions={{
+                headerShown: true}}/>
+      </ExerciseContext.Provider>
     </ThemeContext.Provider>
   );
 }
