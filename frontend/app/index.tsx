@@ -1,6 +1,5 @@
-import { StyleSheet, Pressable} from 'react-native';
+import { StyleSheet, Pressable, Text, View} from 'react-native';
 import { Link } from 'expo-router';
-import { Text, View } from '../components/Themed';
 
 export default function WelcomeScreen() {
   return (
@@ -8,12 +7,12 @@ export default function WelcomeScreen() {
       <Text style={styles.title}>Welcome to CrossTrainerX!{'\n'}</Text>
 
       <Link href="/login" asChild>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} accessibilityRole="button">
           <Text style={styles.text}>Login</Text>
         </Pressable>
       </Link>
       <Link href="/create" asChild>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} accessibilityRole="button">
           <Text style={styles.text}>Create Account</Text>
         </Pressable>
       </Link>

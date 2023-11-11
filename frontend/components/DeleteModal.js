@@ -1,8 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import Theme from './Themes';
+import ThemeContext from '../contexts/ThemeContext';
 
 export default function DeleteModal({exercise}){
+
   const [modalVisible, setModalVisible] = useState(false);
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -15,23 +21,26 @@ export default function DeleteModal({exercise}){
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Delete {exercise} from Fitness Plan?</Text>
+            <Text style={[styles.modalText, themed.text, {color:'black'}]}>Delete {exercise} from Fitness Plan?</Text>
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
             <Pressable
+              accessibilityRole="button"
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Confirm</Text>
+              <Text style={[styles.textStyle, themed.text]}>Confirm</Text>
             </Pressable>
             <Pressable
+              accessibilityRole="button"
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
+              <Text style={[styles.textStyle, themed.text]}>Cancel</Text>
             </Pressable>
             </View>
           </View>
         </View>
       </Modal>
       <Pressable
+        accessibilityRole="button"
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
         <Text style={styles.textStyle}>⌫</Text>
@@ -75,7 +84,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   modalText: {

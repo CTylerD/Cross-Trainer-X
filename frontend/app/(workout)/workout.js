@@ -1,50 +1,51 @@
-import { StyleSheet} from 'react-native';
-import { Text, View } from '../../components/Themed';
-import React, {useState} from 'react';
-import Animated, { FadeIn, FadeOut } from    'react-native-reanimated';
+import { StyleSheet, Dimensions, Text, View} from 'react-native';
+import Animated, { FadeIn } from    'react-native-reanimated';
 import Exercises from '../../components/Exercise';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useState, useContext} from 'react';
+import Theme from '../../components/Themes';
+import ThemeContext from '../../contexts/ThemeContext';
+import ExerciseContext from '../../contexts/ExerciseContext';
+import { exercises } from '../../constants/Exercises';
 
 
 export default function WorkoutScreen() {
-  const [intro, setIntro] = useState(true);
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
+  const {workout, setWorkout} = useContext(ExerciseContext);
 
-  setTimeout(()=>{setIntro(false)}, 3000)
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('exerciseList');
-      if (jsonValue != null){JSON.parse(jsonValue);}
-      else{
-        value = {'0': false, '1': false, '2': false, '3': false};
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem('exerciseList', jsonValue);}
-    } catch (e) {
-      console.log(e)
+  if (workout.intro){
+    var newWorkout = workout;
+    for(const exercise in exercises){
+      newWorkout[exercise] = false;
     }
-  };
+    setWorkout(newWorkout);
+    console.log("workout created");
+    setTimeout(()=>{setWorkout({...workout, intro: false})}, 3000);
+  }
 
-  getData();
-
+  console.log("workout page");
 
   return (
     <View style={styles.container}>
-    {intro ?  (<Animated.View style={styles.container} entering={FadeIn.duration(1000)}>
-                <Text style={styles.title}>Let's Workout</Text>
+    {workout.intro ?  (<Animated.View style={[styles.container, themed.container]} entering={FadeIn.duration(1000)}>
+                <Text style={[styles.title, themed.text]}>Let's Workout {workout.intro}</Text>
               </Animated.View>) :
-              (<Exercises/>)}
+              (<Exercises exercises={exercises}/>)}
     </View>
   );
 }
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: screenWidth,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
   },
 });

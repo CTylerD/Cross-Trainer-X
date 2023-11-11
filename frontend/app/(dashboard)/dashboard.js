@@ -1,5 +1,4 @@
-import { StyleSheet, Pressable, Text} from 'react-native';
-import { View } from '../../components/Themed';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
 

@@ -1,7 +1,6 @@
-import { StyleSheet, Pressable, TextInput} from 'react-native';
+import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
 import React from 'react';
 import { Link } from 'expo-router';
-import { Text, View } from '../components/Themed';
 
 export default function LoginScreen() {
   const [username, onChangeUsername] = React.useState('');

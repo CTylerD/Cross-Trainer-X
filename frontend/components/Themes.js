@@ -1,8 +1,10 @@
 export default function Theme(theme){
     if(theme == 'default'){
         return ({
-            color:'black',
-            font:{
+            container:{
+                backgroundColor:'black'
+            },
+            text:{
                 fontFamily:'SpaceMono',
                 color:'white'
                 },
@@ -13,8 +15,10 @@ export default function Theme(theme){
     }
     else if(theme == 'pink'){
         return({
-            color: 'hotpink',
-            font:{
+            container:{
+                backgroundColor: 'hotpink'
+            },
+            text:{
             fontFamily:'BebasNeue',
             color:'black'
             },
@@ -25,8 +29,10 @@ export default function Theme(theme){
     }
     else if(theme == 'green'){
         return({
-            color: 'lightgreen',
-            font:{
+            container:{
+                backgroundColor: 'lightgreen'
+            },
+            text:{
             fontFamily:'ShadowsIL',
             color:'darkgreen'
             },
