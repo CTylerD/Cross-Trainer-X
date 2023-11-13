@@ -14,11 +14,69 @@ export default function EditPlanScreen() {
     <SafeAreaView style={[styles.container, themed.container]}>
       <Text style={[styles.largetext, themed.text]}>Edit Fitness Plan</Text>
       <ScrollView style={[themed.container, styles.scrollView]}>
+      <Text style={[styles.title, themed.text, styles.container]}>Chest, Triceps, and Shoulders</Text>
       {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Push')
         return (
           <View style={styles.card_template} key={exercise.e_id}>
-            <Text style={[{flex:4}, themed.text]}>{exercise.name}{`\n`}{exercise.description}</Text>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
             <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
+          </View>
+        )
+      })}
+      <Text style={[styles.title, themed.text, styles.container]}>Back and Biceps</Text>
+      {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Pull')
+        return (
+          <View style={styles.card_template} key={exercise.e_id}>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
+            <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
+          </View>
+        )
+      })}
+      <Text style={[styles.title, themed.text, styles.container]}>Legs</Text>
+      {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Legs')
+        return (
+          <View style={styles.card_template} key={exercise.e_id}>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
+            <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
+          </View>
+        )
+      })}
+      <Text style={[styles.title, themed.text, styles.container]}>Yoga</Text>
+      {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Yoga')
+        return (
+          <View style={styles.card_template} key={exercise.e_id}>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
+            <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
+          </View>
+        )
+      })}
+      <Text style={[styles.title, themed.text, styles.container]}>Cardio</Text>
+      {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Cardio')
+        return (
+          <View style={styles.card_template} key={exercise.e_id}>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
+            <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
+          </View>
+        )
+      })}
+      <Text style={[styles.title, themed.text, styles.container]}>Stretch</Text>
+      {Object.values(exercises).map((exercise) => {
+        if(exercise.type == 'Stretch')
+        return (
+          <View style={styles.card_template} key={exercise.e_id}>
+            <Text style={[themed.text, {flex:4, color:'black'}]}>    {exercise.name}{'\n'}</Text>
+            <DeleteModal style={{flex:1}} exercise={exercise.name}/>
+            
           </View>
         )
       })}

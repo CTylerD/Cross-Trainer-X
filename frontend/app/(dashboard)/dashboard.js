@@ -1,24 +1,29 @@
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { useContext } from 'react';
+import Theme from '../../components/Themes';
+import ThemeContext from '../../contexts/ThemeContext';
 
 export default function DashboardScreen() {
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
   return (
 
-  <View style={styles.container}>
-    <Text style={styles.title}>Dashboard</Text>
+  <View style={[styles.container, themed.container]}>
+    <Text style={[styles.title, themed.text]}>Dashboard</Text>
 
     <View style={styles.rowContainer}>
         <Card>
         <Card.Title>Workout Title Card</Card.Title>
         <Card.Divider/>
-          <Text style={styles.text}>Text</Text>
+          <Text style={[styles.text, themed.text]}>Text</Text>
         </Card>
 
         <Card>
         <Card.Title>Day in the week card</Card.Title>
         <Card.Divider/>
-          <Text style={styles.text}>Text</Text>
+          <Text style={[styles.text, themed.text]}>Text</Text>
         </Card>
     </View>
     
@@ -26,20 +31,20 @@ export default function DashboardScreen() {
         <Card>
         <Card.Title>Statistics Info Card</Card.Title>
         <Card.Divider/>
-          <Text style={styles.text}>Text</Text>
+          <Text style={[styles.text, themed.text]}>Text</Text>
         </Card>
 
         <Card>
         <Card.Title>Additional Info Card</Card.Title>
         <Card.Divider/>
-          <Text style={styles.text}>Text</Text>
+          <Text style={[styles.text, themed.text]}>Text</Text>
         </Card>
     </View>
 
   <Card>
   <Card.Title>Maybe card gets a title here</Card.Title>
   <Card.Divider/>
-  <Text style={{marginBottom: 10,}}>
+  <Text style={[{marginBottom: 10,}, [styles.text, themed.text]]}>
     Click this blue button!
   </Text>
 
@@ -70,7 +75,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
   },
   card: {
     
@@ -78,7 +82,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'black',
   },

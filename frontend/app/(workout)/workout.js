@@ -1,8 +1,7 @@
 import { StyleSheet, Dimensions, Text, View} from 'react-native';
 import Animated, { FadeIn } from    'react-native-reanimated';
 import Exercises from '../../components/Exercise';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useState, useContext} from 'react';
+import {useContext} from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
 import ExerciseContext from '../../contexts/ExerciseContext';
