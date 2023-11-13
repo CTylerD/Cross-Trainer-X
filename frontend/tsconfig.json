@@ -8,5 +8,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/_layout.js", "app/welcomescreen.js"  ]
+, "app/_layout.js", "app/welcomescreen.js", "app/(forms)/welcomesurvey.js"  ]
 }

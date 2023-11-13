@@ -1,12 +1,27 @@
 import { StyleSheet, Pressable, Text, View} from 'react-native';
 import { Link } from 'expo-router';
-import BottomTabs from './(navigation)/tabs'
 
-export default function Index() {
+export default function WelcomeScreen() {
   return (
-    <BottomTabs>
-        
-    </BottomTabs>
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome to CrossTrainerX!{'\n'}</Text>
+
+      <Link href="/login" asChild>
+        <Pressable style={styles.button} accessibilityRole="button">
+          <Text style={styles.text}>Login</Text>
+        </Pressable>
+      </Link>
+      <Link href="/create" asChild>
+        <Pressable style={styles.button} accessibilityRole="button">
+          <Text style={styles.text}>Create Account</Text>
+        </Pressable>
+      </Link>
+
+      <Link href="/nav" asChild>
+        <Text>Nav Links For Dev</Text>
+      </Link>
+      
+    </View>
   );
 }
 
