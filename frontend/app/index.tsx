@@ -17,10 +17,10 @@ export default function WelcomeScreen() {
         </Pressable>
       </Link>
 
-      <Link href="/nav">
+      <Link href="/nav" asChild>
         <Text>Nav Links For Dev</Text>
       </Link>
-
+      
     </View>
   );
 }

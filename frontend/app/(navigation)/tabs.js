@@ -2,21 +2,16 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 const Tab = createMaterialBottomTabNavigator();
 
-import WelcomeScreen from '../index'
-import NavScreen from '../nav'
-import LoginScreen from '../login'
 import DashboardScreen from '../(dashboard)/dashboard'
+import EditPlanScreen from '../(workout)/editplan'
+import NavScreen from '../nav'
 
-
-
-export default function bottomTabs() {
+export default function Tabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={WelcomeScreen} />
-      <Tab.Screen name="Login" component={LoginScreen} />
-      <Tab.Screen name="Dev" component={NavScreen} />
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Dashboard" component={DashboardScreen}/>
+      <Tab.Screen name="Workouts" component={EditPlanScreen}/>
+      <Tab.Screen name="Dev" component={NavScreen}/>
     </Tab.Navigator>
   );
 }
-  
