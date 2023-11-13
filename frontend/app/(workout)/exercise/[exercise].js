@@ -6,6 +6,8 @@ import { Link } from 'expo-router';
 import Theme from '../../../components/Themes';
 import ThemeContext from '../../../contexts/ThemeContext';
 import ExerciseContext from '../../../contexts/ExerciseContext';
+import StrengthTimer from '../../../components/StrengthTimer';
+import FlexTimer from '../../../components/FlexTimer';
 
 
 export default function Page() {
@@ -17,11 +19,18 @@ export default function Page() {
 
   console.log(currExercise.name);
 
+
+
   return (
     <View style={[styles.container, themed.container]}>
       <View style={styles.card_template}>
         <Text style={[styles.title, themed.text]}>{currExercise.name}</Text>
         <Text style={[styles.text, themed.text]}>{'\n'}{currExercise.description}</Text>
+      </View>
+      <View>
+        {currExercise.category == 'Strength' ?
+          <StrengthTimer exercise={currExercise}/>:
+          <FlexTimer exercise={currExercise} />}
       </View>
       <View style={styles.card_template}>
       <Link href="/workout" asChild>
