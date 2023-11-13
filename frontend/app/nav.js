@@ -5,8 +5,6 @@ import { useContext } from 'react';
 import ThemeContext from '../contexts/ThemeContext';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 
-
-
 export default function NavScreen() {
 
   const {theme, setTheme} = useContext(ThemeContext);
@@ -53,11 +51,30 @@ export default function NavScreen() {
           <Text style={[themed.text,styles.text]}>Workout</Text>
         </Pressable>
         </Link>
+
       <Link href="/tabs" asChild>
       <Pressable style={styles.button}>
         <Text style={[themed.text,styles.text]}>Bottom Tabs</Text>
       </Pressable>
       </Link>
+
+      <Link href="/welcomesurvey" asChild>
+      <Pressable style={styles.button}>
+        <Text style={[themed.text,styles.text]}>Welcome Survey</Text>
+      </Pressable>
+      </Link>
+
+      <Link href="/postexercisesurvey" asChild>
+      <Pressable style={styles.button}>
+        <Text style={[themed.text,styles.text]}>Post Exercise Survey</Text>
+      </Pressable>
+      </Link>
+
+
+
+
+
+
 
     </View>
   );

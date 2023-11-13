@@ -55,9 +55,6 @@ export default function DashboardScreen() {
   </Card>
   
   </View>
-
-
-
   );
 }
 

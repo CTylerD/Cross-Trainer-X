@@ -22,7 +22,7 @@ export default function LoginScreen() {
         value={password}
         placeholder="Password"
       />
-      <Link href="/dashboard" asChild>
+      <Link href="/tabs" asChild>
         <Pressable style={styles.button}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
