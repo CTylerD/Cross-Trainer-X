@@ -4,28 +4,47 @@ const ExerciseModel = require("../models/exercise");
 
 async function createExercise(exercise, callback) {
   try {
-    const addExerciseQuery = `INSERT INTO Exercises (name, type, description, user_id, muscle_group, equipment, reps, sets, weight, rest, duration, distance, difficulty)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const addExerciseQuery = `INSERT INTO Exercises (name, type, secondary_type, description, user_id, muscle_group, equipment, weight_class)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
 
     db.pool.query(
-      addExerciseQuery,
-      [
+      addExerciseQuery, [
         exercise.name,
         exercise.type,
+        exercise.secondaryType,
         exercise.description,
         exercise.userId,
         exercise.muscleGroup,
         exercise.equipment,
-        exercise.reps,
-        exercise.sets,
-        exercise.weight,
-        exercise.rest,
-        exercise.duration,
-        exercise.distance,
-        exercise.difficulty,
+        exercise.weightClass
       ],
       (error, rows, fields) => {
-        callback(error, rows);
+        if (error) {
+          callback(error, rows)
+        };
+
+        const addUserExerciseQuery = `INSERT INTO UserExercises (exercise_id, user_id, reps, sets, weight, rest, duration, distance, difficulty)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+
+        if (exercise) {
+          db.pool.query(
+            addUserExerciseQuery,
+            [
+              rows.insertId,
+              exercise.userId,
+              exercise.reps,
+              exercise.sets,
+              exercise.weight,
+              exercise.rest,
+              exercise.duration,
+              exercise.distance,
+              exercise.difficulty,
+            ],
+            (error, rows, fields) => {
+              callback(error, rows);
+            }
+          );
+        }
       }
     );
   } catch (e) {
@@ -36,29 +55,31 @@ async function createExercise(exercise, callback) {
 
 async function getExercise(exerciseId, callback) {
   try {
-    const getExerciseQuery = `SELECT * FROM Exercises WHERE id = ?`;
+    const getExerciseQuery = `SELECT
+        ue.id AS id,
+        e.name,
+        e.type,
+        e.secondary_type AS secondaryType,
+        e.description,
+        ue.user_id AS userId,
+        e.muscle_group AS muscleGroup,
+        e.equipment,
+        ue.reps,
+        ue.sets,
+        ue.weight,
+        e.weight_class AS weightClass,
+        ue.rest,
+        ue.duration,
+        ue.distance,
+        ue.difficulty,
+        ue.times_completed
+      FROM
+          Exercises e
+      INNER JOIN UserExercises ue ON e.id = ue.exercise_id
+      WHERE
+          ue.id = ?;`;
     db.pool.query(getExerciseQuery, [exerciseId], (error, rows, fields) => {
-      const exercise = rows.length === 1 ? rows[0] : null
-
-      const responseExercise = exercise ? new ExerciseModel(
-        exercise.id,
-        exercise.name,
-        exercise.type,
-        exercise.description,
-        exercise.user_id,
-        exercise.muscle_group,
-        exercise.equipment,
-        exercise.reps,
-        exercise.sets,
-        exercise.weight,
-        exercise.rest,
-        exercise.duration,
-        exercise.distance,
-        exercise.difficulty,
-        exercise.times_completed
-      ) : null;
-
-      callback(error, responseExercise);
+      callback(error, rows[0]);
     });
   } catch (e) {
     console.error(e);
@@ -68,7 +89,29 @@ async function getExercise(exerciseId, callback) {
 
 async function getAllExercises(userId, callback) {
   try {
-    let queryExercises = "SELECT * FROM Exercises WHERE user_id = ?;";
+    let queryExercises = `SELECT
+        ue.id AS id,
+        e.name,
+        e.type,
+        e.secondary_type AS secondaryType,
+        e.description,
+        ue.user_id AS userId,
+        e.muscle_group AS muscleGroup,
+        e.equipment,
+        ue.reps,
+        ue.sets,
+        ue.weight,
+        e.weight_class AS weightClass,
+        ue.rest,
+        ue.duration,
+        ue.distance,
+        ue.difficulty,
+        ue.times_completed
+      FROM
+          Exercises e
+      INNER JOIN UserExercises ue ON e.id = ue.exercise_id
+      WHERE
+          ue.user_id = ?;`;
     db.pool.query(queryExercises, [userId], (error, rows, fields) => {      
       let responseExercises = [];
 
@@ -78,9 +121,11 @@ async function getAllExercises(userId, callback) {
             exercise.id,
             exercise.name,
             exercise.type,
+            exercise.secondaryType,
             exercise.description,
-            exercise.user_id,
-            exercise.muscle_group,
+            exercise.userId,
+            exercise.muscleGroup,
+            exercise.weightClass,
             exercise.equipment,
             exercise.reps,
             exercise.sets,
@@ -89,7 +134,7 @@ async function getAllExercises(userId, callback) {
             exercise.duration,
             exercise.distance,
             exercise.difficulty,
-            exercise.times_completed
+            exercise.timesCompleted
           )
         );
       })
@@ -106,21 +151,15 @@ function updateExercise(exercise, callback) {
   try {
     const updateExerciseQuery = `
       UPDATE Exercises 
-      SET name = ?, 
-          type = ?, 
-          description = ?, 
-          user_id = ?, 
-          muscle_group = ?, 
-          equipment = ?, 
-          reps = ?, 
-          sets = ?, 
-          weight = ?, 
-          rest = ?, 
-          duration = ?, 
-          distance = ?, 
-          difficulty = ?, 
-          times_completed = ?
-      WHERE id = ?;
+      SET name = ?,
+          type = ?,
+          secondary_type = ?,
+          description = ?,
+          user_id = ?,
+          muscle_group = ?,
+          equipment = ?,
+          weight_class = ?
+      WHERE id = (SELECT exercise_id FROM UserExercises WHERE id = ?);
     `;
 
     db.pool.query(
@@ -128,23 +167,52 @@ function updateExercise(exercise, callback) {
       [
         exercise.name,
         exercise.type,
+        exercise.secondaryType,
         exercise.description,
         exercise.userId,
         exercise.muscleGroup,
         exercise.equipment,
-        exercise.reps,
-        exercise.sets,
-        exercise.weight,
-        exercise.rest,
-        exercise.duration,
-        exercise.distance,
-        exercise.difficulty,
-        exercise.timesCompleted,
-        exercise.id, // Assuming you have an 'id' property in the exercise object
+        exercise.weightClass,
+        exercise.id,
       ],
-
       (error, rows, fields) => {
-        callback(error, rows);
+        if (error) {
+          callback(error, rows);
+        }
+
+      const updateUserExerciseQuery = `
+        UPDATE UserExercises
+        SET
+          reps = ?, 
+          sets = ?, 
+          weight = ?,
+          rest = ?, 
+          duration = ?, 
+          distance = ?, 
+          difficulty = ?, 
+          times_completed = ?
+        WHERE id = ?;
+      `;
+
+        if (exercise) {
+          db.pool.query(
+            updateUserExerciseQuery,
+            [
+              exercise.reps,
+              exercise.sets,
+              exercise.weight,
+              exercise.rest,
+              exercise.duration,
+              exercise.distance,
+              exercise.difficulty,
+              exercise.timesCompleted,
+              exercise.id,
+            ],
+            (error, rows, fields) => {
+              callback(error, rows);
+            }
+          );
+        }
       }
     );
   } catch (e) {
@@ -153,23 +221,50 @@ function updateExercise(exercise, callback) {
   }
 }
 
-
-function deleteExercise(exerciseId, callback) {
+function deleteExercise(userExerciseId, userId, callback) {
   try {
-    const deleteExerciseQuery = `
-      DELETE FROM Exercises
-      WHERE id = ?;
-    `;
+    const getExerciseId = `
+    SELECT exercise_id AS exerciseId FROM UserExercises WHERE id = ?`
+    db.pool.query(getExerciseId, [userExerciseId], (error, rows, fields) => {
+      if (error) {
+        callback(error, rows);
+      }
 
-    db.pool.query(deleteExerciseQuery, [exerciseId], (error, rows, fields) => {
-      callback(error, rows);
+      const exerciseId = rows[0].exerciseId;
+
+      const deleteUserExerciseQuery = `
+          DELETE FROM UserExercises
+          WHERE id = ?;
+        `;
+
+      db.pool.query(
+        deleteUserExerciseQuery,
+        [userExerciseId],
+        (error, rows, fields) => {
+          if (error) {
+            callback(error, rows);
+          }
+
+          const deleteExerciseQuery = `
+              DELETE FROM Exercises
+              WHERE id = ? AND user_id = ?;
+            `;
+
+          db.pool.query(
+            deleteExerciseQuery,
+            [exerciseId, userId],
+            (error, rows, fields) => {
+              callback(error, rows);
+            }
+          );
+        }
+      );
     });
   } catch (e) {
     console.error(e);
     return e;
   }
 }
-
 
 module.exports = {
   createExercise,

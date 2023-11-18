@@ -5,6 +5,7 @@ class Exercise {
     id = null,
     name,
     type,
+    secondaryType,
     description,
     userId,
     muscleGroup = null,
@@ -12,14 +13,17 @@ class Exercise {
     reps = null,
     sets = null,
     weight = null,
+    weightClass = null,
     rest = null,
     duration = null,
     distance = null,
-    difficulty = null
+    difficulty = null,
+    timesCompleted = 0
   ) {
     this.id = id !== undefined ? id : null;
     this.name = name;
     this.type = type;
+    this.secondaryType = secondaryType;
     this.description = description;
     this.userId = userId;
     this.muscleGroup = muscleGroup !== undefined ? muscleGroup : null;
@@ -27,12 +31,13 @@ class Exercise {
     this.reps = reps !== undefined ? reps : null;
     this.sets = sets !== undefined ? sets : null;
     this.weight = weight !== undefined ? weight : null;
+    this.weightClass = weightClass !== undefined ? weightClass : null;
     this.rest = rest !== undefined ? rest : null;
     this.duration = duration !== undefined ? duration : null;
     this.distance = distance !== undefined ? distance : null;
     this.difficulty =
       difficulty !== undefined ? difficulty : null;
-    this.timesCompleted = 0;
+    this.timesCompleted = timesCompleted;
   }
 
   //method to convert the Exercise object to a JSON
@@ -55,12 +60,14 @@ class Exercise {
       id: this.id,
       name: this.name,
       type: this.type,
+      secondaryType: this.secondaryType,
       description: this.description,
       userId: this.userId,
       muscleGroup: this.muscleGroup,
       equipment: this.equipment,
       reps: this.reps,
       sets: this.sets,
+      weightClass: this.weightClass,
       weight: this.weight,
       rest: this.rest,
       timesCompleted: this.timesCompleted,
@@ -74,6 +81,7 @@ class Exercise {
       id: this.id,
       name: this.name,
       type: this.type,
+      secondaryType: this.secondaryType,
       description: this.description,
       muscleGroup: this.muscleGroup,
       userId: this.userId,
@@ -90,6 +98,7 @@ class Exercise {
       id: this.id,
       name: this.name,
       type: this.type,
+      secondaryType: this.secondaryType,
       description: this.description,
       muscleGroup: this.muscleGroup,
       userId: this.userId,
