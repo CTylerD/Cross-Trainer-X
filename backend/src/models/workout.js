@@ -1,16 +1,24 @@
+const Auth0 = require("../auth/auth0Constants");
+
+
 class Workout {
-  constructor(id, exercises, date_completed) {
+  constructor(id, userId,exercises, dateCompleted) {
     this.id = id;
+    this.userId = userId;
     this.exercises = exercises;
-    this.date_completed = date_completed;
+    this.dateCompleted = dateCompleted;
   }
 
   // Method to convert the workout object to JSON
   toJSON() {
     return {
       id: this.id,
+      userId: this.userId,
       exercises: this.exercises,
-      date_completed: this.date_completed
+      dateCompleted: this.dateCompleted,
+      self: this.id == null ? null : `${Auth0.URL}/workouts/${this.id}`,
     };
   }
 }
+
+module.exports = Workout;

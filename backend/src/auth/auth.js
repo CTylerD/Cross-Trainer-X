@@ -1,6 +1,7 @@
 const Auth0 = require("./auth0Constants");
 const jwtParser = require("jsonwebtoken");
 const axios = require("axios");
+const db = require("../database/db-connector");
 
 const ALPHANUM =
   "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -15,10 +16,14 @@ function generateState(stateSize = 32, chars = ALPHANUM) {
 }
 
 // store a new state entity in the database
-async function storeState(state) {
+async function createState(callback) {
   try {
-    const newState = { state: state };
-    return state;
+    const state = generateState();
+    const addStateQuery = `INSERT INTO States (state) VALUES (?);`;
+    
+    db.pool.query(addStateQuery, [state], (error, rows, fields) => {
+      callback(error, state);
+    });
   } catch (e) {
     throw e;
   }
@@ -77,8 +82,7 @@ async function stateExists(givenState) {
 }
 
 module.exports = {
-  generateState,
-  storeState,
+  createState,
   storeUser,
   extractSubFromJwt,
   stateExists,
