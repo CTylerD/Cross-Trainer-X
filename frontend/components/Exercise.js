@@ -5,6 +5,7 @@ import {useState, useContext} from 'react';
 import ThemeContext from '../contexts/ThemeContext';
 import ExerciseContext from '../contexts/ExerciseContext';
 import Theme from '../components/Themes';
+import PostExerciseModal from './PostExerciseModal';
 
 
 export default function Exercises({exercises}) {
@@ -35,6 +36,7 @@ export default function Exercises({exercises}) {
         </Link>
       )
     })}
+    <PostExerciseModal/>
     </ScrollView>
   </SafeAreaView>
   );
@@ -58,5 +60,16 @@ const styles = StyleSheet.create({
   },
   largetext: {
     fontSize: 30,
-  }
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'white',
+    margin: 12,
+    borderWidth: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 32
+  },
 });

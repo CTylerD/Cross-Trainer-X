@@ -24,10 +24,10 @@ export default function StrengthTimer({exercise}){
 
     return(
         <View style={styles.card_template}>
-            <Text>Weight: {weight}</Text>
-            <Text>Sets Left: {set}</Text>
-            <Text>Reps Left: {reps}</Text>
-            <View >
+            <Text style={[themed.text, {color:'black'}]}>Weight: {weight}</Text>
+            <Text style={[themed.text, {color:'black'}]}>Sets Left: {set}</Text>
+            <Text style={[themed.text, {color:'black'}]}>Reps Left: {reps}</Text>
+            <View style={[styles.card_template, {borderWidth:0}]}>
             {rest ? <CountdownCircleTimer
                         isPlaying
                         duration={exercise.duration}
@@ -35,7 +35,10 @@ export default function StrengthTimer({exercise}){
                         colorsTime={[7, 5, 2, 0]}
                         onComplete={() => endRest()}
                     >
-                        {({ remainingTime }) => <Text>Rest For{'\n'}{remainingTime}</Text>}
+                        {({ remainingTime }) => <View style={{alignItems:'center'}}>
+                                                <Text style={[styles.text, themed.text, {color:'black'}]}>Rest</Text>
+                                                <Text style={[styles.text, themed.text, {color:'black'}]}>{remainingTime}</Text>
+                                                </View>}
                     </CountdownCircleTimer>:
                     <Pressable style={styles.button} onPressIn={() => beginRest()}>
                     <Text style={[themed.text, styles.text, {color:'black'}]}>Complete Set</Text>
