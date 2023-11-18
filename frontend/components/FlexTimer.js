@@ -28,7 +28,10 @@ export default function FlexTimer({exercise}){
                         colorsTime={[7, 5, 2, 0]}
                         onComplete={() => endHold()}
                     >
-                        {({ remainingTime }) => <Text>Hold For{'\n'}{remainingTime}</Text>}
+                        {({ remainingTime }) => <View style={{alignItems:'center'}}>
+                                                <Text style={[styles.text, themed.text, {color:'black'}]}>Hold</Text>
+                                                <Text style={[styles.text, themed.text, {color:'black'}]}>{remainingTime}</Text>
+                                                </View>}
                     </CountdownCircleTimer>:
                     <Pressable style={styles.button} onPressIn={() => beginHold()}>
                     <Text style={[themed.text, styles.text, {color:'black'}]}>Begin</Text>

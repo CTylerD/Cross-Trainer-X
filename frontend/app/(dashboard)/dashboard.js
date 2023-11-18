@@ -17,13 +17,13 @@ export default function DashboardScreen() {
         <Card>
         <Card.Title>Workout Title Card</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text]}>Text</Text>
+          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
         </Card>
 
         <Card>
         <Card.Title>Day in the week card</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text]}>Text</Text>
+          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
         </Card>
     </View>
     
@@ -31,20 +31,20 @@ export default function DashboardScreen() {
         <Card>
         <Card.Title>Statistics Info Card</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text]}>Text</Text>
+          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
         </Card>
 
         <Card>
         <Card.Title>Additional Info Card</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text]}>Text</Text>
+          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
         </Card>
     </View>
 
   <Card>
   <Card.Title>Maybe card gets a title here</Card.Title>
   <Card.Divider/>
-  <Text style={[{marginBottom: 10,}, [styles.text, themed.text]]}>
+  <Text style={[{marginBottom: 10,}, [styles.text, themed.text, {color:'black'}]]}>
     Click this blue button!
   </Text>
 

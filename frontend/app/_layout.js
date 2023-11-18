@@ -6,7 +6,6 @@ import { useColorScheme } from 'react-native';
 import React, {useState} from "react";
 import ThemeContext from '../contexts/ThemeContext';
 import ExerciseContext from '../contexts/ExerciseContext';
-import Tabs from './(navigation)/tabs'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,7 +58,9 @@ function RootLayoutNav() {
     <ThemeContext.Provider value={value}>
       <ExerciseContext.Provider value={value1}>
         <Stack screenOptions={{
-                headerShown: true}}>
+                headerShown: true,
+                headerTitle: "",
+                headerTransparent: true}}>
                 </Stack>
       </ExerciseContext.Provider>
     </ThemeContext.Provider>

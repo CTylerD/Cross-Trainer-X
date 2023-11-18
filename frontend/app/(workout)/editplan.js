@@ -4,6 +4,7 @@ import DeleteModal from '../../components/DeleteModal';
 import {useContext} from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
+import AddModal from '../../components/AddModal';
 
 export default function EditPlanScreen() {
 
@@ -14,6 +15,7 @@ export default function EditPlanScreen() {
     <SafeAreaView style={[styles.container, themed.container]}>
       <Text style={[styles.largetext, themed.text]}>Edit Fitness Plan</Text>
       <ScrollView style={[themed.container, styles.scrollView]}>
+      <AddModal/>
       <Text style={[styles.title, themed.text, styles.container]}>Chest, Triceps, and Shoulders</Text>
       {Object.values(exercises).map((exercise) => {
         if(exercise.type == 'Push')
