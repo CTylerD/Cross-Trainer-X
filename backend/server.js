@@ -11,12 +11,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
+const cors = require('cors')
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(bodyParser.json());
+
 
 // JWT checker for ensuring authorization on all endpoints
 const checkJwt = jwt({
