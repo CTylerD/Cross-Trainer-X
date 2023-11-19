@@ -175,7 +175,7 @@ function surveyInvalid(survey) {
     typeof survey.exerciseId === "number" &&
     Number.isInteger(survey.exerciseId);
   const userIdValid = survey.userId && typeof survey.userId === "string";
-  const dateTimeValid = survey.dateTime && typeof survey.dateTime === "string";
+  const dateTimeValid = survey.datetime && typeof survey.datetime === "object";
   const repsValid = validSurveyValues.includes(survey.reps);
   const weightValid = validSurveyValues.includes(survey.weight);
   const setsValid = validSurveyValues.includes(survey.sets);

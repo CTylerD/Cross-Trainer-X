@@ -1,6 +1,5 @@
 const Auth0 = require("../auth/auth0Constants");
 
-
 class Workout {
   constructor(id, userId,exercises, dateCompleted) {
     this.id = id;

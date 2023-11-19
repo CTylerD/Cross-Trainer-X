@@ -1,9 +1,23 @@
+const Auth0 = require("../auth/auth0Constants");
+
 class Survey {
-  constructor(id, exerciseId, userId, dateTime, reps = null, sets = null, weight = null, rest = null, difficulty = null, duration = null, distance = null) {
+  constructor(
+    id,
+    exerciseId,
+    userId,
+    datetime,
+    reps = null,
+    weight = null,
+    sets = null,
+    rest = null,
+    difficulty = null,
+    duration = null,
+    distance = null
+  ) {
     this.id = id;
     this.exerciseId = exerciseId;
     this.userId = userId;
-    this.dateTime = dateTime;
+    this.datetime = datetime;
     this.reps = reps;
     this.weight = weight;
     this.sets = sets;
@@ -19,7 +33,7 @@ class Survey {
       id: this.id,
       exerciseId: this.exerciseId,
       userId: this.userId,
-      dateTime: this.dateTime,
+      datetime: this.datetime,
       reps: this.reps,
       weight: this.weight,
       sets: this.sets,
@@ -27,6 +41,7 @@ class Survey {
       difficulty: this.difficulty,
       duration: this.duration,
       distance: this.distance,
+      self: this.id == null ? null : `${Auth0.URL}/surveys/${this.id}`,
     };
   }
 }

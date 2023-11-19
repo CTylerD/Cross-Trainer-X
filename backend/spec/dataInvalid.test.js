@@ -524,6 +524,7 @@ test('invalid data type for property "weightClass"', () => {
 describe("Validation.userInvalid function", () => {
   test("valid user data", () => {
     const validUser = new UserModel(
+      1,
       "UserId",
       "test@example.com",
       1,
@@ -543,6 +544,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "userId"', () => {
     const user = new UserModel(
+      1,
       undefined,
       "test@example.com",
       1,
@@ -562,6 +564,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "email"', () => {
     const user = new UserModel(
+      1,
       "UserId",
       undefined,
       1,
@@ -581,6 +584,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "avatarId"', () => {
     const user = new UserModel(
+      1,
       "UserId",
       "test@example.com",
       undefined,
@@ -600,6 +604,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "firstName"', () => {
     const user = new UserModel(
+      1,
       "UserId",
       "test@example.com",
       1,
@@ -619,6 +624,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "lastName"', () => {
     const user = new UserModel(
+      1,
       "UserId",
       "test@example.com",
       1,
@@ -638,6 +644,7 @@ describe("Validation.userInvalid function", () => {
 
   test('missing required property "city"', () => {
     const user = new UserModel(
+      1,
       "UserId",
       "test@example.com",
       1,
@@ -1053,7 +1060,7 @@ describe("Validation.surveyInvalid function", () => {
       1,
       2,
       "UserId",
-      "datetime",
+      {datetime: "datetime"},
       1, // Reps
       2, // Sets
       3, // Weight
@@ -1070,7 +1077,7 @@ describe("Validation.surveyInvalid function", () => {
       1,
       2,
       "UserId",
-      "datetime",
+      { datetime: "datetime" },
       null, // Reps
       null, // Sets
       null, // Weight
@@ -1087,7 +1094,7 @@ describe("Validation.surveyInvalid function", () => {
       1,
       2,
       "UserId",
-      "datetime",
+      { datetime: "datetime" },
       null, // Reps
       null, // Sets
       null, // Weight
