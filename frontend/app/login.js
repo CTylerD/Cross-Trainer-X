@@ -1,9 +1,14 @@
 import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
 import React from 'react';
 import { Link } from 'expo-router';
+import axios from 'axios';
 
 
 export default function LoginScreen() {
+
+  const post = () => {
+      axios.post("http://localhost:8080/login", [])
+  }
 
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
@@ -22,11 +27,9 @@ export default function LoginScreen() {
         value={password}
         placeholder="Password"
       />
-      <Link href="/tabs" asChild>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => post()}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
-      </Link>
     </View>
   );
 }
