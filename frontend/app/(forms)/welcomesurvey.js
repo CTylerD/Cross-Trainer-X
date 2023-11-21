@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Button } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import axios from 'axios';
+
+
 
 export default function WelcomeSurvey() {
 
@@ -12,6 +15,7 @@ export default function WelcomeSurvey() {
   const [height, setHeight] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
   const [selectedExperience, setSelectedExperience] = useState("");
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Survey{'\n'}</Text>
@@ -105,9 +109,19 @@ export default function WelcomeSurvey() {
       </View>
 
       <View style={{margineBottom: 10}}>
-        <Button title='Welcome!!!'/> 
-      </View>
-
+        <Button onPress={axios({
+            method: 'post',
+            url: 'http://localhost:8080/users',
+            data: {
+              email: 'bloopy123@testemail.com',
+              avatarId: 1,
+              firstName: "Lonk",
+              lastName: "Bli",
+              fitnessTrack: "Strength"
+            }
+          })
+          } title='Welcome!!!'/> 
+                </View>
     </View>
   )
 }
