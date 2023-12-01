@@ -52,9 +52,9 @@ export default function PostExerciseModal({exercise}){
       </Modal>
       <Pressable
         accessibilityRole="button"
-        style={[styles.button, styles.buttonOpen]}
+        style={[styles.button, styles.buttonOpen, themed.button]}
         onPress={() => setModalVisible(true)}>
-        <Text style={[themed.text,{color:'black'}]}>Complete Workout</Text>
+        <Text style={[themed.text]}>Complete Workout</Text>
       </Pressable>
     </View>
   );

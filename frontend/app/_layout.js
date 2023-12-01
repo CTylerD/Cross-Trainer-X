@@ -21,6 +21,7 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     BebasNeue: require('../assets/fonts/BebasNeue-Regular.ttf'),
     ShadowsIL: require('../assets/fonts/ShadowsIntoLight-Regular.ttf'),
+    Poppins: require('../assets/fonts/Poppins-Regular.ttf'),
     ...FontAwesome.font,
 
   });

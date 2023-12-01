@@ -23,11 +23,11 @@ export default function StrengthTimer({exercise}){
     }
 
     return(
-        <View style={styles.card_template}>
-            <Text style={[themed.text, {color:'black'}]}>Weight: {weight}</Text>
-            <Text style={[themed.text, {color:'black'}]}>Sets Left: {set}</Text>
-            <Text style={[themed.text, {color:'black'}]}>Reps Left: {reps}</Text>
-            <View style={[styles.card_template, {borderWidth:0}]}>
+        <View style={styles.card}>
+            <Text style={[themed.text]}>Weight: {weight}</Text>
+            <Text style={[themed.text]}>Sets Left: {set}</Text>
+            <Text style={[themed.text]}>Reps Left: {reps}</Text>
+            <View style={{paddingTop:15}}>
             {rest ? <CountdownCircleTimer
                         isPlaying
                         duration={exercise.duration}
@@ -36,12 +36,12 @@ export default function StrengthTimer({exercise}){
                         onComplete={() => endRest()}
                     >
                         {({ remainingTime }) => <View style={{alignItems:'center'}}>
-                                                <Text style={[styles.text, themed.text, {color:'black'}]}>Rest</Text>
-                                                <Text style={[styles.text, themed.text, {color:'black'}]}>{remainingTime}</Text>
+                                                <Text style={[styles.text, themed.text]}>Rest</Text>
+                                                <Text style={[styles.text, themed.text]}>{remainingTime}</Text>
                                                 </View>}
                     </CountdownCircleTimer>:
-                    <Pressable style={styles.button} onPressIn={() => beginRest()}>
-                    <Text style={[themed.text, styles.text, {color:'black'}]}>Complete Set</Text>
+                    <Pressable style={[styles.button, themed.button]} onPressIn={() => beginRest()}>
+                    <Text style={[themed.text, styles.text]}>Complete Set</Text>
                     </Pressable>}
             </View>
         </View>
@@ -52,25 +52,21 @@ export default function StrengthTimer({exercise}){
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-    card_template:{
-        width: (screenWidth),
-        height:'auto',
-        margin: 10,
-        padding: 5,
-        borderWidth: 1,
-        backgroundColor: 'darkgray',
-        boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
-        justifyContent: "center",
+    card: {
         alignItems: 'center',
-    },
+        justifyContent: 'center',
+        margin: 12,
+        paddingBottom: 10,
+        paddingTop: 30,
+        paddingHorizontal: 32,
+        width:screenWidth*.95,
+      },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: 'white',
         margin: 12,
-        borderWidth: 1,
         paddingVertical: 12,
         paddingHorizontal: 32
       },
