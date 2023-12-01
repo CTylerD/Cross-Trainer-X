@@ -11,10 +11,13 @@ export default function ThemeSwitcher(){
         <Text>Pink</Text>
       </Pressable>
       <Pressable style={[styles.button]} onPress={() => setTheme("default")} accessibilityRole="button">
-       <Text>Black</Text>
+       <Text>Dark</Text>
       </Pressable>
-      <Pressable style={[styles.button]} onPress={() => setTheme("green")} accessibilityRole="button">
-        <Text>Green</Text>
+      <Pressable style={[styles.button]} onPress={() => setTheme("light")} accessibilityRole="button">
+        <Text>Light</Text>
+      </Pressable>
+      <Pressable style={[styles.button]} onPress={() => setTheme("blue")} accessibilityRole="button">
+        <Text>Blue</Text>
       </Pressable>
     </View>
   );

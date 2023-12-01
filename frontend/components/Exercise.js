@@ -19,26 +19,28 @@ export default function Exercises({exercises}) {
 
   return (
 
-    <SafeAreaView style={[styles.container, themed.container]}>
-    <ScrollView style={[styles.scrollView]}>
+    <View style={[styles.container, themed.container]}>
+      <Text style={[styles.title, themed.text]}>Today's Workout</Text>
+    <ScrollView contentContainerStyle={[styles.scrollView]}>
     {Object.values(exercises).map((exercise) => {
       return (
         <Link href={`/exercise/${exercise.e_id}`} asChild>
           <Pressable disabled={workout[exercise.e_id]}
-                     accessibilityRole="button">
-            <Card>
-              <Card.Title style={{color:'black'}}>{exercise.name}</Card.Title>
-              <Card.Divider/>
-              {workout[exercise.e_id] ? <Card.Title style={{color:'black'}}>Complete</Card.Title>:
-              <Card.Title style={{color:'black'}}>Incomplete</Card.Title>}
-            </Card>  
+                     accessibilityRole="button"
+                     >
+              <View style={[styles.card, themed.card]}>
+              <Text style={[{fontSize:16},themed.text]}>{exercise.name}</Text>
+              {workout[exercise.e_id] ? <View style={{alignItems:'center'}}><Text style={themed.text}>Complete</Text></View>:
+              null}
+              </View>
           </Pressable>
         </Link>
+
       )
     })}
     <PostExerciseModal/>
     </ScrollView>
-  </SafeAreaView>
+  </View>
   );
 }
 
@@ -50,10 +52,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 60
   },
   scrollView: {
-    marginHorizontal: 0,
-    width: screenWidth
+    width:screenWidth,
+    paddingBottom:50
   },
   title: {
     fontSize: 20,
@@ -61,12 +64,21 @@ const styles = StyleSheet.create({
   largetext: {
     fontSize: 30,
   },
+  card: {
+    height:screenHeight*.18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    elevation: 3,
+    margin: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 32
+  },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'white',
     margin: 12,
     borderWidth: 1,
     paddingVertical: 12,

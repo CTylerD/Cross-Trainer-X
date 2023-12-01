@@ -5,39 +5,65 @@ export default function Theme(theme){
                 backgroundColor:'black'
             },
             text:{
-                fontFamily:'SpaceMono',
+                fontFamily:'Poppins',
                 color:'white'
                 },
             button:{
-                backgroundColor:'gray'
+                backgroundColor:'mediumblue'
+            },
+            card:{
+                backgroundColor:'dimgray'
             }
         })
     }
     else if(theme == 'pink'){
         return({
             container:{
-                backgroundColor: 'hotpink'
+                backgroundColor: 'mistyrose'
             },
             text:{
-            fontFamily:'BebasNeue',
-            color:'black'
+            fontFamily:'Poppins',
+            color:'indianred'
             },
             button:{
+                backgroundColor:'linen'
+            },
+            card:{
                 backgroundColor:'pink'
             }
         })
     }
-    else if(theme == 'green'){
+    else if(theme == 'blue'){
         return({
             container:{
-                backgroundColor: 'lightgreen'
+                backgroundColor: 'royalblue'
             },
             text:{
-            fontFamily:'ShadowsIL',
-            color:'darkgreen'
+            fontFamily:'Poppins',
+            color:'white'
             },
             button:{
-                backgroundColor:'wheat'
+                backgroundColor:'mediumblue'
+            },
+            card:{
+                backgroundColor:'cornflowerblue'
+            }
+        })
+    }
+    else if(theme == 'light'){
+        return({
+            container:{
+                backgroundColor: 'white'
+            },
+            text:{
+            fontFamily:'Poppins',
+            color:'black'
+            },
+            button:{
+                backgroundColor:'lightblue'
+            },
+            card:{
+                backgroundColor:'lightslategray'
             }
         })
     }

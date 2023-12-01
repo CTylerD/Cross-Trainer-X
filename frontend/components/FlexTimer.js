@@ -20,7 +20,7 @@ export default function FlexTimer({exercise}){
     }
 
     return(
-        <View style={styles.card_template}>
+        <View style={[styles.card, themed.card]}>
             {hold ? <CountdownCircleTimer
                         isPlaying
                         duration={exercise.duration}
@@ -29,8 +29,8 @@ export default function FlexTimer({exercise}){
                         onComplete={() => endHold()}
                     >
                         {({ remainingTime }) => <View style={{alignItems:'center'}}>
-                                                <Text style={[styles.text, themed.text, {color:'black'}]}>Hold</Text>
-                                                <Text style={[styles.text, themed.text, {color:'black'}]}>{remainingTime}</Text>
+                                                <Text style={[styles.text, themed.text]}>Hold</Text>
+                                                <Text style={[styles.text, themed.text]}>{remainingTime}</Text>
                                                 </View>}
                     </CountdownCircleTimer>:
                     <Pressable style={styles.button} onPressIn={() => beginHold()}>
@@ -44,17 +44,17 @@ export default function FlexTimer({exercise}){
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-    card_template:{
-        width: (screenWidth),
-        height:'auto',
-        margin: 10,
-        padding: 5,
-        borderWidth: 1,
-        backgroundColor: 'darkgray',
-        boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
-        justifyContent: "center",
+    card: {
         alignItems: 'center',
-    },
+        justifyContent: 'center',
+        borderRadius: 15,
+        elevation: 3,
+        margin: 12,
+        borderWidth: 0,
+        paddingVertical: 10,
+        paddingHorizontal: 32,
+        opacity:.90
+      },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
