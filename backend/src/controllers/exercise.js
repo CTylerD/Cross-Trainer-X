@@ -72,7 +72,7 @@ async function getExercise(exerciseId, callback) {
         ue.duration,
         ue.distance,
         ue.difficulty,
-        ue.times_completed
+        ue.times_completed AS timesCompleted
       FROM
           Exercises e
       INNER JOIN UserExercises ue ON e.id = ue.exercise_id
@@ -266,10 +266,31 @@ function deleteExercise(userExerciseId, userId, callback) {
   }
 }
 
+function deleteAllUserExercises(userId, callback) {
+  try {
+    const deleteUserExerciseQuery = `
+      DELETE FROM UserExercises
+      WHERE user_id = ?;
+    `;
+
+    db.pool.query(
+      deleteUserExerciseQuery,
+      [userId],
+      (error, rows, fields) => {
+        callback(error, rows);
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    return e;
+  }
+}
+
 module.exports = {
   createExercise,
   getExercise,
   getAllExercises,
   updateExercise,
   deleteExercise,
+  deleteAllUserExercises,
 };
