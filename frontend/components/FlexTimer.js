@@ -20,7 +20,7 @@ export default function FlexTimer({exercise}){
     }
 
     return(
-        <View style={[styles.card, themed.card]}>
+        <View>
             {hold ? <CountdownCircleTimer
                         isPlaying
                         duration={exercise.duration}
@@ -47,13 +47,11 @@ const styles = StyleSheet.create({
     card: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 15,
-        elevation: 3,
         margin: 12,
-        borderWidth: 0,
-        paddingVertical: 10,
+        paddingBottom: 10,
+        paddingTop: 30,
         paddingHorizontal: 32,
-        opacity:.90
+        width:screenWidth*.95,
       },
     button: {
         alignItems: 'center',

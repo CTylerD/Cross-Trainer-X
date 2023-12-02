@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Alert, Modal, StyleSheet, Text, TextInput, Pressable, Dimensions, View} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, TextInput, Pressable, Dimensions, View, ScrollView} from 'react-native';
 import Theme from './Themes';
 import ThemeContext from '../contexts/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
@@ -34,7 +34,7 @@ export default function AddModal(){
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.centeredView}>
+        <ScrollView style={styles.centeredView} contentContainerStyle={{justifyContent: 'center',alignItems: 'center'}}>
           <View style={styles.modalView}>
             <Text style={[styles.modalText, themed.text, {color:'black'}]}>Add New Exercise</Text>
             <TextInput
@@ -102,7 +102,6 @@ export default function AddModal(){
                                                 value={exercise.equipment}
                                                 placeholder="Equipment"
                                               />
-                                              <View style={styles.rowContainer}>
                                               <View style={{alignItems:'center'}}>
                                               <Text>Reps:</Text>
                                               <TextInput
@@ -130,7 +129,6 @@ export default function AddModal(){
                                                 placeholder="Weight(lbs)"
                                               />
                                               </View>
-                                              </View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.weightClass}
@@ -156,7 +154,6 @@ export default function AddModal(){
                                               <Picker.Item label="Running" value="Running" />
                                               <Picker.Item label="Cycling" value="Cycling" />
                                               </Picker>
-                                              <View style={styles.rowContainer}>
                                               <View>
                                               <Text>Duration(minutes):</Text>
                                               <TextInput
@@ -175,9 +172,8 @@ export default function AddModal(){
                                               placeholder="Distance(miles)"
                                               />
                                               </View>
-                                              </View>
                                             </View>):null}
-            {exercise.type === 'Flexibility' ? (<View style={styles.centeredView}>
+            {exercise.type === 'Flexibility' ? (<View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.secondaryType}
@@ -203,31 +199,28 @@ export default function AddModal(){
                                               <Picker.Item label="Advanced" value="3" />
                                               </Picker>
                                               </View>):null}                                              
-
-
-
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => {setModalVisible(!modalVisible); add()}}>
               <Text style={[styles.textStyle, themed.text]}>Add</Text>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={[styles.textStyle, themed.text]}>Cancel</Text>
             </Pressable>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
       <Pressable
         accessibilityRole="button"
-        style={[styles.button, styles.buttonOpen]}
+        style={[styles.button, styles.buttonOpen, themed.button]}
         onPress={() => {setModalVisible(true); setExercise(initialState)}}>
-        <Text style={styles.textStyle}>+Add New</Text>
+        <Text style={styles.textStyle}>+Add New Exercise</Text>
       </Pressable>
     </View>
   );
@@ -238,13 +231,12 @@ const screenWidth = (Dimensions.get('window').width) * .75
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
     width: screenWidth,
+    height:'auto',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -262,6 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     elevation: 2,
+    margin:3
   },
   buttonOpen: {
     backgroundColor: 'black',
@@ -284,9 +277,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    height: 40,
+    height: 35,
     width: 175,
-    margin: 12,
+    margin: 5,
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,

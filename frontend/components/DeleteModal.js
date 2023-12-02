@@ -34,13 +34,13 @@ export default function DeleteModal({exercise}){
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => {setModalVisible(!modalVisible);deleteExercise()}}>
               <Text style={[styles.textStyle, themed.text]}>Confirm</Text>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={[styles.textStyle, themed.text]}>Cancel</Text>
             </Pressable>
@@ -50,9 +50,9 @@ export default function DeleteModal({exercise}){
       </Modal>
       <Pressable
         accessibilityRole="button"
-        style={[styles.button, styles.buttonOpen]}
+        style={[styles.button, styles.buttonOpen, themed.button]}
         onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>⌫</Text>
+        <Text style={[styles.textStyle, themed.text]}>⌫ Delete</Text>
       </Pressable>
     </View>
   );
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    paddingRight: 10
   },
   modalView: {
     margin: 20,

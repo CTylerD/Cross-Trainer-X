@@ -23,7 +23,7 @@ export default function Page() {
 
 
   return (
-    <ImageBackground source={require('../../../assets/images/Barbell.png')} resizeMode="cover">
+    <ImageBackground source={exercise.type==='Strength' ? require('../../../assets/images/Barbell.png'):require('../../../assets/images/zen.png')} resizeMode="cover">
     <View style={styles.container}>
         <Text style={[styles.title, themed.text]}>{currExercise.name}</Text>
         <View style={[styles.card, themed.card]}>

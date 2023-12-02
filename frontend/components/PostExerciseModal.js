@@ -25,10 +25,10 @@ export default function PostExerciseModal({exercise}){
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Text style={styles.title}>How was the exercise?{'\n'}</Text>
+          <Text style={[styles.title, themed.text,{color:'black'}]}>How was the exercise?{'\n'}</Text>
 
             <View style={styles.surveyBox}>
-            <Text>Please select difficulty</Text>
+            <Text style={[themed.text,{color:'black'}]}>Please select difficulty</Text>
             <Picker style={styles.input}
             selectedValue={selectedDifficulty}
             onValueChange={(itemValue, itemIndex) =>
@@ -42,7 +42,7 @@ export default function PostExerciseModal({exercise}){
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={[styles.textStyle, themed.text]}>Submit</Text>
             </Pressable>

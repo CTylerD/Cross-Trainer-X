@@ -17,10 +17,11 @@ export default function WorkoutScreen() {
   if (workout.intro){
     var newWorkout = workout;
     for(const exercise in exercises){
-      newWorkout[exercise] = false;
+      newWorkout[exercise.e_id] = false;
     }
     setWorkout(newWorkout);
     console.log("workout created");
+    console.log(workout);
     setTimeout(()=>{setWorkout({...workout, intro: false})}, 3000);
   }
 
