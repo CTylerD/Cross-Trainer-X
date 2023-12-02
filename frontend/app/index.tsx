@@ -24,10 +24,10 @@ export default function WelcomeScreen() {
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Create Account</Text>
         </Pressable>
       </Link>
-       {/* <Link href="/nav">
+       <Link href="/nav">
          <Text style={themed.text}>Nav Links For Dev</Text>
-       </Link>*/}
-    </View>
+       </Link>
+    </View> 
     </ImageBackground>
   );
 }
