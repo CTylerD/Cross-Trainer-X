@@ -1,59 +1,91 @@
-import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { StyleSheet, Pressable, Text, View, Dimensions, ImageBackground, Image } from 'react-native';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
 import { useContext } from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
 
+
 export default function DashboardScreen() {
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
   return (
-
+  <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
   <View style={[styles.container, themed.container]}>
-    <Text style={[styles.title, themed.text]}>Dashboard</Text>
+    <Text style={[styles.title]}>Dashboard</Text>
 
     <View style={styles.rowContainer}>
-        <Card>
-        <Card.Title>Workout Title Card</Card.Title>
+        <Card containerStyle={{width: 250, height: 250}}>
+        <Card.Title>Today's Workout</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
+        <Text style={{ alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 50,
+                lineHeight: 21,
+                letterSpacing: 0.25,
+                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>
+
+                  Chest
+                </Text>
         </Card>
 
-        <Card>
-        <Card.Title>Day in the week card</Card.Title>
+        <Card containerStyle={{width: 250, height: 250}}>
+        <Card.Title>Days Completed</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
+          <Text style={{ alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 50,
+                lineHeight: 21,
+                letterSpacing: 0.25,
+                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>18</Text>
         </Card>
     </View>
     
     <View style={styles.rowContainer}>
-        <Card>
-        <Card.Title>Statistics Info Card</Card.Title>
+    <Card containerStyle={{width: 250, height: 250,}}>
+        <Card.Title>Stats</Card.Title>
         <Card.Divider/>
-          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
+          <Text style={[styles.text, {color:'black'}]}>
+          Avg Workout Time: 54 min 
+          {"\n"}
+          Longest Workout: 93 min
+          {"\n"}
+          Grip Strength: 64 psi
+          {"\n"}
+
+          </Text>
         </Card>
 
-        <Card>
-        <Card.Title>Additional Info Card</Card.Title>
+        <Card containerStyle={{width: 250, height: 250}}>
+        <Card.Title>Calories Burned</Card.Title>
+
         <Card.Divider/>
-          <Text style={[styles.text, themed.text, {color:'black'}]}>Text</Text>
+          <Image style={{alignItems: 'center', justifyContent: 'center', width: 100, height: 100, marginLeft: 'auto', marginRight: 'auto'}} source={require('../../assets/images/fire.png')} />
+          <Text style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 25,
+                lineHeight: 21,
+                letterSpacing: 0.25,
+                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 10
+
+  }}>953</Text>
         </Card>
     </View>
 
-  <Card>
-  <Card.Title>Maybe card gets a title here</Card.Title>
-  <Card.Divider/>
+    <Card containerStyle={{width: 530, height: 100}}>
+
   <Text style={[{marginBottom: 10,}, [styles.text, themed.text, {color:'black'}]]}>
-    Click this blue button!
   </Text>
 
   <Button
    // icon={<Icon name='code' color='#ffffff' />}
-    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+    // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0,
+    // backgroundColor: 'blue', }}
     title='START WORKOUT' />
   </Card>
   
   </View>
+  </ImageBackground>
   );
 }
 
@@ -62,24 +94,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   rowContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   title: {
-    fontSize: 20,
-  },
-  card: {
-    
+    fontSize: 50,
+    color: 'white',
+    letterSpacing: 0.25,
+    fontFamily:'Poppins',
   },
   text: {
     fontSize: 16,
-    lineHeight: 21,
+    lineHeight: 40,
     letterSpacing: 0.25,
     color: 'black',
+    
   },
   button: {
     alignItems: 'center',
@@ -90,6 +124,18 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     paddingVertical: 12,
-    paddingHorizontal: 32
-  }
+    paddingHorizontal: 32,
+    fontWeight: 'bold'
+  },
+  cardbox: {
+    width: 250,
+    height: 250,
+  },
+  picture: {
+    paddingLeft: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100,
+    height: 100,
+  },
 });
