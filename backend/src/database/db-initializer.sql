@@ -6,8 +6,8 @@
 -- Workouts
 -- Surveys
 
-DROP TABLE IF EXISTS Workouts;
 DROP TABLE IF EXISTS Surveys;
+DROP TABLE IF EXISTS Workouts;
 DROP TABLE IF EXISTS UserExercises;
 DROP TABLE IF EXISTS Exercises;
 DROP TABLE IF EXISTS Users;
@@ -71,49 +71,43 @@ CREATE TABLE Exercises (
     description VARCHAR(255) NOT NULL,
     muscle_group ENUM('Chest', 'Shoulders', 'Triceps', 'Back', 'Biceps', 'Deltoids', 'Calves', 'Glutes', 'Hamstrings', 'Quads'),
     equipment VARCHAR(255),
-    weight_class ENUM('Bodyweight', 'Dumbbell', 'Barbell')
+    weight_class INT
 );
 
 -- Insert Strength Exercises
 INSERT INTO Exercises (user_id, name, type, secondary_type, description, muscle_group, equipment, weight_class)
 VALUES
-(NULL, 'Bench press', 'Strength', 'Push', 'Lie with your back on a weight bench and then lower a barbell to your chest and press it back up', 'Chest', 'Bench, barbell', 'Barbell'),
-(NULL, 'Overhead press', 'Strength', 'Push', 'Standing with the barbell at shoulder-height, press it up over your head', 'Shoulders', 'Barbell', 'Barbell'),
-(NULL, 'Preacher curls', 'Strength', 'Pull', 'Grab the bar in front of you with your elbows resting on the bench and then perform a curl keeping your elbows in place', 'Biceps', 'Barbell, bench', 'Barbell'),
-(NULL, 'Cable rows', 'Strength', 'Pull', 'Grab the cable with your arms stretched out in front of you, pull it back until your elbows are behind you and then release', 'Back', 'Cable machine', 'Barbell'),
-(NULL, 'Inverted rows', 'Strength', 'Pull', 'Lie flat on your back with your arms fully outstretched and grabbing the bar, then lift your body up to the bar and lower down', 'Back', 'Barbell', 'Barbell'),
-(NULL, 'Seated cable rows', 'Strength', 'Pull', 'Grab the cable with your arms stretched out in front of you, pull it back until your elbows are behind you and then release', 'Back', 'Cable machine', 'Barbell'),
-(NULL, 'Squats', 'Strength', 'Legs', 'With a barbell across your shoulders, lower down into a squat and then press back up', 'Quads', 'Barbell', 'Barbell'),
-(NULL, 'Leg press', 'Strength', 'Legs', 'Press your legs out and away from you and slowly lower back down.', 'Quads', 'Leg press machine', 'Barbell'),
-(NULL, 'Standing calf raises', 'Strength', 'Legs', 'Use a calf raise machine to apply weight to your shoulders as you stand up on tiptoes to lift it up.', 'Calves', 'Calf raise machine', 'Barbell'),
-(NULL, 'Glute bridges', 'Strength', 'Legs', 'Lying on a bench with your feet on the floor and a dumbbell across your hips, raise your hips up to lift the weight and slowly lower down.', 'Glutes', 'Barbell, Bench', 'Barbell'),
-(NULL, 'Deadlifts', 'Strength', 'Legs', 'Bend over to grab a barbell on the floor and straighten your back and legs to lift it off the ground until you are standing.', 'Hamstrings', 'Barbell', 'Barbell'),
-(NULL, 'Good mornings', 'Strength', 'Legs', 'With a barbell across your shoulders and your back leaned slightly over (but straight), stand up tall and then lower back down.', 'Hamstrings', 'Barbell', 'Barbell'),
+(NULL, 'Bench press', 'Strength', 'Push', 'Lie with your back on a weight bench and then lower a barbell to your chest and press it back up', 'Chest', 'Bench, barbell', 3),
+(NULL, 'Overhead press', 'Strength', 'Push', 'Standing with the barbell at shoulder-height, press it up over your head', 'Shoulders', 'Barbell', 3),
+(NULL, 'Preacher curls', 'Strength', 'Pull', 'Grab the bar in front of you with your elbows resting on the bench and then perform a curl keeping your elbows in place', 'Biceps', 'Barbell, bench', 3),
+(NULL, 'Cable rows', 'Strength', 'Pull', 'Grab the cable with your arms stretched out in front of you, pull it back until your elbows are behind you and then release', 'Back', 'Cable machine', 3),
+(NULL, 'Inverted rows', 'Strength', 'Pull', 'Lie flat on your back with your arms fully outstretched and grabbing the bar, then lift your body up to the bar and lower down', 'Back', 'Barbell', 3),
+(NULL, 'Seated cable rows', 'Strength', 'Pull', 'Grab the cable with your arms stretched out in front of you, pull it back until your elbows are behind you and then release', 'Back', 'Cable machine', 3),
+(NULL, 'Squats', 'Strength', 'Legs', 'With a barbell across your shoulders, lower down into a squat and then press back up', 'Quads', 'Barbell', 3),
+(NULL, 'Leg press', 'Strength', 'Legs', 'Press your legs out and away from you and slowly lower back down.', 'Quads', 'Leg press machine', 3),
+(NULL, 'Standing calf raises', 'Strength', 'Legs', 'Use a calf raise machine to apply weight to your shoulders as you stand up on tiptoes to lift it up.', 'Calves', 'Calf raise machine', 3),
+(NULL, 'Glute bridges', 'Strength', 'Legs', 'Lying on a bench with your feet on the floor and a dumbbell across your hips, raise your hips up to lift the weight and slowly lower down.', 'Glutes', 'Barbell, Bench', 3),
+(NULL, 'Deadlifts', 'Strength', 'Legs', 'Bend over to grab a barbell on the floor and straighten your back and legs to lift it off the ground until you are standing.', 'Hamstrings', 'Barbell', 3),
+(NULL, 'Good mornings', 'Strength', 'Legs', 'With a barbell across your shoulders and your back leaned slightly over (but straight), stand up tall and then lower back down.', 'Hamstrings', 'Barbell', 3),
 
-(NULL, 'Dumbbell flys', 'Strength', 'Push', 'Lie with your back on a weight bench with your arms extended out to each side. Then, lift the dumbbells up over your head until they meet in the middle in front of you.', 'Chest', 'Dumbells, bench', 'Dumbbell'), -- id = 13
-(NULL, 'Reverse flys', 'Strength', 'Push', 'Stand up, leaning forward, with a dumbbell in each hand and gradually raise the dumbbells out to the sides and lower them', 'Chest', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Tricep kickbacks', 'Strength', 'Push', 'Lean forward with a dumbbell in your hand and your arm bent, then slowly extend your arm backward until it is straight and repeat.', 'Triceps', 'Dumbbells, bench', 'Dumbbell'),
-(NULL, 'Dumbbell pullover', 'Strength', 'Push', 'Lie with your back on a bench and grab a dumbbell behind your head with both hands, then slowly lift the dumbbell up and over your head and lower down', 'Triceps', 'Dumbbells, bench', 'Dumbbell'),
-(NULL, 'Tricep pushdowns', 'Strength', 'Push', 'Grab the cable and pull it down until your arms are straight and gradually bend your arms to raise the cable', 'Triceps', 'Cable machine', 'Dumbbell'),
-(NULL, 'Lateral raises', 'Strength', 'Push', 'Stand with your arms at your sides with a dumbbell in each hand, then raise your arms out to the sides, parallel with the floor', 'Shoulders', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Front raises', 'Strength', 'Push', 'Stand with your arms at your sides with a dumbbell in each hand, then raise your arms in front of you to be parallel with the floor', 'Shoulders', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Dumbbell rows', 'Strength', 'Pull', 'Lean over on a bench with one arm, holding a dumbbell in your other straightened arm, and slowly raise your arm up until your elbow is behind you and lower it back down', 'Biceps', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Face pulls', 'Strength', 'Pull', 'Hold the cable with your arms out in front of you and then pull the rope directly towards your face and then release', 'Deltoids', 'Cable machine', 'Dumbbell'),
-(NULL, 'Rear deltoid raises', 'Strength', 'Pull', 'Lean over with a dumbbell in each hand and lift your arms out to each side', 'Deltoids', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Reverse flys', 'Strength', 'Pull', 'Lean forward, letting arms hang down with dumbbells, and slowly raise arms out to sides and lower down', 'Deltoids', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Bicep curls', 'Strength', 'Pull', 'Stand up straight with a dumbbell in each hand with your arms straightened to your sides and slowly lift each arm up to bring the weight to your shoulder without moving your arm above the elbow and lower down', 'Biceps', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Lat pulldowns', 'Strength', 'Pull', 'Grab the bar on the machine with your arms outstretched overhead, with palms facing away from you, and gradually lower the bar down to your chest and release', 'Back', 'Pulldown machine', 'Dumbbell'),
-(NULL, 'Lunges', 'Strength', 'Legs', 'Standing with dumbbells by your sides, step forward into a lunge and then raise back up.', 'Quads', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Calf raises', 'Strength', 'Legs', 'Standing with dumbbells by your side, stand up on your tiptoes and then lower down.', 'Calves', 'Dumbbells', 'Dumbbell'),
-(NULL, 'Step-ups', 'Strength', 'Legs', 'Standing with dumbbells at your sides, step up onto a step and then lower back down.', 'Glutes', 'Box, Dumbbells', 'Dumbbell'),
-(NULL, 'Leg curls', 'Strength', 'Legs', 'In a leg curl machine, lift your legs up to lift the weights and then lower back down.', 'Hamstrings', 'Leg curl machine', 'Dumbbell'),
-(NULL, 'Hamstring curls', 'Strength', 'Legs', 'In a hamstring curl machine, lift your legs up to lift the weights and then lower back down.', 'Hamstrings', 'Hamstring curl machine', 'Dumbbell'),
-
-(NULL, 'Push-ups', 'Strength', 'Push', 'From the plank position, lower yourself to the floor and then push up', 'Chest', NULL, 'Bodyweight'), -- id = 31
-(NULL, 'Chest dips', 'Strength', 'Push', 'Grip two dip bars while leaning forward with your arms straight, then lower down and raise up', 'Chest', 'Dip bars', 'Bodyweight'),
-(NULL, 'Tricep dips', 'Strength', 'Push', 'Suspend yourself on dip bars with your arms straight, then lower down and press back up again', 'Triceps', 'Dip bars', 'Bodyweight'),
-(NULL, 'Pull-ups', 'Strength', 'Pull', 'Suspended from a bar, use your arms to pull your chin up over the bar', 'Biceps', 'Pull-up bar', 'Bodyweight'),
-(NULL, 'Box jumps', 'Strength', 'Legs', 'Stand in front of a box. Jump onto said box. Repeat.', 'Quads', 'Box', 'Bodyweight');
+(NULL, 'Dumbbell flys', 'Strength', 'Push', 'Lie with your back on a weight bench with your arms extended out to each side. Then, lift the dumbbells up over your head until they meet in the middle in front of you.', 'Chest', 'Dumbells, bench', 2), -- id = 13
+(NULL, 'Reverse flys', 'Strength', 'Push', 'Stand up, leaning forward, with a dumbbell in each hand and gradually raise the dumbbells out to the sides and lower them', 'Chest', 'Dumbbells', 2),
+(NULL, 'Tricep kickbacks', 'Strength', 'Push', 'Lean forward with a dumbbell in your hand and your arm bent, then slowly extend your arm backward until it is straight and repeat.', 'Triceps', 'Dumbbells, bench', 2),
+(NULL, 'Dumbbell pullover', 'Strength', 'Push', 'Lie with your back on a bench and grab a dumbbell behind your head with both hands, then slowly lift the dumbbell up and over your head and lower down', 'Triceps', 'Dumbbells, bench', 2),
+(NULL, 'Tricep pushdowns', 'Strength', 'Push', 'Grab the cable and pull it down until your arms are straight and gradually bend your arms to raise the cable', 'Triceps', 'Cable machine', 2),
+(NULL, 'Lateral raises', 'Strength', 'Push', 'Stand with your arms at your sides with a dumbbell in each hand, then raise your arms out to the sides, parallel with the floor', 'Shoulders', 'Dumbbells', 2),
+(NULL, 'Front raises', 'Strength', 'Push', 'Stand with your arms at your sides with a dumbbell in each hand, then raise your arms in front of you to be parallel with the floor', 'Shoulders', 'Dumbbells', 2),
+(NULL, 'Dumbbell rows', 'Strength', 'Pull', 'Lean over on a bench with one arm, holding a dumbbell in your other straightened arm, and slowly raise your arm up until your elbow is behind you and lower it back down', 'Biceps', 'Dumbbells', 2),
+(NULL, 'Face pulls', 'Strength', 'Pull', 'Hold the cable with your arms out in front of you and then pull the rope directly towards your face and then release', 'Deltoids', 'Cable machine', 2),
+(NULL, 'Rear deltoid raises', 'Strength', 'Pull', 'Lean over with a dumbbell in each hand and lift your arms out to each side', 'Deltoids', 'Dumbbells', 2),
+(NULL, 'Reverse flys', 'Strength', 'Pull', 'Lean forward, letting arms hang down with dumbbells, and slowly raise arms out to sides and lower down', 'Deltoids', 'Dumbbells', 2),
+(NULL, 'Bicep curls', 'Strength', 'Pull', 'Stand up straight with a dumbbell in each hand with your arms straightened to your sides and slowly lift each arm up to bring the weight to your shoulder without moving your arm above the elbow and lower down', 'Biceps', 'Dumbbells', 2),
+(NULL, 'Lat pulldowns', 'Strength', 'Pull', 'Grab the bar on the machine with your arms outstretched overhead, with palms facing away from you, and gradually lower the bar down to your chest and release', 'Back', 'Pulldown machine', 2),
+(NULL, 'Lunges', 'Strength', 'Legs', 'Standing with dumbbells by your sides, step forward into a lunge and then raise back up.', 'Quads', 'Dumbbells', 2),
+(NULL, 'Calf raises', 'Strength', 'Legs', 'Standing with dumbbells by your side, stand up on your tiptoes and then lower down.', 'Calves', 'Dumbbells', 2),
+(NULL, 'Step-ups', 'Strength', 'Legs', 'Standing with dumbbells at your sides, step up onto a step and then lower back down.', 'Glutes', 'Box, Dumbbells', 2),
+(NULL, 'Leg curls', 'Strength', 'Legs', 'In a leg curl machine, lift your legs up to lift the weights and then lower back down.', 'Hamstrings', 'Leg curl machine', 2),
+(NULL, 'Hamstring curls', 'Strength', 'Legs', 'In a hamstring curl machine, lift your legs up to lift the weights and then lower back down.', 'Hamstrings', 'Hamstring curl machine', 2);
 
 -- Insert Cardio Exercises
 INSERT INTO Exercises (user_id, name, type, secondary_type, description)
@@ -213,7 +207,7 @@ VALUES
 CREATE TABLE UserExercises (
     id INT AUTO_INCREMENT PRIMARY KEY,
     exercise_id INT NOT NULL,
-    user_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
     reps INT,
     sets INT,
     weight INT,
@@ -222,11 +216,12 @@ CREATE TABLE UserExercises (
     distance FLOAT,
     difficulty INT,
     times_completed INT DEFAULT 0,
+    experience INT,
     FOREIGN KEY (exercise_id) REFERENCES Exercises(id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
--- Insert Strength Exercises
+-- Insert Mock User Strength Exercises
 INSERT INTO UserExercises (exercise_id, user_id, reps, sets, weight, rest, times_completed)
 VALUES
 -- User 1: Strength (beginner)
@@ -260,11 +255,6 @@ VALUES
 (28, "65512a3b7409f13021857720", 12, 3, 10,   60, 0),   -- Step-ups
 (29, "65512a3b7409f13021857720", 12, 3, 10,   60, 0),   -- Leg curls
 (30, "65512a3b7409f13021857720", 12, 3, 10,   60, 0),   -- Hamstring curls
-(31, "65512a3b7409f13021857720", 10, 1, NULL, 60, 0),   -- Push-ups
-(32, "65512a3b7409f13021857720", 10, 1, NULL, 60, 0),   -- Chest dips
-(33, "65512a3b7409f13021857720", 10, 1, NULL, 60, 0),   -- Tricep dips
-(34, "65512a3b7409f13021857720", 10, 1, NULL, 60, 0),   -- Pull-ups
-(35, "65512a3b7409f13021857720", 10, 1, NULL, 60, 0),   -- Box jumps
 
 -- User 2: Strength (intermediate)
 (1,  "65512a7064e79113efca213b", 8,  4, 25,   60, 0),   -- Bench press
@@ -297,11 +287,6 @@ VALUES
 (28, "65512a7064e79113efca213b", 8,  4, 60,   60, 0),   -- Step-ups
 (29, "65512a7064e79113efca213b", 8,  4, 60,   60, 0),   -- Leg curls
 (30, "65512a7064e79113efca213b", 8,  4, 60,   60, 0),   -- Hamstring curls
-(31, "65512a7064e79113efca213b", 10, 2, NULL, 60, 0),   -- Push-ups
-(32, "65512a7064e79113efca213b", 10, 2, NULL, 60, 0),   -- Chest dips
-(33, "65512a7064e79113efca213b", 10, 2, NULL, 60, 0),   -- Tricep dips
-(34, "65512a7064e79113efca213b", 10, 2, NULL, 60, 0),   -- Pull-ups
-(35, "65512a7064e79113efca213b", 10, 2, NULL, 60, 0),   -- Box jumps
 
 -- User 3: Strength (advanced)
 (1,  "65512aa4f51452e44ecddaae", 5,  5, 45,   90, 0),   -- Bench press
@@ -333,23 +318,23 @@ VALUES
 (27, "65512aa4f51452e44ecddaae", 5,  5, 90,   90, 0),   -- Calf raises
 (28, "65512aa4f51452e44ecddaae", 5,  5, 90,   90, 0),   -- Step-ups
 (29, "65512aa4f51452e44ecddaae", 5,  5, 90,   90, 0),   -- Leg curls
-(30, "65512aa4f51452e44ecddaae", 5,  5, 90,   90, 0),   -- Hamstring curls
-(31, "65512aa4f51452e44ecddaae", 10, 3, NULL, 60, 0),   -- Push-ups
-(32, "65512aa4f51452e44ecddaae", 10, 3, NULL, 60, 0),   -- Chest dips
-(33, "65512aa4f51452e44ecddaae", 10, 3, NULL, 60, 0),   -- Tricep dips
-(34, "65512aa4f51452e44ecddaae", 10, 3, NULL, 60, 0),   -- Pull-ups
-(35, "65512aa4f51452e44ecddaae", 10, 3, NULL, 60, 0);   -- Box jumps
+(30, "65512aa4f51452e44ecddaae", 5,  5, 90,   90, 0);   -- Hamstring curls
 
 -- Insert Cardio Exercises
 INSERT INTO UserExercises (exercise_id, user_id, duration, distance, times_completed)
 VALUES
-(36, "65512ad4f51452e44ecddac4", 15, 1, 0),   -- User 4: Running
-(37, "65512b098eaf8db1930f6e56", 20, 4, 0);   -- User 5: Cycling
+(31, "65512ad4f51452e44ecddac4", 15, 1, 0),   -- User 4: Running
+(32, "65512b098eaf8db1930f6e56", 20, 4, 0);   -- User 5: Cycling
 
 -- Insert Flexibility-Yoga Exercises
+-- User 6: Yoga
 INSERT INTO UserExercises (exercise_id, user_id, duration, difficulty, times_completed)
 VALUES
--- User 6: Yoga
+(33, "655133dd3e05dd89a157815a", 10, 1, 0),
+(34, "655133dd3e05dd89a157815a", 10, 1, 0),
+(35, "655133dd3e05dd89a157815a", 10, 1, 0),
+(36, "655133dd3e05dd89a157815a", 10, 1, 0),
+(37, "655133dd3e05dd89a157815a", 10, 1, 0),
 (38, "655133dd3e05dd89a157815a", 10, 1, 0),
 (39, "655133dd3e05dd89a157815a", 10, 1, 0),
 (40, "655133dd3e05dd89a157815a", 10, 1, 0),
@@ -360,11 +345,11 @@ VALUES
 (45, "655133dd3e05dd89a157815a", 10, 1, 0),
 (46, "655133dd3e05dd89a157815a", 10, 1, 0),
 (47, "655133dd3e05dd89a157815a", 10, 1, 0),
-(48, "655133dd3e05dd89a157815a", 10, 1, 0),
-(49, "655133dd3e05dd89a157815a", 10, 1, 0),
-(50, "655133dd3e05dd89a157815a", 10, 1, 0),
-(51, "655133dd3e05dd89a157815a", 10, 1, 0),
-(52, "655133dd3e05dd89a157815a", 10, 1, 0),
+(48, "655133dd3e05dd89a157815a", 25, 2, 0),
+(49, "655133dd3e05dd89a157815a", 25, 2, 0),
+(50, "655133dd3e05dd89a157815a", 25, 2, 0),
+(51, "655133dd3e05dd89a157815a", 25, 2, 0),
+(52, "655133dd3e05dd89a157815a", 25, 2, 0),
 (53, "655133dd3e05dd89a157815a", 25, 2, 0),
 (54, "655133dd3e05dd89a157815a", 25, 2, 0),
 (55, "655133dd3e05dd89a157815a", 25, 2, 0),
@@ -374,27 +359,26 @@ VALUES
 (59, "655133dd3e05dd89a157815a", 25, 2, 0),
 (60, "655133dd3e05dd89a157815a", 25, 2, 0),
 (61, "655133dd3e05dd89a157815a", 25, 2, 0),
-(62, "655133dd3e05dd89a157815a", 25, 2, 0),
-(63, "655133dd3e05dd89a157815a", 25, 2, 0),
-(64, "655133dd3e05dd89a157815a", 25, 2, 0),
-(65, "655133dd3e05dd89a157815a", 25, 2, 0),
-(66, "655133dd3e05dd89a157815a", 25, 2, 0),
+(62, "655133dd3e05dd89a157815a", 40, 3, 0),
+(63, "655133dd3e05dd89a157815a", 40, 3, 0),
+(64, "655133dd3e05dd89a157815a", 40, 3, 0),
+(65, "655133dd3e05dd89a157815a", 40, 3, 0),
+(66, "655133dd3e05dd89a157815a", 40, 3, 0),
 (67, "655133dd3e05dd89a157815a", 40, 3, 0),
 (68, "655133dd3e05dd89a157815a", 40, 3, 0),
 (69, "655133dd3e05dd89a157815a", 40, 3, 0),
 (70, "655133dd3e05dd89a157815a", 40, 3, 0),
-(71, "655133dd3e05dd89a157815a", 40, 3, 0),
-(72, "655133dd3e05dd89a157815a", 40, 3, 0),
-(73, "655133dd3e05dd89a157815a", 40, 3, 0),
-(74, "655133dd3e05dd89a157815a", 40, 3, 0),
-(75, "655133dd3e05dd89a157815a", 40, 3, 0),
-(76, "655133dd3e05dd89a157815a", 40, 3, 0);
+(71, "655133dd3e05dd89a157815a", 40, 3, 0);
 
 -- Insert Flexibility-Stretching Exercises
-
 -- User 7: Stretching
 INSERT INTO UserExercises (exercise_id, user_id, duration, difficulty, times_completed)
 VALUES
+(72,  "655133f67409f13021857cfb", 10, 1, 0),
+(73,  "655133f67409f13021857cfb", 10, 1, 0),
+(74,  "655133f67409f13021857cfb", 10, 1, 0),
+(75,  "655133f67409f13021857cfb", 10, 1, 0),
+(76,  "655133f67409f13021857cfb", 10, 1, 0),
 (77,  "655133f67409f13021857cfb", 10, 1, 0),
 (78,  "655133f67409f13021857cfb", 10, 1, 0),
 (79,  "655133f67409f13021857cfb", 10, 1, 0),
@@ -404,11 +388,11 @@ VALUES
 (83,  "655133f67409f13021857cfb", 10, 1, 0),
 (84,  "655133f67409f13021857cfb", 10, 1, 0),
 (85,  "655133f67409f13021857cfb", 10, 1, 0),
-(86,  "655133f67409f13021857cfb", 10, 1, 0),
-(87,  "655133f67409f13021857cfb", 10, 1, 0),
-(88,  "655133f67409f13021857cfb", 10, 1, 0),
-(89,  "655133f67409f13021857cfb", 10, 1, 0),
-(90,  "655133f67409f13021857cfb", 10, 1, 0),
+(86,  "655133f67409f13021857cfb", 25, 2, 0),
+(87,  "655133f67409f13021857cfb", 25, 2, 0),
+(88,  "655133f67409f13021857cfb", 25, 2, 0),
+(89,  "655133f67409f13021857cfb", 25, 2, 0),
+(90,  "655133f67409f13021857cfb", 25, 2, 0),
 (91,  "655133f67409f13021857cfb", 25, 2, 0),
 (92,  "655133f67409f13021857cfb", 25, 2, 0),
 (93,  "655133f67409f13021857cfb", 25, 2, 0),
@@ -418,28 +402,218 @@ VALUES
 (97,  "655133f67409f13021857cfb", 25, 2, 0),
 (98,  "655133f67409f13021857cfb", 25, 2, 0),
 (99,  "655133f67409f13021857cfb", 25, 2, 0),
-(100, "655133f67409f13021857cfb", 25, 2, 0),
-(101, "655133f67409f13021857cfb", 25, 2, 0),
-(102, "655133f67409f13021857cfb", 25, 2, 0),
-(103, "655133f67409f13021857cfb", 25, 2, 0),
-(104, "655133f67409f13021857cfb", 25, 2, 0),
+(100, "655133f67409f13021857cfb", 40, 3, 0),
+(101, "655133f67409f13021857cfb", 40, 3, 0),
+(102, "655133f67409f13021857cfb", 40, 3, 0),
+(103, "655133f67409f13021857cfb", 40, 3, 0),
+(104, "655133f67409f13021857cfb", 40, 3, 0),
 (105, "655133f67409f13021857cfb", 40, 3, 0),
 (106, "655133f67409f13021857cfb", 40, 3, 0),
 (107, "655133f67409f13021857cfb", 40, 3, 0),
 (108, "655133f67409f13021857cfb", 40, 3, 0),
-(109, "655133f67409f13021857cfb", 40, 3, 0),
-(110, "655133f67409f13021857cfb", 40, 3, 0),
-(111, "655133f67409f13021857cfb", 40, 3, 0),
-(112, "655133f67409f13021857cfb", 40, 3, 0),
-(113, "655133f67409f13021857cfb", 40, 3, 0),
-(114, "655133f67409f13021857cfb", 40, 3, 0);
+(109, "655133f67409f13021857cfb", 40, 3, 0);
 
+-- -- Insert Default Strength Exercises
+INSERT INTO UserExercises (exercise_id, user_id, reps, sets, weight, rest, times_completed, experience)
+VALUES
+-- Strength (beginner)
+(1,  NULL, 12, 3, 40,   60, 0, 1),   -- Bench press
+(2,  NULL, 12, 3, 40,   60, 0, 1),   -- Overhead press
+(3,  NULL, 12, 3, 40,   60, 0, 1),   -- Preacher curls
+(4,  NULL, 12, 3, 40,   60, 0, 1),   -- Cable rows
+(5,  NULL, 12, 3, 40,   60, 0, 1),   -- Inverted rows
+(6,  NULL, 12, 3, 40,   60, 0, 1),   -- Seated cable rows
+(7,  NULL, 12, 3, 40,   60, 0, 1),   -- Squats
+(8,  NULL, 12, 3, 40,   60, 0, 1),   -- Leg press
+(9,  NULL, 12, 3, 40,   60, 0, 1),   -- Standing calf raises
+(10, NULL, 12, 3, 40,   60, 0, 1),   -- Glute bridges
+(11, NULL, 12, 3, 40,   60, 0, 1),   -- Deadlifts
+(12, NULL, 12, 3, 40,   60, 0, 1),   -- Good mornings
+(13, NULL, 12, 3, 10,   60, 0, 1),   -- Dumbbell flys
+(14, NULL, 12, 3, 10,   60, 0, 1),   -- Reverse flys
+(15, NULL, 12, 3, 10,   60, 0, 1),   -- Tricep kickbacks
+(16, NULL, 12, 3, 10,   60, 0, 1),   -- Dumbbell pullover
+(17, NULL, 12, 3, 10,   60, 0, 1),   -- Tricep pushdowns
+(18, NULL, 12, 3, 10,   60, 0, 1),   -- Lateral raises
+(19, NULL, 12, 3, 10,   60, 0, 1),   -- Front raises
+(20, NULL, 12, 3, 10,   60, 0, 1),   -- Dumbbell rows
+(21, NULL, 12, 3, 10,   60, 0, 1),   -- Face pulls
+(22, NULL, 12, 3, 10,   60, 0, 1),   -- Rear deltoid raises
+(23, NULL, 12, 3, 10,   60, 0, 1),   -- Reverse flys
+(24, NULL, 12, 3, 10,   60, 0, 1),   -- Bicep curls
+(25, NULL, 12, 3, 10,   60, 0, 1),   -- Lat pulldowns
+(26, NULL, 12, 3, 10,   60, 0, 1),   -- Lunges
+(27, NULL, 12, 3, 10,   60, 0, 1),   -- Calf raises
+(28, NULL, 12, 3, 10,   60, 0, 1),   -- Step-ups
+(29, NULL, 12, 3, 10,   60, 0, 1),   -- Leg curls
+(30, NULL, 12, 3, 10,   60, 0, 1),   -- Hamstring curls
+
+-- Strength (intermediate)
+(1,  NULL, 8,  4, 25,   60, 0, 2),   -- Bench press
+(2,  NULL, 8,  4, 25,   60, 0, 2),   -- Overhead press
+(3,  NULL, 8,  4, 25,   60, 0, 2),   -- Preacher curls
+(4,  NULL, 8,  4, 25,   60, 0, 2),   -- Cable rows
+(5,  NULL, 8,  4, 25,   60, 0, 2),   -- Inverted rows
+(6,  NULL, 8,  4, 25,   60, 0, 2),   -- Seated cable rows
+(7,  NULL, 8,  4, 25,   60, 0, 2),   -- Squats
+(8,  NULL, 8,  4, 25,   60, 0, 2),   -- Leg press
+(9,  NULL, 8,  4, 25,   60, 0, 2),   -- Standing calf raises
+(10, NULL, 8,  4, 25,   60, 0, 2),   -- Glute bridges
+(11, NULL, 8,  4, 25,   60, 0, 2),   -- Deadlifts
+(12, NULL, 8,  4, 25,   60, 0, 2),   -- Good mornings
+(13, NULL, 8,  4, 60,   60, 0, 2),   -- Dumbbell flys
+(14, NULL, 8,  4, 60,   60, 0, 2),   -- Reverse flys
+(15, NULL, 8,  4, 60,   60, 0, 2),   -- Tricep kickbacks
+(16, NULL, 8,  4, 60,   60, 0, 2),   -- Dumbbell pullover
+(17, NULL, 8,  4, 60,   60, 0, 2),   -- Tricep pushdowns
+(18, NULL, 8,  4, 60,   60, 0, 2),   -- Lateral raises
+(19, NULL, 8,  4, 60,   60, 0, 2),   -- Front raises
+(20, NULL, 8,  4, 60,   60, 0, 2),   -- Dumbbell rows
+(21, NULL, 8,  4, 60,   60, 0, 2),   -- Face pulls
+(22, NULL, 8,  4, 60,   60, 0, 2),   -- Rear deltoid raises
+(23, NULL, 8,  4, 60,   60, 0, 2),   -- Reverse flys
+(24, NULL, 8,  4, 60,   60, 0, 2),   -- Bicep curls
+(25, NULL, 8,  4, 60,   60, 0, 2),   -- Lat pulldowns
+(26, NULL, 8,  4, 60,   60, 0, 2),   -- Lunges
+(27, NULL, 8,  4, 60,   60, 0, 2),   -- Calf raises
+(28, NULL, 8,  4, 60,   60, 0, 2),   -- Step-ups
+(29, NULL, 8,  4, 60,   60, 0, 2),   -- Leg curls
+(30, NULL, 8,  4, 60,   60, 0, 2),   -- Hamstring curls
+
+-- Strength (advanced)
+(1,  NULL, 5,  5, 45,   90, 0, 3),   -- Bench press
+(2,  NULL, 5,  5, 45,   90, 0, 3),   -- Overhead press
+(3,  NULL, 5,  5, 45,   90, 0, 3),   -- Preacher curls
+(4,  NULL, 5,  5, 45,   90, 0, 3),   -- Cable rows
+(5,  NULL, 5,  5, 45,   90, 0, 3),   -- Inverted rows
+(6,  NULL, 5,  5, 45,   90, 0, 3),   -- Seated cable rows
+(7,  NULL, 5,  5, 45,   90, 0, 3),   -- Squats
+(8,  NULL, 5,  5, 45,   90, 0, 3),   -- Leg press
+(9,  NULL, 5,  5, 45,   90, 0, 3),   -- Standing calf raises
+(10, NULL, 5,  5, 45,   90, 0, 3),   -- Glute bridges
+(11, NULL, 5,  5, 45,   90, 0, 3),   -- Deadlifts
+(12, NULL, 5,  5, 45,   90, 0, 3),   -- Good mornings
+(13, NULL, 5,  5, 90,   90, 0, 3),   -- Dumbbell flys
+(14, NULL, 5,  5, 90,   90, 0, 3),   -- Reverse flys
+(15, NULL, 5,  5, 90,   90, 0, 3),   -- Tricep kickbacks
+(16, NULL, 5,  5, 90,   90, 0, 3),   -- Dumbbell pullover
+(17, NULL, 5,  5, 90,   90, 0, 3),   -- Tricep pushdowns
+(18, NULL, 5,  5, 90,   90, 0, 3),   -- Lateral raises
+(19, NULL, 5,  5, 90,   90, 0, 3),   -- Front raises
+(20, NULL, 5,  5, 90,   90, 0, 3),   -- Dumbbell rows
+(21, NULL, 5,  5, 90,   90, 0, 3),   -- Face pulls
+(22, NULL, 5,  5, 90,   90, 0, 3),   -- Rear deltoid raises
+(23, NULL, 5,  5, 90,   90, 0, 3),   -- Reverse flys
+(24, NULL, 5,  5, 90,   90, 0, 3),   -- Bicep curls
+(25, NULL, 5,  5, 90,   90, 0, 3),   -- Lat pulldowns
+(26, NULL, 5,  5, 90,   90, 0, 3),   -- Lunges
+(27, NULL, 5,  5, 90,   90, 0, 3),   -- Calf raises
+(28, NULL, 5,  5, 90,   90, 0, 3),   -- Step-ups
+(29, NULL, 5,  5, 90,   90, 0, 3),   -- Leg curls
+(30, NULL, 5,  5, 90,   90, 0, 3);   -- Hamstring curls
+
+-- Insert Cardio Exercises
+INSERT INTO UserExercises (exercise_id, user_id, duration, distance, times_completed, experience)
+VALUES
+(31, NULL, 15,  1, 0, 1),   -- Running: Beginner
+(31, NULL, 30,  3, 0, 2),   -- Running: Intermediate
+(31, NULL, 60,  5, 0, 3),   -- Running: Advanced
+(32, NULL, 20,  4, 0, 1),   -- Cycling: Beginner
+(32, NULL, 40, 10, 0, 2),   -- Cycling: Intermediate
+(32, NULL, 60, 20, 0, 3);   -- Cycling: Advanced
+
+-- Insert Flexibility-Yoga Exercises
+-- Yoga: Beginner
+INSERT INTO UserExercises (exercise_id, user_id, duration, difficulty, times_completed)
+VALUES
+(33, NULL, 10, 1, 0),
+(34, NULL, 10, 1, 0),
+(35, NULL, 10, 1, 0),
+(36, NULL, 10, 1, 0),
+(37, NULL, 10, 1, 0),
+(38, NULL, 10, 1, 0),
+(39, NULL, 10, 1, 0),
+(40, NULL, 10, 1, 0),
+(41, NULL, 10, 1, 0),
+(42, NULL, 10, 1, 0),
+(43, NULL, 10, 1, 0),
+(44, NULL, 10, 1, 0),
+(45, NULL, 10, 1, 0),
+(46, NULL, 10, 1, 0),
+(47, NULL, 10, 1, 0),
+(48, NULL, 25, 2, 0),
+(49, NULL, 25, 2, 0),
+(50, NULL, 25, 2, 0),
+(51, NULL, 25, 2, 0),
+(52, NULL, 25, 2, 0),
+(53, NULL, 25, 2, 0),
+(54, NULL, 25, 2, 0),
+(55, NULL, 25, 2, 0),
+(56, NULL, 25, 2, 0),
+(57, NULL, 25, 2, 0),
+(58, NULL, 25, 2, 0),
+(59, NULL, 25, 2, 0),
+(60, NULL, 25, 2, 0),
+(61, NULL, 25, 2, 0),
+(62, NULL, 40, 3, 0),
+(63, NULL, 40, 3, 0),
+(64, NULL, 40, 3, 0),
+(65, NULL, 40, 3, 0),
+(66, NULL, 40, 3, 0),
+(67, NULL, 40, 3, 0),
+(68, NULL, 40, 3, 0),
+(69, NULL, 40, 3, 0),
+(70, NULL, 40, 3, 0),
+(71, NULL, 40, 3, 0);
+
+-- Insert Flexibility-Stretching Exercises
+-- Stretching: Beginner
+INSERT INTO UserExercises (exercise_id, user_id, duration, difficulty, times_completed)
+VALUES
+(72,  NULL, 10, 1, 0),
+(73,  NULL, 10, 1, 0),
+(74,  NULL, 10, 1, 0),
+(75,  NULL, 10, 1, 0),
+(76,  NULL, 10, 1, 0),
+(77,  NULL, 10, 1, 0),
+(78,  NULL, 10, 1, 0),
+(79,  NULL, 10, 1, 0),
+(80,  NULL, 10, 1, 0),
+(81,  NULL, 10, 1, 0),
+(82,  NULL, 10, 1, 0),
+(83,  NULL, 10, 1, 0),
+(84,  NULL, 10, 1, 0),
+(85,  NULL, 10, 1, 0),
+(86,  NULL, 25, 2, 0),
+(87,  NULL, 25, 2, 0),
+(88,  NULL, 25, 2, 0),
+(89,  NULL, 25, 2, 0),
+(90,  NULL, 25, 2, 0),
+(91,  NULL, 25, 2, 0),
+(92,  NULL, 25, 2, 0),
+(93,  NULL, 25, 2, 0),
+(94,  NULL, 25, 2, 0),
+(95,  NULL, 25, 2, 0),
+(96,  NULL, 25, 2, 0),
+(97,  NULL, 25, 2, 0),
+(98,  NULL, 25, 2, 0),
+(99,  NULL, 25, 2, 0),
+(100, NULL, 40, 3, 0),
+(101, NULL, 40, 3, 0),
+(102, NULL, 40, 3, 0),
+(103, NULL, 40, 3, 0),
+(104, NULL, 40, 3, 0),
+(105, NULL, 40, 3, 0),
+(106, NULL, 40, 3, 0),
+(107, NULL, 40, 3, 0),
+(108, NULL, 40, 3, 0),
+(109, NULL, 40, 3, 0);
 
 CREATE TABLE Workouts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     exercises JSON NOT NULL,
-    date_completed DATETIME,
+    date_completed VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
