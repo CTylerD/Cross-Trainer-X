@@ -1,12 +1,20 @@
 const Auth = require("./src/auth/auth");
 const AuthUser = require("./src/auth/user");
 const Auth0 = require("./src/auth/auth0Constants");
+
 const ExerciseModel = require("./src/models/exercise");
 const WorkoutModel = require("./src/models/workout");
+const UserModel = require("./src/models/user");
+const SurveyModel = require("./src/models/survey");
+
 const ExerciseController = require("./src/controllers/exercise");
 const WorkoutController = require("./src/controllers/workout");
+const UserController = require("./src/controllers/user");
+const SurveyController = require("./src/controllers/survey");
+
 const HeaderValidation = require("./src/validation/headerValidation");
 const ModelValidator = require("./src/validation/modelValidation");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const { expressjwt: jwt } = require("express-jwt");
@@ -101,6 +109,10 @@ app.get("/oauth", async (req, res) => {
 ##############################
 */
 
+/*
+### /exercises ###
+*/
+
 // POST /exercises endpoint, adds exercise to database
 app.post("/exercises", checkJwt, async (req, res) => {
   try {
@@ -144,208 +156,6 @@ app.post("/exercises", checkJwt, async (req, res) => {
 
       ExerciseController.createExercise(newExercise, responseHandler);
     }
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// GET /exercises endpoint, retrieves specified exercise from database
-app.get("/exercises/:exerciseId", checkJwt, async (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const responseHandler = (error, exercise) => {      
-      try {
-        if (error) {
-          handleError(error, res);
-          return res.end();
-        }
-        if (!exercise) {
-          res
-            .status(404)
-            .json({ Error: "No exercise with this exerciseId exists" });
-          return res.end();
-        }
-
-        if (
-          exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
-        ) {
-          res.status(401).json({
-            Error:
-              "Access denied: this exercise does not belong to the current user",
-          });
-          return res.end();
-        }
-        const newExercise = new ExerciseModel(
-          exercise.id,
-          exercise.name,
-          exercise.type,
-          exercise.secondaryType,
-          exercise.description,
-          exercise.userId,
-          exercise.muscleGroup,
-          exercise.equipment,
-          exercise.reps,
-          exercise.sets,
-          exercise.weight,
-          exercise.weightClass,
-          exercise.rest,
-          exercise.duration,
-          exercise.distance,
-          exercise.difficulty
-        );
-
-        res.status(200).json(newExercise.toJSON()).end();
-      } catch (e) {
-        handleError(e, res);
-      }
-    };
-
-    ExerciseController.getExercise(req.params.exerciseId, responseHandler);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PUT /exercises - this endpoint is not allowed
-app.put("/exercises/:exerciseId", checkJwt, (req, res) => {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PATCH /exercises endpoint, updates an exercise
-app.patch("/exercises/:exerciseId", checkJwt, (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const updatedExercise = new ExerciseModel(
-      req.params.exerciseId,
-      req.body.name,
-      req.body.type,
-      req.body.secondaryType,
-      req.body.description,
-      Auth.extractSubFromJwt(`${req.headers.authorization}`),
-      req.body.muscleGroup,
-      req.body.equipment,
-      req.body.reps,
-      req.body.sets,
-      req.body.weight,
-      req.body.weightClass,
-      req.body.rest,
-      req.body.duration,
-      req.body.distance,
-      req.body.difficulty,
-      req.body.timesCompleted
-    );
-
-    if (ModelValidator.exerciseInvalid(updatedExercise)) {
-      res.status(400).json({ Error: "The exercise request data is invalid" });
-      return res.end();
-    }
-
-    if (
-      updatedExercise.userId !=
-      Auth.extractSubFromJwt(req.headers.authorization)
-    ) {
-      res.status(401).json({
-        Error:
-          "Access denied: this exercise does not belong to the current user",
-      });
-      return res.end();
-    }
-
-    const getResponseHandler = (error, exercise) => {
-      if (error) {
-        handleError(error, res);
-        return res.end();
-      }
-
-      if (!exercise) {
-        res
-          .status(404)
-          .json({ Error: "No exercise with this exerciseId exists" });
-        return res.end();
-      }
-
-      
-      let updateResponseHandler = (error, _) => {
-        try {
-          if (error) {
-            handleError(error, res);
-          } else {
-            res.status(200).json(updatedExercise.toJSON());
-            return res.end();
-          }
-        } catch (e) {
-          handleError(e, res);
-        }
-      }
-
-
-      ExerciseController.updateExercise(
-        req.params.exerciseId,
-        updateResponseHandler
-      );
-    };
-
-    ExerciseController.updateExercise(updatedExercise, getResponseHandler);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// DELETE /exercises endpoint, deletes specified exercise from database
-app.delete("/exercises/:exerciseId", checkJwt, (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const getResponseHandler = (error, exercise) => {
-      if (error) {
-        handleError(e, res);
-        return res.end();
-      }
-
-      if (!exercise) {
-        res
-          .status(404)
-          .json({ Error: "No exercise with this exerciseId exists" });
-        return res.end();
-      }
-
-      if (
-        exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
-      ) {
-        res.status(401).json({
-          Error:
-            "Access denied: this exercise does not belong to the current user",
-        });
-        return res.end();
-      }
-
-      const deleteResponseHandler = (error, _) => {
-        try {
-          if (error) {
-            handleError(error, res);
-            return res.end();
-          }
-          res.status(204).end();
-        } catch (e) {
-          handleError(e, res);
-        }
-      };
-
-      ExerciseController.deleteExercise(
-        req.params.exerciseId,
-        exercise.userId,
-        deleteResponseHandler
-      );
-    };
-
-    ExerciseController.getExercise(req.params.exerciseId, getResponseHandler);
   } catch (e) {
     handleError(e, res);
   }
@@ -417,11 +227,221 @@ app.delete("/exercises", checkJwt, function (req, res) {
   }
 });
 
+/*
+### /exercises/:exerciseID ###
+*/
+
+// GET /exercises/:exerciseID endpoint, retrieves specified exercise from database
+app.get("/exercises/:exerciseId", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const responseHandler = (error, exercise) => {      
+      try {
+        if (error) {
+          handleError(error, res);
+          return res.end();
+        }
+        if (!exercise) {
+          res
+            .status(404)
+            .json({ Error: "No exercise with this exerciseId exists" });
+          return res.end();
+        }
+
+        if (
+          exercise.userId && exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
+        ) {
+          res.status(401).json({
+            Error:
+              "Access denied: this exercise does not belong to the current user",
+          });
+          return res.end();
+        }
+        const newExercise = new ExerciseModel(
+          exercise.id,
+          exercise.name,
+          exercise.type,
+          exercise.secondaryType,
+          exercise.description,
+          exercise.userId,
+          exercise.muscleGroup,
+          exercise.equipment,
+          exercise.reps,
+          exercise.sets,
+          exercise.weight,
+          exercise.weightClass,
+          exercise.rest,
+          exercise.duration,
+          exercise.distance,
+          exercise.difficulty
+        );
+
+        res.status(200).json(newExercise.toJSON()).end();
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    ExerciseController.getExercise(req.params.exerciseId, responseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /exercises/:exerciseId - this endpoint is not allowed
+app.put("/exercises/:exerciseId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /exercises/:exerciseId endpoint, updates an exercise
+app.patch("/exercises/:exerciseId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, exercise) => {
+      if (error) {
+        handleError(error, res);
+        return res.end();
+      }
+
+      if (!exercise) {
+        res
+          .status(404)
+          .json({ Error: "No exercise with this id exists" });
+        return res.end();
+      }
+
+      const updatedExercise = new ExerciseModel(
+        req.params.exerciseId,
+        req.body.name,
+        req.body.type,
+        req.body.secondaryType,
+        req.body.description,
+        exercise.userId,
+        req.body.muscleGroup,
+        req.body.equipment,
+        req.body.reps,
+        req.body.sets,
+        req.body.weight,
+        req.body.weightClass,
+        req.body.rest,
+        req.body.duration,
+        req.body.distance,
+        req.body.difficulty,
+        req.body.timesCompleted
+      );
+
+      if (ModelValidator.exerciseInvalid(updatedExercise)) {
+        res.status(400).json({ Error: "The exercise request data is invalid" });
+        return res.end();
+      }
+
+      if (
+        updatedExercise.userId &&
+        updatedExercise.userId !=
+          Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this exercise does not belong to the current user",
+        });
+        return res.end();
+      }
+      
+      let updateResponseHandler = (error, _) => {
+        try {
+          if (error) {
+            handleError(error, res);
+          } else {
+            res.status(200).json(updatedExercise.toJSON());
+            return res.end();
+          }
+        } catch (e) {
+          handleError(e, res);
+        }
+      }
+
+
+      ExerciseController.updateExercise(
+        updatedExercise,
+        updateResponseHandler
+      );
+    };
+
+    ExerciseController.getExercise(req.params.exerciseId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /exercises/:exerciseId endpoint, deletes specified exercise from database
+app.delete("/exercises/:exerciseId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, exercise) => {
+      if (error) {
+        handleError(e, res);
+        return res.end();
+      }
+
+      if (!exercise) {
+        res
+          .status(404)
+          .json({ Error: "No exercise with this exerciseId exists" });
+        return res.end();
+      }
+
+      if (
+        exercise.userId && exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this exercise does not belong to the current user",
+        });
+        return res.end();
+      }
+
+      const deleteResponseHandler = (error, _) => {
+        try {
+          if (error) {
+            handleError(error, res);
+            return res.end();
+          }
+          res.status(204).end();
+        } catch (e) {
+          handleError(e, res);
+        }
+      };
+
+      ExerciseController.deleteExercise(
+        req.params.exerciseId,
+        exercise.userId,
+        deleteResponseHandler
+      );
+    };
+
+    ExerciseController.getExercise(req.params.exerciseId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
 
 /*
 ##############################
 ##### WORKOUT ENDPOINTS #####
 ##############################
+*/
+
+/*
+### /workouts ###
 */
 
 // POST /workouts endpoint, adds workout to database
@@ -520,6 +540,67 @@ app.post("/workouts", checkJwt, async (req, res) => {
   }
 });
 
+
+// GET /workouts endpoint, retrieves all workouts from database
+app.get("/workouts", async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    let responseHandler = (error, workouts) => {
+      try {
+        if (error) {
+          handleError(error, res);
+        } else {
+          res.status(200).json(workouts);
+        }
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    WorkoutController.getAllWorkouts(
+      Auth.extractSubFromJwt(req.headers.authorization),
+      responseHandler
+    );
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /workouts - this endpoint is not allowed
+app.patch("/workouts", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /workouts - this endpoint is not allowed
+app.put("/workouts", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /workouts - this endpoint is not allowed
+app.delete("/workouts", checkJwt, function (req, res) {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+##### /workouts/:workoutId #####
+*/
+
 // GET /workouts endpoint, retrieves specified workout from database
 app.get("/workouts/:workoutId", checkJwt, async (req, res) => {
   try {
@@ -539,7 +620,7 @@ app.get("/workouts/:workoutId", checkJwt, async (req, res) => {
         }
 
         if (
-          workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
+          workout.userId && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
         ) {
           res.status(401).json({
             Error:
@@ -724,7 +805,7 @@ app.delete("/workouts/:workoutId", checkJwt, (req, res) => {
 });
 
 // POST /workouts - this endpoint is not allowed
-app.post("/workouts/:exercise_id", checkJwt, (req, res) => {
+app.post("/workouts/:workoutId", checkJwt, (req, res) => {
   try {
     const error_msg = { Error: "This method is not allowed on this endpoint" };
     res.status(405).json(error_msg);
@@ -732,6 +813,505 @@ app.post("/workouts/:exercise_id", checkJwt, (req, res) => {
     handleError(e, res);
   }
 });
+
+/*
+### /current_workouts ###
+*/
+
+// POST /current_workouts - this endpoint is not allowed
+app.post("/current_workout", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// GET /current_workout endpoint, retrieves current workout from database
+app.get("/current_workout", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const responseHandler = (error, workout) => {      
+      try {
+        workout = workout ? workout[0] : null;
+        if (error) {
+          handleError(error, res);
+          return res.end();
+        }
+        
+        if (workout.dateCompleted !== null) {
+          res
+            .status(404)
+            .json({ Error: "No uncompleted workouts exist for this user." });
+          return res.end();
+        }
+
+        if (
+          workout.userId && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
+        ) {
+          res.status(401).json({
+            Error:
+              "Access denied: this workout does not belong to the current user",
+          });
+          return res.end();
+        }
+        const newWorkout = new WorkoutModel(
+          workout.id,
+          workout.userId,
+          JSON.parse(workout.exercises),
+          workout.dateCompleted
+        );
+
+        res.status(200).json(newWorkout.toJSON()).end();
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    WorkoutController.getCurrentWorkout(
+      Auth.extractSubFromJwt(req.headers.authorization),
+      responseHandler
+    );
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /current_workout - this endpoint is not allowed
+app.put("/current_workout", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /current_workout - this endpoint is not allowed
+app.patch("/current_workout", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /current_workout - this endpoint is not allowed
+app.delete("/current_workout", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+### /workouts/:workoutId/exercises/:exerciseId ###
+*/
+
+// POST /workouts/:workoutId/exercises/:exerciseId endpoint, retrieves specified exercise from database
+app.post("/workouts/:workoutId/exercises/:exerciseId", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const exerciseResponseHandler = (error, exercise) => {      
+      try {
+        if (error) {
+          handleError(error, res);
+          return res.end();
+        }
+        if (!exercise) {
+          res
+            .status(404)
+            .json({ Error: "No exercise with this exerciseId exists" });
+          return res.end();
+        }
+
+        if (
+          exercise.userId && exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
+        ) {
+          res.status(401).json({
+            Error:
+              "Access denied: this exercise does not belong to the current user",
+          });
+          return res.end();
+        }
+        const newExercise = new ExerciseModel(
+          exercise.id,
+          exercise.name,
+          exercise.type,
+          exercise.secondaryType,
+          exercise.description,
+          exercise.userId,
+          exercise.muscleGroup,
+          exercise.equipment,
+          exercise.reps,
+          exercise.sets,
+          exercise.weight,
+          exercise.weightClass,
+          exercise.rest,
+          exercise.duration,
+          exercise.distance,
+          exercise.difficulty
+        );
+
+        res.status(200).json(newExercise.toJSON()).end();
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    ExerciseController.getExercise(
+      req.params.exerciseId,
+      exerciseResponseHandler
+    );
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+##############################
+###### USERS  ENDPOINTS ######
+##############################
+*/
+
+/*
+### /users ###
+*/
+
+// POST /users - this endpoint adds a new user
+app.post("/users", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const newUser = new UserModel(
+      1,
+      Auth.extractSubFromJwt(req.headers.authorization),
+      req.body.email,
+      req.body.avatarId,
+      req.body.firstName,
+      req.body.lastName,
+      req.body.city,
+      req.body.state,
+      req.body.age,
+      req.body.gender,
+      req.body.weight,
+      req.body.height,
+      req.body.fitnessTrack,
+      req.body.secondaryTrack
+    ); 
+  
+    if (ModelValidator.userInvalid(newUser)) {
+      res.status(400).json({ Error: "The user request data is invalid" });
+    } else {
+      let responseHandler = (error, data) => {
+        try {
+          if (error) {
+            if (error.code == 'ER_DUP_ENTRY') {
+              res
+                .status(400)
+                .json({ Error: "A user already exists for this Auth0 account." });
+
+            } else {
+              handleError(error, res);
+              return res.end();
+            };
+          } else {
+            newUser.id = data.insertId;
+            res.status(201).json(newUser.toJSON());
+          }
+        } catch (e) {
+          handleError(e, res);
+          return res.end();
+        }
+      };
+
+      UserController.createUser(newUser, responseHandler);
+    }
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// GET /users endpoint, retrieves all users from database
+app.get("/users", async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    let responseHandler = (error, users) => {
+      try {
+        if (error) {
+          handleError(error, res);
+        } else {
+          res.status(200).json(users);
+        }
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    UserController.getAllUsers(
+      Auth.extractSubFromJwt(req.headers.authorization),
+      responseHandler
+    );
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /users - this endpoint is not allowed
+app.put("/users", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /users - this endpoint is not allowed
+app.patch("/users", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /users - this endpoint is not allowed
+app.delete("/users", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+### /users/:userId ###
+*/
+
+// POST /users - this endpoint is not allowed
+app.post("/users/:userId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// GET /users/:userId endpoint, retrieves specified user from database
+app.get("/users/:userId", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const responseHandler = (error, user) => {      
+      try {
+        if (error) {
+          handleError(error, res);
+          return res.end();
+        }
+        if (!user) {
+          res
+            .status(404)
+            .json({ Error: "No user with this id exists" });
+          return res.end();
+        }
+
+        if (
+          user.userId && user.userId != Auth.extractSubFromJwt(req.headers.authorization)
+        ) {
+          res.status(401).json({
+            Error:
+              "Access denied: this user is not the current user",
+          });
+          return res.end();
+        }
+        const userResponse = new UserModel(
+          user.id,
+          user.userId,
+          user.email,
+          user.avatarId,
+          user.firstName,
+          user.lastName,
+          user.city,
+          user.state,
+          user.age,
+          user.gender,
+          user.weight,
+          user.height,
+          user.fitnessTrack,
+          user.secondaryTrack
+        );
+
+        res.status(200).json(userResponse.toJSON()).end();
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    UserController.getUser(req.params.userId, responseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /users endpoint, updates a user
+app.patch("/users/:userId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, user) => {
+      if (error) {
+        handleError(error, res);
+        return res.end();
+      }
+
+      if (!user) {
+        res
+          .status(404)
+          .json({ Error: "No user with this id exists" });
+        return res.end();
+      }
+
+      const updatedUser = new UserModel(
+        1,
+        user.userId,
+        req.body.email,
+        req.body.avatarId,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.city,
+        req.body.state,
+        req.body.age,
+        req.body.gender,
+        req.body.weight,
+        req.body.height,
+        req.body.fitnessTrack,
+        req.body.secondaryTrack
+      );
+
+      if (ModelValidator.userInvalid(updatedUser)) {
+        res.status(400).json({ Error: "The user request data is invalid" });
+        return res.end();
+      }
+
+      if (
+        updatedUser.userId &&
+        updatedUser.userId !=
+          Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this user is not the current user",
+        });
+        return res.end();
+      }
+      
+      let updateResponseHandler = (error, _) => {
+        try {
+          if (error) {
+            handleError(error, res);
+          } else {
+            res.status(200).json(updatedUser.toJSON());
+            return res.end();
+          }
+        } catch (e) {
+          handleError(e, res);
+        }
+      }
+
+      UserController.updateUser(
+        updatedUser,
+        updateResponseHandler
+      );
+    };
+
+    UserController.getUser(req.params.userId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /users - this endpoint is not allowed
+app.put("/users/:userId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /users endpoint, deletes specified workout from database
+app.delete("/users/:userId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+    const getResponseHandler = (error, user) => {
+      if (error) {
+        handleError(e, res);
+        return res.end();
+      }
+
+      if (
+        user &&
+        user.userId != Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this user is not the current user",
+        });
+        return res.end();
+      }
+
+      if (!user) {
+        res
+          .status(404)
+          .json({ Error: "No user with this id exists" });
+        return res.end();
+      }
+
+      const deleteResponseHandler = (error, _) => {
+        try {
+          if (error) {
+            handleError(error, res);
+            return res.end();
+          }
+          res.status(204).end();
+        } catch (e) {
+          handleError(e, res);
+        }
+      };
+
+      UserController.deleteUser(
+        req.params.userId,
+        deleteResponseHandler
+      );
+    };
+
+    UserController.getUser(req.params.userId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+##############################
+##### WORKOUTS ENDPOINTS #####
+##############################
+*/
+
+/*
+### /workouts ###
+*/
 
 // GET /workouts endpoint, retrieves all workouts from database
 app.get("/workouts", async (req, res) => {
@@ -789,8 +1369,12 @@ app.delete("/workouts", checkJwt, function (req, res) {
   }
 });
 
-// POST /current_workouts - this endpoint is not allowed
-app.post("/current_workout", checkJwt, (req, res) => {
+/*
+##### /workouts/:workoutId #####
+*/
+
+// POST /workouts - this endpoint is not allowed
+app.post("/workouts/:workoutId", checkJwt, (req, res) => {
   try {
     const error_msg = { Error: "This method is not allowed on this endpoint" };
     res.status(405).json(error_msg);
@@ -799,15 +1383,13 @@ app.post("/current_workout", checkJwt, (req, res) => {
   }
 });
 
-
 // GET /workouts endpoint, retrieves specified workout from database
-app.get("/current_workout", checkJwt, async (req, res) => {
+app.get("/workouts/:workoutId", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
     const responseHandler = (error, workout) => {      
       try {
-        workout = workout ? workout[0] : null;
         if (error) {
           handleError(error, res);
           return res.end();
@@ -815,12 +1397,12 @@ app.get("/current_workout", checkJwt, async (req, res) => {
         if (!workout) {
           res
             .status(404)
-            .json({ Error: "No uncompleted workouts exist for this user." });
+            .json({ Error: "No workout with this id exists" });
           return res.end();
         }
 
         if (
-          workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
+          workout.userId && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
         ) {
           res.status(401).json({
             Error:
@@ -841,7 +1423,269 @@ app.get("/current_workout", checkJwt, async (req, res) => {
       }
     };
 
-    WorkoutController.getCurrentWorkout(
+    WorkoutController.getWorkout(req.params.workoutId, responseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /workouts - this endpoint is not allowed
+app.put("/workouts/:workoutId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /workouts endpoint, updates an workout
+app.patch("/workouts/:workoutId", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    if (!req.body.exercises) {
+      return res.status(400).json({
+        Error:
+          "The request object is missing at least one of the required attributes",
+      });
+    }
+
+    const getExercise = (exerciseId) => {
+      return new Promise((resolve, reject) => {
+        ExerciseController.getExercise(exerciseId, (error, exercise) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(exercise);
+          }
+        });
+      });
+    };
+
+    const exercisePromises = req.body.exercises.map((exerciseId) =>
+      getExercise(exerciseId)
+    );
+
+    const exercises = await Promise.all(exercisePromises)
+      .then((exercisesData) => {
+        const results = {};
+        exercisesData.forEach((exercise) => {
+          if (exercise) {
+            results[`${exercise.id}`] = exercise;
+          }
+        });
+        return results;
+      })
+      .catch((error) => {
+        return handleError(error, res);
+      });
+
+    for (const exercise in exercises) {
+      if (
+        exercises[exercise] &&
+        exercises[exercise].userId !=
+          Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        return res.status(401).json({
+          Error:
+            "Access denied: one or more of these excercises does not belong to the current user",
+        });
+      }
+    }
+
+    if (
+      !exercises ||
+      req.body.exercises.length != Object.keys(exercises).length
+    ) {
+      return res.status(404).json({
+        Error: "One or more of the exercises in the request do not exist",
+      });
+    }
+
+    const updatedWorkout = new WorkoutModel(
+      parseInt(req.params.workoutId, 10),
+      Auth.extractSubFromJwt(req.headers.authorization),
+      exercises,
+      null
+    );
+
+    if (ModelValidator.workoutInvalid(updatedWorkout)) {
+      return res.status(400).json({
+        Error:
+          "The request object is missing at least one of the required attributes",
+      });
+    } else {
+      let responseHandler = (error, data) => {
+        try {
+          if (error) {
+            handleError(error, res);
+          } else {
+            return res.status(201).json(updatedWorkout.toJSON());
+          }
+        } catch (e) {
+          return handleError(e, res);
+        }
+      };
+
+      WorkoutController.updateWorkout(updatedWorkout, responseHandler);
+    }
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /workouts endpoint, deletes specified workout from database
+app.delete("/workouts/:workoutId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, workout) => {
+      if (error) {
+        handleError(e, res);
+        return res.end();
+      }
+
+      if (workout && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)) {
+        res.status(401).json({
+          Error:
+            "Access denied: this workout does not belong to the current user",
+        });
+        return res.end();
+      }
+
+      if (!workout) {
+        res
+          .status(404)
+          .json({ Error: "No workout with this id exists" });
+        return res.end();
+      }
+
+      const deleteResponseHandler = (error, _) => {
+        try {
+          if (error) {
+            handleError(error, res);
+            return res.end();
+          }
+          res.status(204).end();
+        } catch (e) {
+          handleError(e, res);
+        }
+      };
+
+      WorkoutController.deleteWorkout(
+        req.params.workoutId,
+        workout.userId,
+        deleteResponseHandler
+      );
+    };
+
+    WorkoutController.getWorkout(req.params.workoutId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+/*
+##############################
+##### SURVEY ENDPOINTS #####
+##############################
+*/
+
+/*
+### /surveys ###
+*/
+
+// POST /surveys endpoint, adds survey to database
+app.post("/surveys", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, exercise) => {
+      if (error) {
+        handleError(error, res);
+        return res.end();
+      }
+
+      if (!exercise) {
+        res.status(404).json({ Error: "No exercise with this id exists" });
+        return res.end();
+      }
+
+      const newSurvey = new SurveyModel(
+        1,
+        req.body.exerciseId,
+        Auth.extractSubFromJwt(req.headers.authorization),
+        new Date(),
+        req.body.reps,
+        req.body.weight,
+        req.body.sets,
+        req.body.rest,
+        req.body.difficulty,
+        req.body.duration,
+        req.body.distance
+      );
+
+      if (ModelValidator.surveyInvalid(newSurvey.toJSON())) {
+        return res.status(400).json({
+          Error:
+            "The request object is missing at least one of the required attributes",
+        });
+      }
+
+      if (
+        exercise.userId &&
+        exercise.userId !=
+          Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this exercise does not belong to the current user",
+        });
+        return res.end();
+      }
+
+      let createSurveyHandler = (error, data) => {
+        try {
+          if (error) {
+            handleError(error, res);
+          } else {
+            newSurvey.id = data.insertId;
+            res.status(201).json(newSurvey.toJSON());
+            return res.end();
+          }
+        } catch (e) {
+          handleError(e, res);
+        }
+      };
+
+      SurveyController.createSurvey(newSurvey, createSurveyHandler);
+    };
+
+    ExerciseController.getExercise(req.body.exerciseId, getResponseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// GET /surveys endpoint, retrieves all surveys from database
+app.get("/surveys", checkJwt, async (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    let responseHandler = (error, data) => {
+      try {
+        if (error) {
+          handleError(error, res);
+        } else {
+          res.status(200).json(data);
+        }
+      } catch (e) {
+        handleError(e, rs);
+      }
+    };
+
+    SurveyController.getAllSurveys(
       Auth.extractSubFromJwt(req.headers.authorization),
       responseHandler
     );
@@ -850,8 +1694,8 @@ app.get("/current_workout", checkJwt, async (req, res) => {
   }
 });
 
-// PUT /current_workouts - this endpoint is not allowed
-app.put("/current_workout", checkJwt, (req, res) => {
+// PUT /surveys - this endpoint is not allowed
+app.put("/surveys", checkJwt, (req, res) => {
   try {
     const error_msg = { Error: "This method is not allowed on this endpoint" };
     res.status(405).json(error_msg);
@@ -860,8 +1704,8 @@ app.put("/current_workout", checkJwt, (req, res) => {
   }
 });
 
-// PATCH /current_workouts - this endpoint is not allowed
-app.patch("/current_workout", checkJwt, (req, res) => {
+// PATCH /surveys - this endpoint is not allowed
+app.patch("/surveys", checkJwt, (req, res) => {
   try {
     const error_msg = { Error: "This method is not allowed on this endpoint" };
     res.status(405).json(error_msg);
@@ -870,123 +1714,154 @@ app.patch("/current_workout", checkJwt, (req, res) => {
   }
 });
 
-// DELETE /current_workouts - this endpoint is not allowed
-app.delete("/current_workout", checkJwt, (req, res) => {
+// DELETE /surveys - this endpoint is not allowed
+app.delete("/surveys", checkJwt, (req, res) => {
   try {
     const error_msg = { Error: "This method is not allowed on this endpoint" };
     res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// POST /workouts/:workoutId/exercises/:exerciseId endpoint, retrieves specified exercise from database
-app.post("/workouts/:workoutId/exercises/:exerciseId", checkJwt, async (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const exerciseResponseHandler = (error, exercise) => {      
-      try {
-        if (error) {
-          handleError(error, res);
-          return res.end();
-        }
-        if (!exercise) {
-          res
-            .status(404)
-            .json({ Error: "No exercise with this exerciseId exists" });
-          return res.end();
-        }
-
-        if (
-          exercise.userId != Auth.extractSubFromJwt(req.headers.authorization)
-        ) {
-          res.status(401).json({
-            Error:
-              "Access denied: this exercise does not belong to the current user",
-          });
-          return res.end();
-        }
-        const newExercise = new ExerciseModel(
-          exercise.id,
-          exercise.name,
-          exercise.type,
-          exercise.secondaryType,
-          exercise.description,
-          exercise.userId,
-          exercise.muscleGroup,
-          exercise.equipment,
-          exercise.reps,
-          exercise.sets,
-          exercise.weight,
-          exercise.weightClass,
-          exercise.rest,
-          exercise.duration,
-          exercise.distance,
-          exercise.difficulty
-        );
-
-        res.status(200).json(newExercise.toJSON()).end();
-      } catch (e) {
-        handleError(e, res);
-      }
-    };
-
-    ExerciseController.getExercise(
-      req.params.exerciseId,
-      exerciseResponseHandler
-    );
   } catch (e) {
     handleError(e, res);
   }
 });
 
 /*
-##############################
-###### USERS  ENDPOINTS ######
-##############################
+### /surveys/:surveyId ###
 */
 
-// GET /users/:user_id - this endpoint gets all of the user information for a specified user
-app.get("/users/:user_id", checkJwt, (req, res) => {
+// POST /surveys/:surveyId - this endpoint is not allowed
+app.post("/surveys/:surveyId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// GET /surveys/:surveyId - this endpoint is not allowed
+app.get("/surveys/:surveyId", checkJwt, (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
-    const newUser = 
-      new UserModel(
-        Auth.extractSubFromJwt(req.headers.authorization),
-        req.body.email,
-        req.body.avatarId,
-        req.body.firstName,
-        req.body.lastName,
-        req.body.city,
-        req.body.state,
-        req.body.age,
-        req.body.gender,
-        req.body.weight,
-        req.body.height,
-        req.body.fitnessTrack,
-        req.body.secondaryTrack
-      ) 
-  
-    if (ModelValidator.exerciseInvalid(newExercise)) {
-      res.status(400).json({ Error: "The exercise request data is invalid" });
-    } else {
-      let responseHandler = (error, data) => {
+    const responseHandler = (error, survey) => {      
+      try {
+        if (error) {
+          handleError(error, res);
+          return res.end();
+        }
+        if (!survey) {
+          res
+            .status(404)
+            .json({ Error: "No survey with this id exists" });
+          return res.end();
+        }
+
+        if (
+          survey.userId &&
+          survey.userId != Auth.extractSubFromJwt(req.headers.authorization)
+        ) {
+          res.status(401).json({
+            Error:
+              "Access denied: this survey does not belong to the current user",
+          });
+          return res.end();
+        }
+
+        const newSurvey = new SurveyModel(
+          survey.id,
+          survey.exerciseId,
+          Auth.extractSubFromJwt(req.headers.authorization),
+          new Date(),
+          survey.reps,
+          survey.weight,
+          survey.sets,
+          survey.rest,
+          survey.difficulty,
+          survey.duration,
+          survey.distance
+        );
+
+        console.log(newSurvey);
+
+        res.status(200).json(newSurvey.toJSON()).end();
+      } catch (e) {
+        handleError(e, res);
+      }
+    };
+
+    SurveyController.getSurvey(req.params.surveyId, responseHandler);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PUT /surveys/:surveyId - this endpoint is not allowed
+app.put("/survey/:surveyIds", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// PATCH /surveys/:surveyId - this endpoint is not allowed
+app.patch("/surveys/:surveyId", checkJwt, (req, res) => {
+  try {
+    const error_msg = { Error: "This method is not allowed on this endpoint" };
+    res.status(405).json(error_msg);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+// DELETE /surveys/:surveyId endpoint, deletes specified survey from database
+app.delete("/surveys/:surveyId", checkJwt, (req, res) => {
+  try {
+    if (HeaderValidation.headersInvalid(req, res)) return;
+
+    const getResponseHandler = (error, survey) => {
+      if (error) {
+        handleError(e, res);
+        return res.end();
+      }
+
+      if (!survey) {
+        res
+          .status(404)
+          .json({ Error: "No survey with this id exists" });
+        return res.end();
+      }
+
+      if (
+        survey.userId && survey.userId != Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this survey does not belong to the current user",
+        });
+        return res.end();
+      }
+
+      const deleteResponseHandler = (error, _) => {
         try {
           if (error) {
             handleError(error, res);
-          } else {
-            res.status(201).json(newUser.toJSON());
+            return res.end();
           }
+          res.status(204).end();
         } catch (e) {
           handleError(e, res);
-          return res.end();
         }
       };
 
-      ExerciseController.createExercise(newUser, responseHandler);
-    }
+      SurveyController.deleteSurvey(
+        req.params.surveyId,
+        deleteResponseHandler
+      );
+    };
+
+    SurveyController.getSurvey(req.params.surveyId, getResponseHandler);
   } catch (e) {
     handleError(e, res);
   }

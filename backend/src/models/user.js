@@ -1,5 +1,8 @@
+const Auth0 = require("../auth/auth0Constants");
+
 class User {
   constructor(
+    id,
     userId,
     email,
     avatarId,
@@ -14,6 +17,7 @@ class User {
     fitnessTrack,
     secondaryTrack
   ) {
+    this.id = id;
     this.userId = userId;
     this.email = email;
     this.avatarId = avatarId;
@@ -32,7 +36,8 @@ class User {
   // Method to convert the user object to JSON
   toJSON() {
     return {
-      user_id: this.user_id,
+      id: this.id,
+      userId: this.userId,
       email: this.email,
       avatarId: this.avatarId,
       firstName: this.firstName,
@@ -45,6 +50,7 @@ class User {
       height: this.height,
       fitnessTrack: this.fitnessTrack,
       secondaryTrack: this.secondaryTrack,
+      self: this.id == null ? null : `${Auth0.URL}/users/${this.userId}`,
     };
   }
 }
