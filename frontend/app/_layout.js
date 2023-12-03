@@ -6,6 +6,7 @@ import { useColorScheme } from 'react-native';
 import React, {useState} from "react";
 import ThemeContext from '../contexts/ThemeContext';
 import ExerciseContext from '../contexts/ExerciseContext';
+import PostExerciseModal from '../components/PostExerciseModal';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,7 +52,7 @@ function RootLayoutNav() {
 
   const [theme, setTheme] = useState("default");
   const value = { theme, setTheme };
-  const [workout, setWorkout] = useState({intro:true});
+  const [workout, setWorkout] = useState({intro:true, workout:false});
   const value1 = { workout, setWorkout };
 
   return (

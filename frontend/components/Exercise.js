@@ -1,11 +1,11 @@
 import { StyleSheet, Pressable, Dimensions,SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { Link } from 'expo-router';
-import { Card } from 'react-native-elements'
-import {useState, useContext} from 'react';
+import { Link, router } from 'expo-router';
+import { useContext} from 'react';
 import ThemeContext from '../contexts/ThemeContext';
 import ExerciseContext from '../contexts/ExerciseContext';
+import UserContext from '../contexts/userContext';
 import Theme from '../components/Themes';
-import PostExerciseModal from './PostExerciseModal';
+import axios from 'axios';
 
 
 export default function Exercises({exercises}) {
@@ -16,6 +16,15 @@ export default function Exercises({exercises}) {
 
   console.log('Exercise workout list');
 
+  const {user, setUser} = useContext(UserContext);
+  axios.defaults.headers.post['Authorization'] = `Bearer ${user}`;
+
+  const complete = () => {
+    const now = new Date();
+    // axios.patch(`http://localhost:8080/workouts/${workout.workoutId}`, {"dateCompleted":now});
+    setWorkout({...workout, workoutComplete:true});
+    router.replace('/dashboard');
+  }
 
   return (
 
@@ -24,13 +33,13 @@ export default function Exercises({exercises}) {
     <ScrollView contentContainerStyle={[styles.scrollView]}>
     {Object.values(exercises).map((exercise) => {
       return (
-        <Link href={`/exercise/${exercise.e_id}`} asChild>
-          <Pressable disabled={workout[exercise.e_id]}
+        <Link href={`/exercise/${exercise.id}`} asChild>
+          <Pressable disabled={workout[exercise.id]}
                      accessibilityRole="button"
                      >
               <View style={[styles.card, themed.card]}>
               <Text style={[{fontSize:16},themed.text]}>{exercise.name}</Text>
-              {workout[exercise.e_id] ? <View style={{alignItems:'center'}}><Text style={themed.text}>Complete</Text></View>:
+              {workout[exercise.id] ? <View style={{alignItems:'center'}}><Text style={themed.text}>Complete</Text></View>:
               null}
               </View>
           </Pressable>
@@ -38,7 +47,10 @@ export default function Exercises({exercises}) {
 
       )
     })}
-    <PostExerciseModal/>
+    <View style={[styles.button, themed.button,{alignSelf:'center'}]}>
+      <Pressable onPressIn={() => complete()} ><Text style={themed.text}>Complete Workout</Text></Pressable>
+    </View>
+
     </ScrollView>
   </View>
   );
@@ -82,6 +94,6 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     paddingVertical: 12,
-    paddingHorizontal: 32
+    paddingHorizontal: 32,
   },
 });

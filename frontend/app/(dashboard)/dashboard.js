@@ -1,13 +1,16 @@
 import { StyleSheet, Pressable, Text, View, Dimensions, ImageBackground, Image } from 'react-native';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { Link } from 'expo-router';
 import { useContext } from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
+import ExerciseContext from '../../contexts/ExerciseContext';
 
 
 export default function DashboardScreen() {
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
+  const {workout, setWorkout} = useContext(ExerciseContext);
   return (
   <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
   <View style={[styles.container, themed.container]}>
@@ -76,12 +79,10 @@ export default function DashboardScreen() {
 
   <Text style={[{marginBottom: 10,}, [styles.text, themed.text, {color:'black'}]]}>
   </Text>
-
-  <Button
-   // icon={<Icon name='code' color='#ffffff' />}
-    // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0,
-    // backgroundColor: 'blue', }}
-    title='START WORKOUT' />
+  {workout.workoutComplete ? <View style={[styles.button, themed.button]}><Text style={[styles.text, themed.text]}>Workout Complete</Text></View>:
+                              <Link href='/workout' asChild style={[styles.button, themed.button]}><Pressable><Text style={{color:'white'}}>Start Workout</Text></Pressable></Link>}
+                              
+  
   </Card>
   
   </View>

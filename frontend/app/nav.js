@@ -10,6 +10,8 @@ export default function NavScreen() {
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
 
+  const now = new Date();
+
   return (
     <View style={[themed.container,styles.container]}>
       
