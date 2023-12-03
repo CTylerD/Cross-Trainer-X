@@ -54,7 +54,7 @@ export default function Page() {
           <FlexTimer exercise={Exercise} />}
       </View>
       <View style={[styles.button, themed.button]}>
-      <PostExerciseModal exerciseId={exerciseId.exercise}/>
+      <PostExerciseModal exercise={Exercise}/>
       </View>
     </View>
     </ImageBackground>

@@ -17,13 +17,14 @@ export default function Exercises({exercises}) {
   console.log('Exercise workout list');
 
   const {user, setUser} = useContext(UserContext);
-  axios.defaults.headers.post['Authorization'] = `Bearer ${user}`;
+  axios.defaults.headers.patch['Authorization'] = `Bearer ${user}`;
 
   const complete = () => {
     const now = new Date();
-    // axios.patch(`http://localhost:8080/workouts/${workout.workoutId}`, {"dateCompleted":now});
+    console.log("id: " + workout.workoutId);
+    axios.patch(`http://localhost:8080/workouts/${workout.workoutId}`, {"dateCompleted":now});
     setWorkout({...workout, workoutComplete:true});
-    router.replace('/dashboard');
+    setTimeout(() => router.replace('/dashboard'), 1000);
   }
 
   return (
