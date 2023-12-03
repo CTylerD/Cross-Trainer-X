@@ -5,6 +5,7 @@ import ThemeContext from '../contexts/ThemeContext';
 import UserContext from '../contexts/userContext';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
+import { router } from 'expo-router';
 
 export default function AddModal(){
 
@@ -22,6 +23,7 @@ export default function AddModal(){
 
   const add = () => {
     axios.post('http://localhost:8080/exercises', exercise);
+    setTimeout(() => router.replace('/editplan'), 1000);
   }
 
   return (
