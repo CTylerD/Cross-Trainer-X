@@ -52,7 +52,7 @@ function handleError(error, res) {
 
 // GET / welcome to the app
 app.get("/", function (req, res) {
-  res.status(200).json({ welcome: "you've got mail!" });
+  res.status(200).send("Welcome to CrossTrainerX! Please send a POST request to the /login endpoint to get started.");
 });
 
 /*
@@ -69,7 +69,7 @@ app.post("/login", (req, res) => {
         handleError(error, res);
         return res.end();
       } else {
-        res.redirect(
+        res.send(
           `https://${Auth0.OAUTH_DOMAIN}/authorize?response_type=code&client_id=${Auth0.OAUTH_CLIENT_ID}&redirect_uri=${Auth0.URL}/oauth&scope=openid%20profile%20email&state=${state}`
         );
       }
