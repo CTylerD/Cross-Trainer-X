@@ -314,7 +314,7 @@
 			"response": []
 		},
 		{
-			"name": "add cardio_exercise1 (user1) 201",
+			"name": "add cardio_exercise1 (user4) 201",
 			"event": [
 				{
 					"listen": "test",
@@ -341,6 +341,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -366,69 +376,7 @@
 			"response": []
 		},
 		{
-			"name": "add cardio_exercise2 (user2) 201",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.environment.set(\"cardio_exercise_id2\", pm.response.json()[\"id\"]);",
-							"",
-							"pm.test(\"201 status code\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Cycling\");",
-							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Cardio\");",
-							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"Biking on a scenic route\");",
-							"    pm.expect(pm.response.json()[\"duration\"]).to.eq(30);",
-							"    pm.expect(pm.response.json()[\"distance\"]).to.eq(10);",
-							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/exercises/${pm.environment.get(\"cardio_exercise_id2\")}`);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt2}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Cycling\",\r\n  \"type\": \"Cardio\",\r\n  \"secondaryType\": \"Cycling\",\r\n  \"description\": \"Biking on a scenic route\",\r\n  \"duration\": 30,\r\n  \"distance\": 10\r\n}\r\n"
-				},
-				"url": {
-					"raw": "{{app_url}}/exercises",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"exercises"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "add flexibility_exercise1 (user1) 201",
+			"name": "add flexibility_exercise1 (user6) 201",
 			"event": [
 				{
 					"listen": "test",
@@ -455,64 +403,12 @@
 				}
 			],
 			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Forward Bend\",\r\n  \"type\": \"Flexibility\",\r\n  \"secondaryType\": \"Yoga\",\r\n  \"description\": \"Bend forward from the waist, reaching toward the toes\",\r\n  \"duration\": 20,\r\n  \"difficulty\": 2\r\n}"
-				},
-				"url": {
-					"raw": "{{app_url}}/exercises",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"exercises"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "add flexibility_exercise2 (user2) 201",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.environment.set(\"flexibility_exercise_id2\", pm.response.json()[\"id\"]);",
-							"",
-							"pm.test(\"201 status code\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Neck Stretch\");",
-							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Flexibility\");",
-							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"Gently tilt your head to each side to stretch the neck muscles\");",
-							"    pm.expect(pm.response.json()[\"duration\"]).to.eq(15);",
-							"    pm.expect(pm.response.json()[\"difficulty\"]).to.eq(1);",
-							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/exercises/${pm.environment.get(\"flexibility_exercise_id2\")}`);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{jwt2}}",
+							"value": "{{jwt6}}",
 							"type": "string"
 						}
 					]
@@ -527,7 +423,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Neck Stretch\",\r\n  \"type\": \"Flexibility\",\r\n  \"secondaryType\": \"Stretching\",\r\n  \"description\": \"Gently tilt your head to each side to stretch the neck muscles\",\r\n  \"duration\": 15,\r\n  \"difficulty\": 1\r\n}"
+					"raw": "{\r\n  \"name\": \"Forward Bend\",\r\n  \"type\": \"Flexibility\",\r\n  \"secondaryType\": \"Yoga\",\r\n  \"description\": \"Bend forward from the waist, reaching toward the toes\",\r\n  \"duration\": 20,\r\n  \"difficulty\": 2\r\n}"
 				},
 				"url": {
 					"raw": "{{app_url}}/exercises",
@@ -892,6 +788,16 @@
 				}
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -945,6 +851,16 @@
 				}
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt6}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -1288,60 +1204,6 @@
 			"response": []
 		},
 		{
-			"name": "add workout3 (user1) 201",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.environment.set(\"workout_id3\", pm.response.json()[\"id\"]);",
-							"",
-							"pm.test(\"201 status code\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"pm.test(\"content is valid\", function () {",
-							"    jsonResponse = pm.response.json();",
-							"    pm.expect(Object.keys(jsonResponse).length).to.eq(5);",
-							"    ",
-							"    pm.expect(jsonResponse).to.have.property(\"exercises\");",
-							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id1\")}`);",
-							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id3\")}`);",
-							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
-							"    pm.expect(jsonResponse[\"dateCompleted\"]).to.eq(null);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"exercises\": [{{strength_exercise_id1}}, {{strength_exercise_id3}}]\r\n}"
-				},
-				"url": {
-					"raw": "{{app_url}}/workouts",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"workouts"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "add workout with missing attributes 400",
 			"event": [
 				{
@@ -1599,6 +1461,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.environment.set(\"current_workout_user1_id\", pm.response.json()[\"id\"]);",
+							"",
 							"pm.test(\"200 status code\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
@@ -1606,11 +1470,10 @@
 							"pm.test(\"content is valid\", function () {",
 							"    jsonResponse = pm.response.json();",
 							"",
-							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]).length).to.eq(2);",
+							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]).length).to.eq(1);",
 							"    pm.expect(jsonResponse[\"exercises\"]).to.have.property(pm.environment.get(\"strength_exercise_id1\"));",
-							"    pm.expect(jsonResponse[\"exercises\"]).to.have.property(pm.environment.get(\"strength_exercise_id3\"));",
 							"    pm.expect(jsonResponse[\"dateCompleted\"]).to.eq(null);",
-							"    pm.expect(jsonResponse[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"workout_id3\")}`);",
+							"    pm.expect(jsonResponse[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"current_workout_user1_id\")}`);",
 							"});",
 							""
 						],
@@ -1788,7 +1651,6 @@
 							"pm.test(\"405 status code\", function () {",
 							"    pm.response.to.have.status(405);",
 							"});",
-							"",
 							"",
 							"pm.test(\"405 error message\", function () {",
 							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"This method is not allowed on this endpoint\");",
@@ -2289,6 +2151,105 @@
 			"response": []
 		},
 		{
+			"name": "complete current workout (user1) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    const jsonResponse = pm.response.json();",
+							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]).length).to.eq(1);",
+							"    ",
+							"    pm.expect(jsonResponse).to.have.property(\"exercises\");",
+							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id1\")}`);",
+							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
+							"    pm.expect(pm.response.json()[\"dateCompleted\"]).to.eq(\"2023-11-06T19:43:23.243Z\");",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"current_workout_user1_id\")}`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dateCompleted\": \"2023-11-06T19:43:23.243Z\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/workouts/{{current_workout_user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"workouts",
+						"{{current_workout_user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get current workout (user1) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    jsonResponse = pm.response.json();",
+							"",
+							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]));",
+							"    pm.expect(jsonResponse[\"id\"]).to.not.equal(pm.environment.get(\"current_workout_user1_id\"));",
+							"    pm.expect(jsonResponse[\"dateCompleted\"]).to.eq(null);",
+							"    pm.expect(jsonResponse[\"self\"]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/current_workout",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"current_workout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add user8 (strength) 201",
 			"event": [
 				{
@@ -2339,7 +2300,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Strength\",\r\n  \"secondaryTrack\": null\r\n}"
+					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Strength\",\r\n  \"secondaryTrack\": null,\r\n  \"experience\": 2\r\n}"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -2348,6 +2309,48 @@
 					],
 					"path": [
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all exercises (user8 strength) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.be.greaterThan(25);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
 					]
 				}
 			},
@@ -2389,6 +2392,58 @@
 					"path": [
 						"users",
 						"{{user_id8}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all exercises user8 empty200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.equal(0);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
 					]
 				}
 			},
@@ -2445,7 +2500,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\"\r\n}\r\n"
+					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\",\r\n  \"experience\": 1\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -2454,6 +2509,58 @@
 					],
 					"path": [
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all exercises (user8 cardio) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.equal(1);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
 					]
 				}
 			},
@@ -2495,6 +2602,58 @@
 					"path": [
 						"users",
 						"{{user_id8}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all exercises user8 empty 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.equal(0);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
 					]
 				}
 			},
@@ -2551,7 +2710,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Flexibility\",\r\n  \"secondaryTrack\": \"Yoga\"\r\n}\r\n"
+					"raw": "{\r\n  \"email\": \"user8@mock.com\",\r\n  \"avatarId\": 2,\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Flexibility\",\r\n  \"secondaryTrack\": \"Yoga\",\r\n  \"experience\": 3\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -2560,6 +2719,120 @@
 					],
 					"path": [
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add flexibility_exercise2 (user8) 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"flexibility_exercise_id2\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Neck Stretch\");",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Flexibility\");",
+							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"Gently tilt your head to each side to stretch the neck muscles\");",
+							"    pm.expect(pm.response.json()[\"duration\"]).to.eq(15);",
+							"    pm.expect(pm.response.json()[\"difficulty\"]).to.eq(1);",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/exercises/${pm.environment.get(\"flexibility_exercise_id2\")}`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Neck Stretch\",\r\n  \"type\": \"Flexibility\",\r\n  \"secondaryType\": \"Stretching\",\r\n  \"description\": \"Gently tilt your head to each side to stretch the neck muscles\",\r\n  \"duration\": 15,\r\n  \"difficulty\": 1\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all exercises (user8 flexibility) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.be.greaterThan(0);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
 					]
 				}
 			},
@@ -2607,7 +2880,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"user1@mock.com\",\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\"\r\n}\r\n"
+					"raw": "{\r\n  \"email\": \"user1@mock.com\",\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\",\r\n  \"experience\": 1\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -2664,7 +2937,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Bench Press\",\r\n  \"type\": \"Strength Training\",\r\n  \"description\": \"A reclined barbell exercise\",\r\n  \"muscleGroup\": \"chest shoulders arms\",\r\n  \"equipment\": \"barbell\",\r\n  \"rating\": 5\r\n}"
+					"raw": "{\r\n  \"email\": \"user1@mock.com\",\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\",\r\n  \"experience\": 1\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/exercises",
@@ -2715,7 +2988,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Bench Press\",\r\n  \"type\": \"Strength Training\",\r\n  \"description\": \"A reclined barbell exercise\",\r\n  \"muscleGroup\": \"chest shoulders arms\",\r\n  \"equipment\": \"barbell\",\r\n  \"rating\": 5\r\n}\r\n",
+					"raw": "{\r\n  \"email\": \"user1@mock.com\",\r\n  \"firstName\": \"FirstName\",\r\n  \"lastName\": \"LastName\",\r\n  \"city\": \"City\",\r\n  \"state\": \"State\",\r\n  \"age\": 10,\r\n  \"gender\": \"Gender\",\r\n  \"weight\": 150,\r\n  \"height\": 70,\r\n  \"fitnessTrack\": \"Cardio\",\r\n  \"secondaryTrack\": \"Running\",\r\n  \"experience\": 1\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3576,6 +3849,58 @@
 			"response": []
 		},
 		{
+			"name": "get all exercises user8 empty 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json().length).to.equal(0);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt8}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/exercises",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"exercises"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "delete user with invalid id 404",
 			"event": [
 				{
@@ -3622,7 +3947,167 @@
 			"response": []
 		},
 		{
-			"name": "edit workout3 (user1) 200",
+			"name": "add workout3 (user1) 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"workout_id3\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    jsonResponse = pm.response.json();",
+							"    pm.expect(Object.keys(jsonResponse).length).to.eq(5);",
+							"    ",
+							"    pm.expect(jsonResponse).to.have.property(\"exercises\");",
+							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id1\")}`);",
+							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id3\")}`);",
+							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
+							"    pm.expect(jsonResponse[\"dateCompleted\"]).to.eq(null);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"exercises\": [{{strength_exercise_id1}}, {{strength_exercise_id3}}]\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/workouts",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"workouts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit workout3 only exercises (user1) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    const jsonResponse = pm.response.json();",
+							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]).length).to.eq(1);",
+							"    ",
+							"    pm.expect(jsonResponse).to.have.property(\"exercises\");",
+							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id5\")}`);",
+							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
+							"    pm.expect(pm.response.json()[\"dateCompleted\"]).to.eq(null);",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"workout_id3\")}`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"exercises\": [{{strength_exercise_id5}}]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/workouts/{{workout_id3}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"workouts",
+						"{{workout_id3}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit workout3 only dateCompleted (user1) 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    const jsonResponse = pm.response.json();",
+							"    pm.expect(Object.keys(jsonResponse[\"exercises\"]).length).to.eq(1);",
+							"    ",
+							"    pm.expect(jsonResponse).to.have.property(\"exercises\");",
+							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id5\")}`);",
+							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
+							"    pm.expect(pm.response.json()[\"dateCompleted\"]).to.eq(\"2023-11-06T19:43:23.243Z\");",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"workout_id3\")}`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dateCompleted\": \"2023-11-06T19:43:23.243Z\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/workouts/{{workout_id3}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"workouts",
+						"{{workout_id3}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit workout3 all (user1) 200",
 			"event": [
 				{
 					"listen": "test",
@@ -3641,8 +4126,8 @@
 							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id3\")}`);",
 							"    pm.expect(jsonResponse['exercises']).to.have.property(`${pm.environment.get(\"strength_exercise_id5\")}`);",
 							"    pm.expect(jsonResponse).to.have.property(\"dateCompleted\");",
-							"    pm.expect(pm.response.json()[\"dateCompleted\"]).to.eq(null);",
-							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"workout_id1\")}`);",
+							"    pm.expect(pm.response.json()[\"dateCompleted\"]).to.eq(\"2023-11-06T19:43:23.243Z\");",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/workouts/${pm.environment.get(\"workout_id3\")}`);",
 							"});",
 							""
 						],
@@ -3664,13 +4149,13 @@
 					"raw": "{\r\n  \"exercises\": [{{strength_exercise_id1}}, {{strength_exercise_id3}}, {{strength_exercise_id5}}]\r\n}\r\n"
 				},
 				"url": {
-					"raw": "{{app_url}}/workouts/{{workout_id1}}",
+					"raw": "{{app_url}}/workouts/{{workout_id3}}",
 					"host": [
 						"{{app_url}}"
 					],
 					"path": [
 						"workouts",
-						"{{workout_id1}}"
+						"{{workout_id3}}"
 					]
 				}
 			},
@@ -3688,7 +4173,7 @@
 							"});",
 							"",
 							"pm.test(\"400 error message\", function () {",
-							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request object is missing at least one of the required attributes\");",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request object contains no valid attributes\");",
 							"});",
 							"",
 							""
@@ -3708,7 +4193,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"dateCompleted\": \"2023-11-06T19:43:23.243Z\"\r\n}"
+					"raw": "{\r\n\r\n}"
 				},
 				"url": {
 					"raw": "{{app_url}}/workouts/{{workout_id1}}",
@@ -4437,7 +4922,7 @@
 			"response": []
 		},
 		{
-			"name": "edit cardio_exercise1 (user1) 200",
+			"name": "edit cardio_exercise1 (user4) 200",
 			"event": [
 				{
 					"listen": "test",
@@ -4467,6 +4952,16 @@
 				}
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -4493,7 +4988,7 @@
 			"response": []
 		},
 		{
-			"name": "edit flexibility_exercise2 (user2) 200",
+			"name": "edit flexibility_exercise1 (user6) 200",
 			"event": [
 				{
 					"listen": "test",
@@ -4509,7 +5004,7 @@
 							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"Gently tilt your head to each side to stretch the neck muscles\");",
 							"    pm.expect(pm.response.json()[\"duration\"]).to.eq(50);",
 							"    pm.expect(pm.response.json()[\"difficulty\"]).to.eq(2);",
-							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/exercises/${pm.environment.get(\"flexibility_exercise_id2\")}`);",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(`${pm.environment.get(\"app_url\")}/exercises/${pm.environment.get(\"flexibility_exercise_id1\")}`);",
 							"});",
 							""
 						],
@@ -4523,7 +5018,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{jwt2}}",
+							"value": "{{jwt6}}",
 							"type": "string"
 						}
 					]
@@ -4541,13 +5036,13 @@
 					"raw": "{\r\n  \"name\": \"Neck Stretcher\",\r\n  \"type\": \"Flexibility\",\r\n  \"secondaryType\": \"Stretching\",\r\n  \"description\": \"Gently tilt your head to each side to stretch the neck muscles\",\r\n  \"duration\": 50,\r\n  \"difficulty\": 2\r\n}"
 				},
 				"url": {
-					"raw": "{{app_url}}/exercises/{{flexibility_exercise_id2}}",
+					"raw": "{{app_url}}/exercises/{{flexibility_exercise_id1}}",
 					"host": [
 						"{{app_url}}"
 					],
 					"path": [
 						"exercises",
-						"{{flexibility_exercise_id2}}"
+						"{{flexibility_exercise_id1}}"
 					]
 				}
 			},
@@ -4833,8 +5328,8 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"id\"]);",
 							"    pm.expect(pm.response.json()[\"exerciseId\"]).to.eq(1);",
-							"    pm.expect(pm.response.json()[\"userId\"]).to.eq(`${pm.environment.get(\"user_id1\")}`);",
 							"    pm.expect(pm.response.json()[\"datetime\"]);",
 							"    pm.expect(pm.response.json()[\"reps\"]).to.eq(2);",
 							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(3);",
@@ -4877,7 +5372,7 @@
 			"response": []
 		},
 		{
-			"name": "add survey2 (cardio - user1) 201",
+			"name": "add survey2 (cardio - user4) 201",
 			"event": [
 				{
 					"listen": "test",
@@ -4890,8 +5385,8 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"exerciseId\"]).to.eq(2);",
-							"    pm.expect(pm.response.json()[\"userId\"]).to.eq(`${pm.environment.get(\"user_id1\")}`);",
+							"    pm.expect(pm.response.json()[\"id\"]);",
+							"    pm.expect(pm.response.json()[\"exerciseId\"]).to.eq(91);",
 							"    pm.expect(pm.response.json()[\"datetime\"]);",
 							"    pm.expect(pm.response.json()[\"reps\"]).to.eq(null);",
 							"    pm.expect(pm.response.json()[\"sets\"]).to.eq(null);",
@@ -4908,6 +5403,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -4918,7 +5423,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"exerciseId\": 2,\r\n  \"duration\": 2,\r\n  \"distance\": 3\r\n}\r\n"
+					"raw": "{\r\n  \"exerciseId\": 91,\r\n  \"duration\": 2,\r\n  \"distance\": 3\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/surveys",
@@ -4933,7 +5438,7 @@
 			"response": []
 		},
 		{
-			"name": "add survey3 (flexibility - user2) 201",
+			"name": "add survey3 (flexibility - user6) 201",
 			"event": [
 				{
 					"listen": "test",
@@ -4946,8 +5451,8 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"exerciseId\"]).to.eq(40);",
-							"    pm.expect(pm.response.json()[\"userId\"]).to.eq(`${pm.environment.get(\"user_id2\")}`);",
+							"    pm.expect(pm.response.json()[\"id\"]);",
+							"    pm.expect(pm.response.json()[\"exerciseId\"]).to.eq(93);",
 							"    pm.expect(pm.response.json()[\"datetime\"]);",
 							"    pm.expect(pm.response.json()[\"reps\"]).to.eq(null);",
 							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(null);",
@@ -4970,7 +5475,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{jwt2}}",
+							"value": "{{jwt6}}",
 							"type": "string"
 						}
 					]
@@ -4985,7 +5490,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"exerciseId\": 40,\r\n  \"difficulty\": 1,\r\n  \"duration\": 3\r\n}\r\n"
+					"raw": "{\r\n  \"exerciseId\": 93,\r\n  \"difficulty\": 1,\r\n  \"duration\": 3\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/surveys",
@@ -5764,6 +6269,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -5958,7 +6473,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{jwt2}}",
+							"value": "{{jwt6}}",
 							"type": "string"
 						}
 					]
@@ -6269,7 +6784,7 @@
 			"response": []
 		},
 		{
-			"name": "delete cardio_exercise2 with invalid user1 401",
+			"name": "delete cardio_exercise1 with invalid user1 401",
 			"event": [
 				{
 					"listen": "test",
@@ -6301,13 +6816,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{app_url}}/exercises/{{cardio_exercise_id2}}",
+					"raw": "{{app_url}}/exercises/{{cardio_exercise_id1}}",
 					"host": [
 						"{{app_url}}"
 					],
 					"path": [
 						"exercises",
-						"{{cardio_exercise_id2}}"
+						"{{cardio_exercise_id1}}"
 					]
 				}
 			},
@@ -6329,6 +6844,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt4}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -6339,47 +6864,6 @@
 					"path": [
 						"exercises",
 						"{{cardio_exercise_id1}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete cardio_exercise2 204",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"204 no content\", function () {",
-							"    pm.response.to.have.status(204);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt2}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{app_url}}/exercises/{{cardio_exercise_id2}}",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"exercises",
-						"{{cardio_exercise_id2}}"
 					]
 				}
 			},
@@ -6401,6 +6885,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt6}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -6411,47 +6905,6 @@
 					"path": [
 						"exercises",
 						"{{flexibility_exercise_id1}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete flexibility_exercise2 204",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"204 no content\", function () {",
-							"    pm.response.to.have.status(204);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt2}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{app_url}}/exercises/{{flexibility_exercise_id2}}",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"exercises",
-						"{{flexibility_exercise_id2}}"
 					]
 				}
 			},

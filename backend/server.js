@@ -1,5 +1,4 @@
 const Auth = require("./src/auth/auth");
-const AuthUser = require("./src/auth/user");
 const Auth0 = require("./src/auth/auth0Constants");
 
 const ExerciseModel = require("./src/models/exercise");
@@ -14,6 +13,10 @@ const SurveyController = require("./src/controllers/survey");
 
 const HeaderValidation = require("./src/validation/headerValidation");
 const ModelValidator = require("./src/validation/modelValidation");
+
+const ExerciseUpdater = require("./src/generator/exerciseUpdater");
+const GeneratorQueries = require("./src/generator/generatorQueries");
+const GeneratorControllers = require("./src/generator/generatorControllers");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -172,7 +175,7 @@ app.post("/exercises", checkJwt, (req, res) => {
 });
 
 // GET /exercises endpoint, retrieves all exercises from database
-app.get("/exercises", async (req, res) => {
+app.get("/exercises", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
@@ -542,7 +545,7 @@ app.post("/workouts", checkJwt, async (req, res) => {
 
 
 // GET /workouts endpoint, retrieves all workouts from database
-app.get("/workouts", async (req, res) => {
+app.get("/workouts", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
@@ -662,92 +665,118 @@ app.patch("/workouts/:workoutId", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
-    if (!req.body.exercises) {
+    if (!req.body.exercises && !req.body.dateCompleted) {
       return res.status(400).json({
         Error:
-          "The request object is missing at least one of the required attributes",
+          "The request object contains no valid attributes",
       });
     }
 
-    const getExercise = (exerciseId) => {
-      return new Promise((resolve, reject) => {
-        ExerciseController.getExercise(exerciseId, (error, exercise) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(exercise);
-          }
-        });
-      });
-    };
+    const getWorkoutHandler = async (error, workout) => {
+      if (error) {
+        handleError(e, res);
+        return res.end();
+      }
 
-    const exercisePromises = req.body.exercises.map((exerciseId) =>
-      getExercise(exerciseId)
-    );
-
-    const exercises = await Promise.all(exercisePromises)
-      .then((exercisesData) => {
-        const results = {};
-        exercisesData.forEach((exercise) => {
-          if (exercise) {
-            results[`${exercise.id}`] = exercise;
-          }
-        });
-        return results;
-      })
-      .catch((error) => {
-        return handleError(error, res);
-      });
-
-    for (const exercise in exercises) {
-      if (
-        exercises[exercise] &&
-        exercises[exercise].userId !=
-          Auth.extractSubFromJwt(req.headers.authorization)
-      ) {
-        return res.status(401).json({
-          Error:
-            "Access denied: one or more of these excercises does not belong to the current user",
+      if (!workout) {
+        return res.status(404).json({
+          Error: "No workout with this workoutId exists",
         });
       }
-    }
 
-    if (
-      !exercises ||
-      req.body.exercises.length != Object.keys(exercises).length
-    ) {
-      return res.status(404).json({
-        Error: "One or more of the exercises in the request do not exist",
-      });
-    }
+      const updatedWorkout = new WorkoutModel(
+        workout.id,
+        workout.userId,
+        JSON.parse(workout.exercises),
+        req.body.dateCompleted ? req.body.dateCompleted : workout.dateCompleted
+      );
 
-    const updatedWorkout = new WorkoutModel(
-      parseInt(req.params.workoutId, 10),
-      Auth.extractSubFromJwt(req.headers.authorization),
-      exercises,
-      null
-    );
+      let exercises = null;
 
-    if (ModelValidator.workoutInvalid(updatedWorkout)) {
-      return res.status(400).json({
-        Error:
-          "The request object is missing at least one of the required attributes",
-      });
-    } else {
-      let responseHandler = (error, data) => {
-        try {
-          if (error) {
-            handleError(error, res);
-          } else {
-            return res.status(201).json(updatedWorkout.toJSON());
+      if (req.body.exercises) {
+        const getExercise = (exerciseId) => {
+          return new Promise((resolve, reject) => {
+            ExerciseController.getExercise(exerciseId, (error, exercise) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(exercise);
+              }
+            });
+          });
+        };
+
+        const exercisePromises = req.body.exercises.map((exerciseId) =>
+          getExercise(exerciseId)
+        );
+
+        exercises = await Promise.all(exercisePromises)
+          .then((exercisesData) => {
+            const results = {};
+            exercisesData.forEach((exercise) => {
+              if (exercise) {
+                results[`${exercise.id}`] = exercise;
+              }
+            });
+            return results;
+          })
+          .catch((error) => {
+            return handleError(error, res);
+          });
+
+        for (const exercise in exercises) {
+          if (
+            exercises[exercise] &&
+            exercises[exercise].userId !=
+              Auth.extractSubFromJwt(req.headers.authorization)
+          ) {
+            return res.status(401).json({
+              Error:
+                "Access denied: one or more of these excercises does not belong to the current user",
+            });
           }
-        } catch (e) {
-          return handleError(e, res);
         }
-      };
 
-      WorkoutController.updateWorkout(updatedWorkout, responseHandler);
-    }
+        if (
+          !exercises ||
+          req.body.exercises.length != Object.keys(exercises).length
+        ) {
+          return res.status(404).json({
+            Error: "One or more of the exercises in the request do not exist",
+          });
+        }
+
+        updatedWorkout.exercises = exercises;
+      }
+
+      if (ModelValidator.workoutInvalid(updatedWorkout)) {
+        return res.status(400).json({
+          Error:
+            "The request object is missing at least one of the required attributes",
+        });
+      } else {
+        let responseHandler = (error, data) => {
+          try {
+            if (error) {
+              handleError(error, res);
+            } else {
+              return res.status(201).json(updatedWorkout.toJSON());
+            }
+          } catch (e) {
+            return handleError(e, res);
+          }
+        };
+
+        WorkoutController.updateWorkout(
+          parseInt(req.params.workoutId, 10),
+          exercises,
+          updatedWorkout.dateCompleted,
+          responseHandler
+        );
+      }
+    };
+
+    WorkoutController.getWorkout(req.params.workoutId, getWorkoutHandler);
   } catch (e) {
     handleError(e, res);
   }
@@ -833,47 +862,59 @@ app.get("/current_workout", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
-    const responseHandler = (error, workout) => {      
-      try {
-        workout = workout ? workout[0] : null;
-        if (error) {
-          handleError(error, res);
-          return res.end();
-        }
-        
-        if (workout.dateCompleted !== null) {
-          res
-            .status(404)
-            .json({ Error: "No uncompleted workouts exist for this user." });
-          return res.end();
-        }
+    const userId = Auth.extractSubFromJwt(req.headers.authorization);
+    let [exercises, currentWorkout, workoutCount] = await Promise.all([
+      GeneratorQueries.getAllExercises(userId),
+      GeneratorQueries.getCurrentWorkout(userId),
+      GeneratorQueries.getWorkoutCount(userId),
+    ]);
 
-        if (
-          workout.userId && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
-        ) {
-          res.status(401).json({
-            Error:
-              "Access denied: this workout does not belong to the current user",
-          });
-          return res.end();
-        }
-        const newWorkout = new WorkoutModel(
-          workout.id,
-          workout.userId,
-          JSON.parse(workout.exercises),
-          workout.dateCompleted
-        );
+    exercises = exercises ? exercises : null;
+    const exerciseMap = exercises ? await GeneratorControllers.mapExercises(exercises) : null;
 
-        res.status(200).json(newWorkout.toJSON()).end();
-      } catch (e) {
-        handleError(e, res);
+    if (currentWorkout.dateCompleted != null) {
+      const newWorkout = new WorkoutModel(
+        1,
+        Auth.extractSubFromJwt(req.headers.authorization),
+        await GeneratorControllers.generateWorkout(exerciseMap, workoutCount),
+        null
+      );
+
+      let responseHandler = (error, data) => {
+        try {
+          if (error) {
+            handleError(error, res);
+          } else {
+            newWorkout.id = data.insertId;
+            res.status(200).json(newWorkout.toJSON());
+            res.end();
+          }
+        } catch (e) {
+          return handleError(e, res);
+        }
+      };
+
+      WorkoutController.createWorkout(newWorkout, responseHandler);
+    } else {
+      if (
+        currentWorkout.userId &&
+        currentWorkout.userId !=
+          Auth.extractSubFromJwt(req.headers.authorization)
+      ) {
+        res.status(401).json({
+          Error:
+            "Access denied: this workout does not belong to the current user",
+        });
+        return res.end();
       }
-    };
-
-    WorkoutController.getCurrentWorkout(
-      Auth.extractSubFromJwt(req.headers.authorization),
-      responseHandler
-    );
+      const currentWorkoutModel = new WorkoutModel(
+        currentWorkout.id,
+        currentWorkout.userId,
+        JSON.parse(currentWorkout.exercises),
+        currentWorkout.dateCompleted
+      );
+      res.status(200).json(currentWorkoutModel).end();
+    }
   } catch (e) {
     handleError(e, res);
   }
@@ -985,7 +1026,7 @@ app.post("/workouts/:workoutId/exercises/:exerciseId", checkJwt, async (req, res
 */
 
 // POST /users - this endpoint adds a new user
-app.post("/users", checkJwt, (req, res) => {
+app.post("/users", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
@@ -1009,7 +1050,7 @@ app.post("/users", checkJwt, (req, res) => {
     if (ModelValidator.userInvalid(newUser)) {
       res.status(400).json({ Error: "The user request data is invalid" });
     } else {
-      let responseHandler = (error, data) => {
+      let responseHandler = async (error, data) => {
         try {
           if (error) {
             if (error.code == 'ER_DUP_ENTRY') {
@@ -1023,6 +1064,30 @@ app.post("/users", checkJwt, (req, res) => {
             };
           } else {
             newUser.id = data.insertId;
+            const [userExercises] = await Promise.all([
+              GeneratorQueries.getAllUserTrackExercises(
+                newUser.fitnessTrack,
+                newUser.secondaryTrack,
+                req.body.experience
+              ),
+            ]);
+
+            userExercises.forEach((exercise) => {
+              exercise.userId = Auth.extractSubFromJwt(req.headers.authorization)
+              const responseHandler = async (error, data)  => {
+                try {
+                  if (error) {
+                    handleError(error, res);
+                    return res.end();
+                  }
+                } catch (e) {
+                  handleError(e, res);
+                  return res.end();
+                }
+              }
+
+              ExerciseController.createExercise(exercise, responseHandler);
+            })
             res.status(201).json(newUser.toJSON());
           }
         } catch (e) {
@@ -1039,7 +1104,7 @@ app.post("/users", checkJwt, (req, res) => {
 });
 
 // GET /users endpoint, retrieves all users from database
-app.get("/users", async (req, res) => {
+app.get("/users", checkJwt, async (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
 
@@ -1255,7 +1320,8 @@ app.put("/users/:userId", checkJwt, (req, res) => {
 app.delete("/users/:userId", checkJwt, (req, res) => {
   try {
     if (HeaderValidation.headersInvalid(req, res)) return;
-    const getResponseHandler = (error, user) => {
+
+    const getUsereHandler = (error, user) => {
       if (error) {
         handleError(e, res);
         return res.end();
@@ -1279,308 +1345,38 @@ app.delete("/users/:userId", checkJwt, (req, res) => {
         return res.end();
       }
 
-      const deleteResponseHandler = (error, _) => {
+      const deleteUserExercisesHandler = (error, exercises) => {
         try {
           if (error) {
             handleError(error, res);
             return res.end();
           }
-          res.status(204).end();
+        
+          const deleteUserHandler = (error, _) => {
+            try {
+              if (error) {
+                handleError(error, res);
+                return res.end();
+              }
+              res.status(204).end();
+            } catch (e) {
+              handleError(e, res);
+            }
+          };
+          
+          UserController.deleteUser(req.params.userId, deleteUserHandler);
         } catch (e) {
           handleError(e, res);
         }
-      };
-
-      UserController.deleteUser(
+      }
+      
+      ExerciseController.deleteAllUserExercises(
         req.params.userId,
-        deleteResponseHandler
+        deleteUserExercisesHandler
       );
-    };
-
-    UserController.getUser(req.params.userId, getResponseHandler);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-/*
-##############################
-##### WORKOUTS ENDPOINTS #####
-##############################
-*/
-
-/*
-### /workouts ###
-*/
-
-// GET /workouts endpoint, retrieves all workouts from database
-app.get("/workouts", async (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    let responseHandler = (error, workouts) => {
-      try {
-        if (error) {
-          handleError(error, res);
-        } else {
-          res.status(200).json(workouts);
-        }
-      } catch (e) {
-        handleError(e, res);
-      }
-    };
-
-    WorkoutController.getAllWorkouts(
-      Auth.extractSubFromJwt(req.headers.authorization),
-      responseHandler
-    );
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PATCH /workouts - this endpoint is not allowed
-app.patch("/workouts", checkJwt, (req, res) => {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PUT /workouts - this endpoint is not allowed
-app.put("/workouts", checkJwt, (req, res) => {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// DELETE /workouts - this endpoint is not allowed
-app.delete("/workouts", checkJwt, function (req, res) {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-/*
-##### /workouts/:workoutId #####
-*/
-
-// POST /workouts - this endpoint is not allowed
-app.post("/workouts/:workoutId", checkJwt, (req, res) => {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// GET /workouts endpoint, retrieves specified workout from database
-app.get("/workouts/:workoutId", checkJwt, async (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const responseHandler = (error, workout) => {      
-      try {
-        if (error) {
-          handleError(error, res);
-          return res.end();
-        }
-        if (!workout) {
-          res
-            .status(404)
-            .json({ Error: "No workout with this id exists" });
-          return res.end();
-        }
-
-        if (
-          workout.userId && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)
-        ) {
-          res.status(401).json({
-            Error:
-              "Access denied: this workout does not belong to the current user",
-          });
-          return res.end();
-        }
-        const newWorkout = new WorkoutModel(
-          workout.id,
-          workout.userId,
-          JSON.parse(workout.exercises),
-          workout.dateCompleted
-        );
-
-        res.status(200).json(newWorkout.toJSON()).end();
-      } catch (e) {
-        handleError(e, res);
-      }
-    };
-
-    WorkoutController.getWorkout(req.params.workoutId, responseHandler);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PUT /workouts - this endpoint is not allowed
-app.put("/workouts/:workoutId", checkJwt, (req, res) => {
-  try {
-    const error_msg = { Error: "This method is not allowed on this endpoint" };
-    res.status(405).json(error_msg);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// PATCH /workouts endpoint, updates an workout
-app.patch("/workouts/:workoutId", checkJwt, async (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    if (!req.body.exercises) {
-      return res.status(400).json({
-        Error:
-          "The request object is missing at least one of the required attributes",
-      });
     }
 
-    const getExercise = (exerciseId) => {
-      return new Promise((resolve, reject) => {
-        ExerciseController.getExercise(exerciseId, (error, exercise) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(exercise);
-          }
-        });
-      });
-    };
-
-    const exercisePromises = req.body.exercises.map((exerciseId) =>
-      getExercise(exerciseId)
-    );
-
-    const exercises = await Promise.all(exercisePromises)
-      .then((exercisesData) => {
-        const results = {};
-        exercisesData.forEach((exercise) => {
-          if (exercise) {
-            results[`${exercise.id}`] = exercise;
-          }
-        });
-        return results;
-      })
-      .catch((error) => {
-        return handleError(error, res);
-      });
-
-    for (const exercise in exercises) {
-      if (
-        exercises[exercise] &&
-        exercises[exercise].userId !=
-          Auth.extractSubFromJwt(req.headers.authorization)
-      ) {
-        return res.status(401).json({
-          Error:
-            "Access denied: one or more of these excercises does not belong to the current user",
-        });
-      }
-    }
-
-    if (
-      !exercises ||
-      req.body.exercises.length != Object.keys(exercises).length
-    ) {
-      return res.status(404).json({
-        Error: "One or more of the exercises in the request do not exist",
-      });
-    }
-
-    const updatedWorkout = new WorkoutModel(
-      parseInt(req.params.workoutId, 10),
-      Auth.extractSubFromJwt(req.headers.authorization),
-      exercises,
-      null
-    );
-
-    if (ModelValidator.workoutInvalid(updatedWorkout)) {
-      return res.status(400).json({
-        Error:
-          "The request object is missing at least one of the required attributes",
-      });
-    } else {
-      let responseHandler = (error, data) => {
-        try {
-          if (error) {
-            handleError(error, res);
-          } else {
-            return res.status(201).json(updatedWorkout.toJSON());
-          }
-        } catch (e) {
-          return handleError(e, res);
-        }
-      };
-
-      WorkoutController.updateWorkout(updatedWorkout, responseHandler);
-    }
-  } catch (e) {
-    handleError(e, res);
-  }
-});
-
-// DELETE /workouts endpoint, deletes specified workout from database
-app.delete("/workouts/:workoutId", checkJwt, (req, res) => {
-  try {
-    if (HeaderValidation.headersInvalid(req, res)) return;
-
-    const getResponseHandler = (error, workout) => {
-      if (error) {
-        handleError(e, res);
-        return res.end();
-      }
-
-      if (workout && workout.userId != Auth.extractSubFromJwt(req.headers.authorization)) {
-        res.status(401).json({
-          Error:
-            "Access denied: this workout does not belong to the current user",
-        });
-        return res.end();
-      }
-
-      if (!workout) {
-        res
-          .status(404)
-          .json({ Error: "No workout with this id exists" });
-        return res.end();
-      }
-
-      const deleteResponseHandler = (error, _) => {
-        try {
-          if (error) {
-            handleError(error, res);
-            return res.end();
-          }
-          res.status(204).end();
-        } catch (e) {
-          handleError(e, res);
-        }
-      };
-
-      WorkoutController.deleteWorkout(
-        req.params.workoutId,
-        workout.userId,
-        deleteResponseHandler
-      );
-    };
-
-    WorkoutController.getWorkout(req.params.workoutId, getResponseHandler);
+    UserController.getUser(req.params.userId, getUsereHandler);
   } catch (e) {
     handleError(e, res);
   }
@@ -1651,8 +1447,27 @@ app.post("/surveys", checkJwt, async (req, res) => {
             handleError(error, res);
           } else {
             newSurvey.id = data.insertId;
-            res.status(201).json(newSurvey.toJSON());
-            return res.end();
+            const updatedExercise = ExerciseUpdater.updateUserExercise(
+              exercise,
+              newSurvey
+            );
+
+            let updateExerciseHandler = (error, data) => {
+              try {
+                if (error) {
+                  handleError(error, res);
+                } else {
+                  res.status(201).json(newSurvey);
+                }
+              } catch (e) {
+                handleError(e, res);
+              }
+            };
+
+            ExerciseController.updateExercise(
+              updatedExercise,
+              updateExerciseHandler
+            );
           }
         } catch (e) {
           handleError(e, res);
@@ -1780,8 +1595,6 @@ app.get("/surveys/:surveyId", checkJwt, (req, res) => {
           survey.duration,
           survey.distance
         );
-
-        console.log(newSurvey);
 
         res.status(200).json(newSurvey.toJSON()).end();
       } catch (e) {

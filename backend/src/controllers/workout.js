@@ -28,7 +28,7 @@ async function getWorkout(workoutId, callback) {
   try {
     const getWorkoutQuery = `SELECT id, user_id AS userId, exercises, date_completed AS dateCompleted FROM Workouts WHERE id = ?;`;
     db.pool.query(getWorkoutQuery, [workoutId], (error, rows, fields) => {
-      callback(error, rows[0]);
+      callback(error, rows.length > 0 ? rows[0] : null);
     });
   } catch (e) {
     console.error(e);
@@ -74,28 +74,22 @@ async function getAllWorkouts(userId, callback) {
   }
 }
 
-function updateWorkout(workout, callback) {
+function updateWorkout(workoutId, exercises, dateCompleted, callback) {
   try {
-    const updateWorkoutQuery = `
-      UPDATE Workouts 
-      SET user_id = ?,
-          exercises = ?,
+      const updateWorkoutQuery = `
+        UPDATE Workouts 
+        SET exercises = ?,
           date_completed = ?
-      WHERE id = ?;
-    `;
+        WHERE id = ?;
+      `;
 
-    db.pool.query(
-      updateWorkoutQuery,
-      [
-        workout.userId,
-        JSON.stringify(workout.exercises),
-        workout.dateCompleted,
-        workout.id,
-      ],
-      (error, rows, fields) => {
-        callback(error, rows);
-      }
-    );
+      db.pool.query(
+        updateWorkoutQuery,
+        [JSON.stringify(exercises), dateCompleted, workoutId],
+        (error, rows, fields) => {
+          callback(error, rows);
+        }
+      );
   } catch (e) {
     console.error(e);
     return e;
