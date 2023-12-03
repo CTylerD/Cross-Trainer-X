@@ -1,48 +1,64 @@
 import { useLocalSearchParams } from 'expo-router';
-import { exercises } from '../../../constants/Exercises';
 import { StyleSheet, Dimensions, Text, View, Pressable, ImageBackground } from 'react-native';
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import { Link } from 'expo-router';
 import Theme from '../../../components/Themes';
 import ThemeContext from '../../../contexts/ThemeContext';
 import ExerciseContext from '../../../contexts/ExerciseContext';
+import UserContext from '../../../contexts/userContext';
 import StrengthTimer from '../../../components/StrengthTimer';
 import FlexTimer from '../../../components/FlexTimer';
+import PostExerciseModal from '../../../components/PostExerciseModal';
+import axios from 'axios';
 
 
 
 export default function Page() {
-  const { exercise } = useLocalSearchParams();
-  const currExercise = exercises[exercise];
+  const exerciseId = useLocalSearchParams();
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
-  const {workout, setWorkout} = useContext(ExerciseContext);
+  const [Exercise, setExercise] = useState(null);
+  const {user, setUser} = useContext(UserContext);
 
-  console.log(currExercise.name);
+  useEffect(() => {
+    axios.get(`http://localhost:8080/exercises/${exerciseId.exercise}`, {
+      headers: {
+          'authorization': `Bearer ${user}`
+      }
+      })
+      .then(response => response.data)
+      .then((data) => {
+        console.log(data);
+        setExercise(data);
+      });
+    },[])
+
+  console.log(exerciseId);
+
+  if(!Exercise){
+    return null;
+  }
 
 
-
+  if(Exercise){ 
+    console.log(Exercise)   
   return (
-    <ImageBackground source={require('../../../assets/images/Barbell.png')} resizeMode="cover">
+    <ImageBackground source={Exercise.type==='Strength' ? require('../../../assets/images/Barbell.png'):require('../../../assets/images/zen.png')} resizeMode="cover">
     <View style={styles.container}>
-        <Text style={[styles.title, themed.text]}>{currExercise.name}</Text>
+        <Text style={[styles.title, themed.text]}>{Exercise.name}</Text>
         <View style={[styles.card, themed.card]}>
         <Text style={[styles.text, themed.text]}>{'\n'}How To:</Text>
-        <Text style={[styles.text, themed.text]}>{currExercise.description}</Text>
-        {currExercise.category == 'Strength' ?
-          <StrengthTimer exercise={currExercise}/>:
-          <FlexTimer exercise={currExercise} />}
+        <Text style={[styles.text, themed.text]}>{Exercise.description}</Text>
+        {Exercise.type == 'Strength' ?
+          <StrengthTimer exercise={Exercise}/>:
+          <FlexTimer exercise={Exercise} />}
       </View>
       <View style={[styles.button, themed.button]}>
-      <Link href="/workout" asChild>
-        <Pressable onPressIn={() => setWorkout({...workout, [currExercise.e_id] :true})}>
-          <Text style={[themed.text, styles.text]}>Complete Exercise</Text>
-        </Pressable>
-      </Link>
+      <PostExerciseModal exerciseId={exerciseId.exercise}/>
       </View>
     </View>
     </ImageBackground>
-  );
+  );}
 }
 
 const screenWidth = Dimensions.get('window').width;

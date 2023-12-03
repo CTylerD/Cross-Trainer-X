@@ -1,7 +1,8 @@
 import React, {useState, useContext} from 'react';
-import {Alert, Modal, StyleSheet, Text, TextInput, Pressable, Dimensions, View} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, TextInput, Pressable, Dimensions, View, ScrollView} from 'react-native';
 import Theme from './Themes';
 import ThemeContext from '../contexts/ThemeContext';
+import UserContext from '../contexts/userContext';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
@@ -16,11 +17,10 @@ export default function AddModal(){
   const initialState = {}
   const [exercise, setExercise] = useState(initialState);
 
-  const auth = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik11bUdhNXVhSjVyR3N0M3kzTWp1NyJ9.eyJuaWNrbmFtZSI6InVzZXIxIiwibmFtZSI6InVzZXIxQG1vY2suY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyL2IxMDliMjZjZmJhMjFhMzRiNmFkMjI2Yzk3MjQ4YTdlP3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGdXMucG5nIiwidXBkYXRlZF9hdCI6IjIwMjMtMTEtMTlUMDA6MjE6NTUuNDYwWiIsImVtYWlsIjoidXNlcjFAbW9jay5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vY3Jvc3MtdHJhaW5lci14LnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJDN1VQR3FqODRhbjhGbzJGdVl6Q0IyU0E2SHdaQzg5eSIsImlhdCI6MTcwMDM1MzMxNiwiZXhwIjoxNzAwMzg5MzE2LCJzdWIiOiJhdXRoMHw2NTUxMmEzYjc0MDlmMTMwMjE4NTc3MjAiLCJzaWQiOiJ5akRHRVEzNmFyVEw1ejBUVndmZFVrYXptS1ZYWGhubyJ9.H8cFcpcSUvHAYLnOqAs6rrffhEgazYE6jsaKWhRfb_ZcSGO1qiXfOcywS13bRbBgRaTo4og3AEoAB2t6O5al3oFdK4jzqDyRAE6MzeCiWaf_I24J9j7pyCb4TZrxXipqlVb_JxXAXRdU2N4pZzXmZzGDIq-9A58X4iqBO9qvpoAsNinr9DY-HzFSCf6-vm6E4o8v07i7YYkvdaJ5aRRBk1OKlrrT02-h54W8gqLhHlresRr0RN01sibKhU1Kx0ENgznmw-mQp3Z96KTxcTVMyF_Fgui1Z2JWH5pgx-lH7EvPCDvxbJCa0Xre_iO-b7Zd34HGrtQ0YCsLrdKocMBTRg";
-  axios.defaults.headers.post['Authorization'] = `Bearer ${auth}`;
+  const {user, setUser} = useContext(UserContext);
+  axios.defaults.headers.post['Authorization'] = `Bearer ${user}`;
 
   const add = () => {
-    console.dir(exercise);
     axios.post('http://localhost:8080/exercises', exercise);
   }
 
@@ -34,7 +34,7 @@ export default function AddModal(){
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.centeredView}>
+        <ScrollView style={styles.centeredView} contentContainerStyle={{justifyContent: 'center',alignItems: 'center'}}>
           <View style={styles.modalView}>
             <Text style={[styles.modalText, themed.text, {color:'black'}]}>Add New Exercise</Text>
             <TextInput
@@ -58,7 +58,7 @@ export default function AddModal(){
             <Picker.Item label="Yoga or Stretch" value="Flexibility" />
             <Picker.Item label="Cardio" value="Cardio" />
             </Picker>
-            {exercise.type === 'Strength' ? (<View style={styles.centeredView}>
+            {exercise.type === 'Strength' ? (<View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.secondaryType}
@@ -102,7 +102,6 @@ export default function AddModal(){
                                                 value={exercise.equipment}
                                                 placeholder="Equipment"
                                               />
-                                              <View style={styles.rowContainer}>
                                               <View style={{alignItems:'center'}}>
                                               <Text>Reps:</Text>
                                               <TextInput
@@ -130,15 +129,14 @@ export default function AddModal(){
                                                 placeholder="Weight(lbs)"
                                               />
                                               </View>
-                                              </View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.weightClass}
-                                              onValueChange={currentWC => setExercise({...exercise, weightClass:currentWC })}>
+                                              onValueChange={currentWC => setExercise({...exercise, weightClass:Number(currentWC)})}>
                                               <Picker.Item label="..." value={null} />
-                                              <Picker.Item label="Bodyweight" value="Bodyweight" />
-                                              <Picker.Item label="Dumbbell" value="Dumbbell" />
-                                              <Picker.Item label="Barbell" value="Barbell" />
+                                              <Picker.Item label="Bodyweight" value='1' />
+                                              <Picker.Item label="Dumbbell" value="2" />
+                                              <Picker.Item label="Barbell" value="3" />
                                               </Picker>
                                               <TextInput
                                                 style={styles.input}
@@ -147,7 +145,7 @@ export default function AddModal(){
                                                 placeholder="Rest Time(Seconds)"
                                               />
                                               </View>):null}
-            {exercise.type === 'Cardio' ? (<View style={styles.centeredView}>
+            {exercise.type === 'Cardio' ? (<View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.secondaryType}
@@ -156,7 +154,6 @@ export default function AddModal(){
                                               <Picker.Item label="Running" value="Running" />
                                               <Picker.Item label="Cycling" value="Cycling" />
                                               </Picker>
-                                              <View style={styles.rowContainer}>
                                               <View>
                                               <Text>Duration(minutes):</Text>
                                               <TextInput
@@ -175,9 +172,8 @@ export default function AddModal(){
                                               placeholder="Distance(miles)"
                                               />
                                               </View>
-                                              </View>
                                             </View>):null}
-            {exercise.type === 'Flexibility' ? (<View style={styles.centeredView}>
+            {exercise.type === 'Flexibility' ? (<View>
                                               <Picker
                                               style={styles.picker}
                                               selectedValue={exercise.secondaryType}
@@ -203,31 +199,28 @@ export default function AddModal(){
                                               <Picker.Item label="Advanced" value="3" />
                                               </Picker>
                                               </View>):null}                                              
-
-
-
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => {setModalVisible(!modalVisible); add()}}>
               <Text style={[styles.textStyle, themed.text]}>Add</Text>
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, themed.button]}
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={[styles.textStyle, themed.text]}>Cancel</Text>
             </Pressable>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
       <Pressable
         accessibilityRole="button"
-        style={[styles.button, styles.buttonOpen]}
+        style={[styles.button, styles.buttonOpen, themed.button]}
         onPress={() => {setModalVisible(true); setExercise(initialState)}}>
-        <Text style={styles.textStyle}>+Add New</Text>
+        <Text style={styles.textStyle}>+Add New Exercise</Text>
       </Pressable>
     </View>
   );
@@ -238,13 +231,12 @@ const screenWidth = (Dimensions.get('window').width) * .75
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
     width: screenWidth,
+    height:'auto',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -262,6 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     elevation: 2,
+    margin:3
   },
   buttonOpen: {
     backgroundColor: 'black',
@@ -278,15 +271,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   picker: {
-    width: 150
+    width: 150,
+    margin: 2
   },
   input: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    height: 40,
+    height: 35,
     width: 175,
-    margin: 12,
+    margin: 5,
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,

@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, Dimensions,SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { StyleSheet, Pressable, Dimensions, Text, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import {useState, useContext} from 'react';
 import Theme from './Themes';
@@ -6,9 +6,11 @@ import ThemeContext from '../contexts/ThemeContext';
 
 export default function StrengthTimer({exercise}){
 
-    const weight = "40 lbs--Bar Only";
-    const reps = "12";
-    const [set, setSet] = useState(4);
+    console.log('exercise: ' + exercise);
+
+    const weight = exercise.weight;
+    const reps = exercise.reps;
+    const [set, setSet] = useState(exercise.sets);
     const [rest, setRest] = useState(false);
 
     const {theme, setTheme} = useContext(ThemeContext);
@@ -24,13 +26,13 @@ export default function StrengthTimer({exercise}){
 
     return(
         <View style={styles.card}>
-            <Text style={[themed.text]}>Weight: {weight}</Text>
+            <Text style={[themed.text]}>Weight: {weight} Lbs</Text>
             <Text style={[themed.text]}>Sets Left: {set}</Text>
-            <Text style={[themed.text]}>Reps Left: {reps}</Text>
+            <Text style={[themed.text]}>Reps: {reps}</Text>
             <View style={{paddingTop:15}}>
             {rest ? <CountdownCircleTimer
                         isPlaying
-                        duration={exercise.duration}
+                        duration={exercise.rest}
                         colors={['#004777', '#F7B801', '#A30000', '#A30000']}
                         colorsTime={[7, 5, 2, 0]}
                         onComplete={() => endRest()}
