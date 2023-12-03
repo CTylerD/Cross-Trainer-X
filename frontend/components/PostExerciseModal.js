@@ -6,19 +6,40 @@ import {Picker} from '@react-native-picker/picker';
 import UserContext from '../contexts/userContext';
 import ExerciseContext from '../contexts/ExerciseContext';
 import axios from 'axios';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 
-export default function PostExerciseModal({exerciseId}){
+export default function PostExerciseModal({exercise}){
 
   const [modalVisible, setModalVisible] = useState(false);
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
-
-  const {user, setUser} = useContext(UserContext);
   const {workout, setWorkout} = useContext(ExerciseContext);
 
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
-  console.log('Exercise ID: ' + exerciseId)
+  const [selectedDifficulty, setSelectedDifficulty] = useState("2");
+
+  const {user, setUser} = useContext(UserContext);
+  axios.defaults.headers.post['Authorization'] = `Bearer ${user}`;
+
+  const submitSurvey = () => {
+    var surveyData = null;
+    
+    if(exercise.type === 'Strength'){
+    surveyData = {'exerciseId': exercise.id, 'sets': Number(selectedDifficulty), 'reps':Number(selectedDifficulty), 'weight':Number(selectedDifficulty), 'rest':Number(selectedDifficulty)};
+    console.log('surveyData: ' + JSON.stringify(surveyData));
+    axios.post('http://localhost:8080/surveys', surveyData);
+  }
+    else if(exercise.type === 'Flexibility'){
+      surveyData = {'exerciseId': exercise.id, 'time': Number(selectedDifficulty), 'difficuly': Number(selectedDifficulty)};
+      axios.post('http://localhost:8080/surveys', surveyData);
+    }
+    else{
+      surveyData = {'exerciseId': exercise.id, 'time': Number(selectedDifficulty), 'distance': Number(selectedDifficulty)};
+      axios.post('http://localhost:8080/surveys', surveyData);
+    }
+
+    setTimeout(() => router.replace('/workout'), 1000);
+  }
+
 
   return (
     
@@ -42,17 +63,15 @@ export default function PostExerciseModal({exerciseId}){
             onValueChange={(itemValue, itemIndex) =>
             setSelectedDifficulty(itemValue)
             }>
-            <Picker.Item label="Too easy" value="-1" />
-            <Picker.Item label="Just right" value="0" />
-            <Picker.Item label="Too difficult" value="1" />
+            <Picker.Item label="Too easy" value="1" />
+            <Picker.Item label="Just right" value="2" />
+            <Picker.Item label="Too difficult" value="3" />
             </Picker>
             </View>
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
-            <Link href="/workout" asChild style={[styles.button, themed.button]}>
-            <Pressable onPress={() => {setModalVisible(!modalVisible)}}>
+            <Pressable style={[styles.button, themed.button]} onPress={() => {setModalVisible(!modalVisible);submitSurvey()}}>
             <Text style={{color:'white'}}>Submit</Text>
             </Pressable>
-            </Link>
             <Link href="/workout" asChild style={[styles.button, themed.button]}>
               <Pressable onPress={() => {setModalVisible(!modalVisible)}}>
               <Text style={{color:'white'}}>Skip</Text>
@@ -65,7 +84,7 @@ export default function PostExerciseModal({exerciseId}){
       <Pressable
         accessibilityRole="button"
         style={[styles.button, themed.button]}
-        onPress={() => {setModalVisible(true);setWorkout({...workout, [exerciseId] :true})}}>
+        onPress={() => {setModalVisible(true);setWorkout({...workout, [exercise.id] :true});}}>
         <Text style={[themed.text]}>Complete Exercise</Text>
       </Pressable>
     </View>

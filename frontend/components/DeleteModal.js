@@ -4,6 +4,7 @@ import Theme from './Themes';
 import UserContext from '../contexts/userContext';
 import ThemeContext from '../contexts/ThemeContext';
 import axios from 'axios';
+import { router } from 'expo-router';
 
 export default function DeleteModal({exercise}){
 
@@ -16,6 +17,7 @@ export default function DeleteModal({exercise}){
   const deleteExercise = () => {
     console.log(exercise);
     axios.delete(`http://localhost:8080/exercises/${exercise.id}`);
+    setTimeout(() => router.replace('/editplan'), 1000);
   }
 
   return (
