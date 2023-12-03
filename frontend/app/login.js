@@ -6,9 +6,8 @@ import axios from 'axios';
 
 export default function LoginScreen() {
 
-  const post = () => {
-      axios.post("http://localhost:8080/login", [])
-  }
+  const post = axios.post("http://localhost:8080/login", [])
+  
 
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');

@@ -3,22 +3,31 @@ import { Link } from 'expo-router';
 import { useContext } from 'react';
 import ThemeContext from '../contexts/ThemeContext';
 import Theme from '../components/Themes';
+import axios from 'axios';
+import * as WebBrowser from 'expo-web-browser';
 
 export default function WelcomeScreen() {
   
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
 
+  const login = async () => {
+    const url = await axios.post("http://localhost:8080/login", []);
+    console.log(JSON.stringify(url))
+    let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+
+  }
+
 
   return (
     <ImageBackground source={require('../assets/images/welcome.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
     <View style={[styles.container]}>
       <Text style={[styles.title, themed.text]}>Welcome to CrossTrainerX!{'\n'}</Text>
-      <Link href="/login" asChild>
-        <Pressable style={styles.button} accessibilityRole="button">
+
+        <Pressable style={styles.button} accessibilityRole="button" onPress={() => {login()}}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Login</Text>
         </Pressable>
-      </Link>
+
       <Link href="/create" asChild>
         <Pressable style={styles.button} accessibilityRole="button">
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Create Account</Text>
