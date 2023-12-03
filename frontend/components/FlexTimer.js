@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, Dimensions,SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { StyleSheet, Pressable, Dimensions, Text, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import {useState, useContext} from 'react';
 import Theme from './Themes';
@@ -33,8 +33,8 @@ export default function FlexTimer({exercise}){
                                                 <Text style={[styles.text, themed.text]}>{remainingTime}</Text>
                                                 </View>}
                     </CountdownCircleTimer>:
-                    <Pressable style={styles.button} onPressIn={() => beginHold()}>
-                    <Text style={[themed.text, styles.text, {color:'black'}]}>Begin</Text>
+                    <Pressable style={[styles.button, themed.button]} onPressIn={() => beginHold()}>
+                    <Text style={[themed.text, styles.text]}>Begin</Text>
                     </Pressable>}
         </View>
     )

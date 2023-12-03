@@ -2,18 +2,26 @@ import React, {useState, useContext} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import Theme from './Themes';
 import ThemeContext from '../contexts/ThemeContext';
-import {Picker} from '@react-native-picker/picker'
+import {Picker} from '@react-native-picker/picker';
+import UserContext from '../contexts/userContext';
+import ExerciseContext from '../contexts/ExerciseContext';
+import axios from 'axios';
+import { Link } from 'expo-router';
 
-export default function PostExerciseModal({exercise}){
+export default function PostExerciseModal({exerciseId}){
 
   const [modalVisible, setModalVisible] = useState(false);
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
 
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const {user, setUser} = useContext(UserContext);
+  const {workout, setWorkout} = useContext(ExerciseContext);
 
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  console.log('Exercise ID: ' + exerciseId)
 
   return (
+    
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
@@ -40,21 +48,25 @@ export default function PostExerciseModal({exercise}){
             </Picker>
             </View>
             <View style={{flexDirection:'row', alignContent:'space-between'}}>
-            <Pressable
-              accessibilityRole="button"
-              style={[styles.button, styles.buttonClose, themed.button]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={[styles.textStyle, themed.text]}>Submit</Text>
+            <Link href="/workout" asChild style={[styles.button, themed.button]}>
+            <Pressable onPress={() => {setModalVisible(!modalVisible)}}>
+            <Text style={{color:'white'}}>Submit</Text>
             </Pressable>
+            </Link>
+            <Link href="/workout" asChild style={[styles.button, themed.button]}>
+              <Pressable onPress={() => {setModalVisible(!modalVisible)}}>
+              <Text style={{color:'white'}}>Skip</Text>
+              </Pressable>
+            </Link> 
             </View>
           </View>
         </View>
       </Modal>
       <Pressable
         accessibilityRole="button"
-        style={[styles.button, styles.buttonOpen, themed.button]}
-        onPress={() => setModalVisible(true)}>
-        <Text style={[themed.text]}>Complete Workout</Text>
+        style={[styles.button, themed.button]}
+        onPress={() => {setModalVisible(true);setWorkout({...workout, [exerciseId] :true})}}>
+        <Text style={[themed.text]}>Complete Exercise</Text>
       </Pressable>
     </View>
   );

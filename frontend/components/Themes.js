@@ -1,9 +1,9 @@
 export default function Theme(theme){
     if(theme == 'default'){
         return ({
-            // container:{
-            //     backgroundColor:'salmon'
-            // },
+            container:{
+                backgroundColor:'black'
+            },
             text:{
                 fontFamily:'Poppins',
                 color:'white'

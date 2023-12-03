@@ -1,38 +1,53 @@
 import { StyleSheet, Dimensions, Text, View, Pressable} from 'react-native';
 import Animated, { FadeIn } from    'react-native-reanimated';
 import Exercises from '../../components/Exercise';
-import {useContext, useState} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
 import ExerciseContext from '../../contexts/ExerciseContext';
-import { exercises } from '../../constants/Exercises';
+import UserContext from '../../contexts/userContext';
+import axios from 'axios';
 
 
 export default function WorkoutScreen() {
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
   const {workout, setWorkout} = useContext(ExerciseContext);
-  const [complete, setComplete] = useState(false);
+  const {user, setUser} = useContext(UserContext);
+  const [exerciseList, setExercises] = useState(null);
 
-  if (workout.intro){
-    var newWorkout = workout;
-    for(const exercise in exercises){
-      newWorkout[exercise.e_id] = false;
+  useEffect(() => {
+    axios.get('http://localhost:8080/current_workout', {
+      headers: {
+          'authorization': `Bearer ${user}`
+      }
+      })
+      .then(response => response.data)
+      .then((data) => {
+        console.log(data);
+        setExercises(data);
+      });
+    },[])
+
+    if(workout.intro){
+      var newWorkout = workout;
+      if(exerciseList){
+        for(const exercise in exerciseList.exercises){
+              newWorkout[exercise] = false;
+            }
+            newWorkout["intro"] = false;
+            newWorkout["workoutId"] = exerciseList.id;
+            newWorkout["workoutComplete"] = false;
+            newWorkout["exercises"] = exerciseList.exercises;
+            setWorkout(newWorkout);    
+      }
     }
-    setWorkout(newWorkout);
-    console.log("workout created");
-    console.log(workout);
-    setTimeout(()=>{setWorkout({...workout, intro: false})}, 3000);
-  }
-
-  console.log("workout page");
 
   return (
     <View style={styles.container}>
     {workout.intro ?  (<Animated.View style={[styles.container, themed.container]} entering={FadeIn.duration(1000)}>
                       <Text style={[styles.title, themed.text]}>Let's Workout {workout.intro}</Text>
-                      </Animated.View>):
-                      <Exercises exercises={exercises}/>}
+                      </Animated.View>): <Exercises exercises={workout.exercises}/>}
     </View>
     
   );
