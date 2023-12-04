@@ -14,7 +14,7 @@ export default function WelcomeScreen() {
   const login = async () => {
     const url = await axios.post("http://localhost:8080/login", []);
     console.log(JSON.stringify(url))
-    let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    let result = await WebBrowser.openBrowserAsync(`${url.data['auth']}`);
 
   }
 

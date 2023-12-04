@@ -70,7 +70,7 @@ app.post("/login", (req, res) => {
         return res.end();
       } else {
         res.send(
-          `https://${Auth0.OAUTH_DOMAIN}/authorize?response_type=code&client_id=${Auth0.OAUTH_CLIENT_ID}&redirect_uri=${Auth0.URL}/oauth&scope=openid%20profile%20email&state=${state}`
+          {'auth': `https://${Auth0.OAUTH_DOMAIN}/authorize?response_type=code&client_id=${Auth0.OAUTH_CLIENT_ID}&redirect_uri=${Auth0.URL}/oauth&scope=openid%20profile%20email&state=${state}`}
         );
       }
     };
@@ -80,6 +80,7 @@ app.post("/login", (req, res) => {
     console.error(e);
   }
 });
+
 
 // GET /oauth endpoint, which verifies the state is valid and requests the JWT using the auth code
 app.get("/oauth", async (req, res) => {
