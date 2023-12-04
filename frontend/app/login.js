@@ -1,17 +1,36 @@
 import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import axios from 'axios';
+import UserContext from './../contexts/userContext';
+import {useContext, useState, useEffect} from 'react';
 
 
 export default function LoginScreen() {
 
-  const post = () => {
-      axios.post("http://localhost:8080/login", [])
-  }
+  const [data, setData] = useState({});
+  const {user, setUser} = useContext(UserContext);
+
+async function loginRequest(username, password) {
+
+    axios.post('http://localhost:8080/login', {
+      "username": username,
+      "password": password
+    })
+    .then(response => response.data)
+    .then((data) => {
+        setData(data);
+    })
+
+    // setUser(data.user)
+    console.log(data)
+
+  return <Redirect href="/nav"/>
+}
 
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login{'\n'}</Text>
@@ -21,13 +40,13 @@ export default function LoginScreen() {
         value={username}
         placeholder="Username"
       />
-      <TextInput
+      <TextInput secureTextEntry={true}
         style={styles.input}
         onChangeText={onChangePassword}
         value={password}
         placeholder="Password"
       />
-        <Pressable style={styles.button} onPress={() => post()}>
+        <Pressable style={styles.button} href='/tabs' onPressIn={() => loginRequest(username, password)}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
     </View>

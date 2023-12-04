@@ -12,8 +12,8 @@ export default function DashboardScreen() {
   const themed = Theme(theme);
   const {workout, setWorkout} = useContext(ExerciseContext);
   return (
-  <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
-  <View style={[styles.container, themed.container]}>
+  <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%'}}>
+  <View style={[styles.container]}>
     <Text style={[styles.title]}>Dashboard</Text>
 
     <View style={styles.rowContainer}>

@@ -1,75 +1,72 @@
-import React from "react";
+import {useContext, useState, useEffect} from 'react';
 import { StyleSheet, Pressable, Text, View, ImageBackground, Image } from 'react-native';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
 import axios from 'axios';
-        
+import UserContext from '../../contexts/userContext';
+import React from 'react'
 
 export default function ProfileScreen() {
+
+  const [data, setData] = useState({});
+  const {user, setUser} = useContext(UserContext);
+  useEffect(() => {
+    axios.get(`http://localhost:8080/users/65512a7064e79113efca213b`, {
+      headers: {
+          'authorization': `Bearer ${user}`
+      }
+      })
+      .then(response => response.data)
+      .then((data) => {
+          setData(data);
+      });
+    },[])
+
     return (
-    <ImageBackground source={require('../../assets/images/freeweights.png')} resizeMode="cover" style={{ width: '100%', height: '100%'}}>
+      
+  <ImageBackground source={require('../../assets/images/freeweights.png')} resizeMode="cover" style={{ width: '100%', height: '100%'}}>
   <View style={[styles.container]}>
-    <Text style={[styles.title]}>Dashboard</Text>
+    <Text style={[styles.title]}>Profile</Text>
 
     <View style={styles.rowContainer}>
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Today's Workout</Card.Title>
+        <Card containerStyle={{width: 500, height: 750}}>
+        <Card.Title style={{}}>Your Info</Card.Title>
         <Card.Divider/>
-        <Text style={{ alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 50,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>
+        <Text style={styles.textBox}>
 
-                  Chest
+                {data.firstName} {data.lastName}
+                {'\n'}
+                {data.city}, {data.state}
+                {'\n'}
+                {data.email}
+
                 </Text>
+
+                <Card.Divider/>
+
+      <Text style={styles.textBox}>
+        Workout Track: {data.fitnessTrack}
+        {'\n'}
+        Age: {data.age}
+        {'\n'}
+        Height: {data.height}
+        {'\n'}
+        Weight: {data.weight}
+        {'\n'}
+        Gender: {data.gender}
+        {'\n'}
+
+        Max Bench Press: 135
+        {'\n'}
+        Max Squat: 225
+        {'\n'}
+        Max Deadlift: 405
+        
+        </Text>
+                
+              
         </Card>
 
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Days Completed</Card.Title>
-        <Card.Divider/>
-          <Text style={{ alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 50,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>18</Text>
-        </Card>
-    </View>
-    
-    <View style={styles.rowContainer}>
-    <Card containerStyle={{width: 250, height: 250,}}>
-        <Card.Title>Stats</Card.Title>
-        <Card.Divider/>
-          <Text style={[styles.text, {color:'black'}]}>
-          Avg Workout Time: 54 min 
-          {"\n"}
-          Longest Workout: 93 min
-          {"\n"}
-          Grip Strength: 64 psi
-          {"\n"}
-
-          </Text>
-        </Card>
-
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Calories Burned</Card.Title>
-
-        <Card.Divider/>
-          <Image style={{alignItems: 'center', justifyContent: 'center', width: 100, height: 100, marginLeft: 'auto', marginRight: 'auto'}} source={require('../../assets/images/fire.png')} />
-          <Text style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 25,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 10
-
-  }}>953</Text>
-        </Card>
-    </View>
-
-  
+  </View>
   </View>
     </ImageBackground>
 )}
@@ -83,8 +80,8 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
       flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+      // alignItems: 'center',
+      // justifyContent: 'center',
       flexDirection: 'row',
     },
     title: {
@@ -123,4 +120,9 @@ const styles = StyleSheet.create({
       width: 100,
       height: 100,
     },
+    textBox: {
+      fontSize: 30,
+      letterSpacing: 0.25,
+      color: 'black', marginTop: 12, marginBottom: 12,  lineHeight: 50
+    }
   });

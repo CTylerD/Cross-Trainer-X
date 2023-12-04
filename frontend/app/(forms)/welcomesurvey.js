@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, Button } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, TextInput, Text, StyleSheet, Button, Pressable } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
+import UserContext from '../../contexts/userContext';
 
 
 
 export default function WelcomeSurvey() {
+
+  const [data, setData] = useState({});
+  const {user, setUser} = useContext(UserContext);
 
   const [firstName, setFirstName]=useState("");
   const [lastName, setLastName]=useState("");
@@ -15,6 +19,32 @@ export default function WelcomeSurvey() {
   const [height, setHeight] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
   const [selectedExperience, setSelectedExperience] = useState("");
+
+  async function sendSurvey(firstName, lastName, age, gender, weight, height, selectedExperience, selectedPlan) {
+    axios.patch('http://localhost:8080/users/65512a7064e79113efca213b',
+    {   
+      "email": 'mock2@mock.com',  
+      "avatarId": 2,
+      "firstName": firstName,
+      "lastName": lastName,
+      "fitnessTrack": selectedPlan,
+      "age": age,
+      "gender": gender,
+      "height": height,
+      "weight": weight,
+      "experience": selectedExperience
+    },
+    {
+      headers: {
+        'authorization': `Bearer ${user}`
+      }}).then(response => response.data)
+      .then((data) => {
+          setData(data);
+      },
+      console.log(data)
+      )
+
+  }
 
   return (
     <View style={styles.container}>
@@ -108,20 +138,12 @@ export default function WelcomeSurvey() {
     </Picker>
       </View>
 
-      <View style={{margineBottom: 10}}>
-        <Button onPress={axios({
-            method: 'post',
-            url: 'http://localhost:8080/users',
-            data: {
-              email: 'bloopy123@testemail.com',
-              avatarId: 1,
-              firstName: "Lonk",
-              lastName: "Bli",
-              fitnessTrack: "Strength"
-            }
-          })
-          } title='Welcome!!!'/> 
-                </View>
+      <View>
+        <Pressable href='tabs' onPressIn={() => sendSurvey(
+          firstName, lastName, age, gender, weight, height, selectedExperience, selectedPlan
+        )}>  <Text style={styles.text}>Welcome!</Text>
+        </Pressable>
+        </View>
     </View>
   )
 }

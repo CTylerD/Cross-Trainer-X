@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, Text, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, Pressable, Text, View, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import { Link } from 'expo-router';
 import Theme from '../components/Themes';
 import { useContext } from 'react';
@@ -71,12 +71,6 @@ export default function NavScreen() {
         <Text style={[themed.text,styles.text]}>Post Exercise Survey</Text>
       </Pressable>
       </Link>
-
-
-
-
-
-
 
     </View>
   );
