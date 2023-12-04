@@ -117,44 +117,80 @@ async function getAllUsers(userId, callback) {
 
 function updateUser(user, callback) {
   try {
+    const updateColumns = [];
+    const updateValues = [];
+    const queryParams = [];
+
+    for (let key in user) {
+      if (
+        user.hasOwnProperty(key) &&
+        user[key] !== undefined &&
+        key !== "id"
+      ) {
+        queryParams.push(user[key]);
+
+        switch (key) {
+          case "userId":
+            key = "user_id";
+            break;
+          case "avatarId":
+            key = "avatar_id";
+            break;
+          case "firstName":
+            key = "first_name";
+            break;
+          case "lastName":
+            key = "last_name";
+            break;
+          case "fitnessTrack":
+            key = "fitness_track";
+            break;
+          case "secondaryTrack":
+            key = "secondary_track";
+            break;
+        }
+        updateColumns.push(`${key} = ?`);
+        updateValues.push(user[key]);
+      }
+    }
+
+    queryParams.push(user.userId);
+
     const updateUserQuery = `
       UPDATE Users 
-      SET email = ?,
-          avatar_id = ?,
-          first_name = ?,
-          last_name = ?,
-          city = ?,
-          state = ?,
-          age = ?,
-          gender = ?,
-          weight = ?,
-          height = ?,
-          fitness_track = ?,
-          secondary_track = ?
+      SET ${updateColumns.join(", ")}
       WHERE user_id = ?;
     `;
 
-    db.pool.query(
-      updateUserQuery,
-      [
-        user.email,
-        user.avatarId,
-        user.firstName,
-        user.lastName,
-        user.city,
-        user.state,
-        user.age,
-        user.gender,
-        user.weight,
-        user.height,
-        user.fitnessTrack,
-        user.secondaryTrack,
-        user.userId
-      ],
-      (error, rows, fields) => {
+    db.pool.query(updateUserQuery, queryParams, (error, rows, fields) => {
+      if (error) {
         callback(error, rows);
+        return;
       }
-    );
+      const getUserQuery = `SELECT
+          id,
+          user_id AS userId,
+          email,
+          avatar_id AS avatarId,
+          first_name AS firstName,
+          last_name AS lastName,
+          city,
+          state,
+          age,
+          gender,
+          weight,
+          height,
+          fitness_track AS fitnessTrack,
+          secondary_track AS secondaryTrack
+        FROM
+            Users
+        WHERE
+            user_id = ?;`;
+
+      db.pool.query(getUserQuery, [user.userId], (error, rows, fields) => {
+        callback(error, rows[0]);
+      });
+    });
   } catch (e) {
     console.error(e);
     return e;
