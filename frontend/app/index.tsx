@@ -5,6 +5,7 @@ import ThemeContext from '../contexts/ThemeContext';
 import Theme from '../components/Themes';
 import axios from 'axios';
 import * as WebBrowser from 'expo-web-browser';
+import { router } from 'expo-router';
 
 export default function WelcomeScreen() {
   
@@ -15,6 +16,7 @@ export default function WelcomeScreen() {
     const url = await axios.post("http://localhost:8080/login", []);
     console.log(JSON.stringify(url))
     let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    setTimeout(() => router.replace('/login'), 500);
 
   }
 
@@ -23,16 +25,12 @@ export default function WelcomeScreen() {
     <ImageBackground source={require('../assets/images/welcome.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
     <View style={[styles.container]}>
       <Text style={[styles.title, themed.text]}>Welcome to CrossTrainerX!{'\n'}</Text>
-
-        <Pressable style={styles.button} accessibilityRole="button" onPress={() => {login()}}>
+        <Pressable style={styles.button} accessibilityRole="button" onPress={() => login()}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Login</Text>
         </Pressable>
-
-      <Link href="/create" asChild>
-        <Pressable style={styles.button} accessibilityRole="button">
+        <Pressable style={styles.button} accessibilityRole="button" onPress={() => login()}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Create Account</Text>
         </Pressable>
-      </Link>
        <Link href="/nav">
          <Text style={themed.text}>Nav Links For Dev</Text>
        </Link>
