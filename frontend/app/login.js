@@ -21,7 +21,6 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Auth Token: {user}{'\n'}</Text>
       <Text style={styles.title}>Please Enter Your Auth Token:{'\n'}</Text>
 
       <TextInput

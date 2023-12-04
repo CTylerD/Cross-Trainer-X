@@ -17,7 +17,6 @@ export default function DashboardScreen() {
   <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
   <View style={[styles.container, themed.container]}>
     <Text style={[styles.title]}>Dashboard</Text>
-    <Text style={[styles.title]}>User Token: {user}</Text>
 
 
     <View style={styles.rowContainer}>
