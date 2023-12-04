@@ -1,52 +1,33 @@
 import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
-import React from 'react';
-import { Link, Redirect } from 'expo-router';
-import axios from 'axios';
-import UserContext from './../contexts/userContext';
-import {useContext, useState, useEffect} from 'react';
+import React, {useContext} from 'react';
+import UserContext from '../contexts/userContext';
+import { router } from 'expo-router';
 
 
 export default function LoginScreen() {
 
-  const [data, setData] = useState({});
   const {user, setUser} = useContext(UserContext);
 
-async function loginRequest(username, password) {
 
-    axios.post('http://localhost:8080/login', {
-      "username": username,
-      "password": password
-    })
-    .then(response => response.data)
-    .then((data) => {
-        setData(data);
-    })
-
-    // setUser(data.user)
-    console.log(data)
-
-  return <Redirect href="/nav"/>
-}
-
-  const [username, onChangeUsername] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
+  const setToken = () => {
+    console.log(text);
+      setUser(text);
+      console.log("token set: " + user);
+      setTimeout(() => router.replace('/tabs'), 1000);
+  }
+  
+  const [text, onChangeText] = React.useState('');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login{'\n'}</Text>
+      <Text style={styles.title}>Please Enter Your Auth Token:{'\n'}</Text>
+
       <TextInput
         style={styles.input}
-        onChangeText={onChangeUsername}
-        value={username}
-        placeholder="Username"
+        onChangeText={onChangeText}
+        value={text}
       />
-      <TextInput secureTextEntry={true}
-        style={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="Password"
-      />
-        <Pressable style={styles.button} href='/tabs' onPressIn={() => loginRequest(username, password)}>
+        <Pressable style={styles.button} onPress={() => setToken()}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
     </View>
