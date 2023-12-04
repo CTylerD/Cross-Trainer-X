@@ -5,16 +5,20 @@ import { useContext } from 'react';
 import Theme from '../../components/Themes';
 import ThemeContext from '../../contexts/ThemeContext';
 import ExerciseContext from '../../contexts/ExerciseContext';
+import UserContext from '../../contexts/userContext';
 
 
 export default function DashboardScreen() {
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
   const {workout, setWorkout} = useContext(ExerciseContext);
+  const {user, setUser} = useContext(UserContext);
   return (
   <ImageBackground source={require('../../assets/images/dashboard.png')} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
   <View style={[styles.container, themed.container]}>
     <Text style={[styles.title]}>Dashboard</Text>
+    <Text style={[styles.title]}>User Token: {user}</Text>
+
 
     <View style={styles.rowContainer}>
         <Card containerStyle={{width: 250, height: 250}}>

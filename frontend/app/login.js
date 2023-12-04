@@ -1,32 +1,35 @@
 import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
-import React from 'react';
-import { Link } from 'expo-router';
-import axios from 'axios';
+import React, {useContext} from 'react';
+import UserContext from '../contexts/userContext';
+import { router } from 'expo-router';
 
 
 export default function LoginScreen() {
 
-  const post = axios.post("http://localhost:8080/login", [])
+  const {user, setUser} = useContext(UserContext);
+
+
+  const setToken = () => {
+    console.log(text);
+      setUser(text);
+      console.log("token set: " + user);
+      setTimeout(() => router.replace('/dashboard'), 1000);
+  }
   
 
-  const [username, onChangeUsername] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
+  const [text, onChangeText] = React.useState('');
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login{'\n'}</Text>
+      <Text style={styles.title}>Auth Token: {user}{'\n'}</Text>
+      <Text style={styles.title}>Please Enter Your Auth Token:{'\n'}</Text>
+
       <TextInput
         style={styles.input}
-        onChangeText={onChangeUsername}
-        value={username}
-        placeholder="Username"
+        onChangeText={onChangeText}
+        value={text}
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="Password"
-      />
-        <Pressable style={styles.button} onPress={() => post()}>
+        <Pressable style={styles.button} onPress={() => setToken()}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
     </View>

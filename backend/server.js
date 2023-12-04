@@ -70,7 +70,7 @@ app.post("/login", (req, res) => {
         return res.end();
       } else {
         res.send(
-          {'auth': `https://${Auth0.OAUTH_DOMAIN}/authorize?response_type=code&client_id=${Auth0.OAUTH_CLIENT_ID}&redirect_uri=${Auth0.URL}/oauth&scope=openid%20profile%20email&state=${state}`}
+          `https://${Auth0.OAUTH_DOMAIN}/authorize?response_type=code&client_id=${Auth0.OAUTH_CLIENT_ID}&redirect_uri=${Auth0.URL}/oauth&scope=openid%20profile%20email&state=${state}`
         );
       }
     };
