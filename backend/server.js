@@ -1282,11 +1282,25 @@ app.patch("/users/:userId", checkJwt, (req, res) => {
         return res.end();
       }
       
-      let updateResponseHandler = (error, _) => {
+      let updateResponseHandler = (error, dbUser) => {
         try {
           if (error) {
             handleError(error, res);
           } else {
+            updatedUser.userId = dbUser.userId;
+            updatedUser.email = dbUser.email;
+            updatedUser.avatarId = dbUser.avatarId;
+            updatedUser.firstName = dbUser.firstName;
+            updatedUser.lastName = dbUser.lastName;
+            updatedUser.city = dbUser.city;
+            updatedUser.state = dbUser.state;
+            updatedUser.age = dbUser.age;
+            updatedUser.gender = dbUser.gender;
+            updatedUser.weight = dbUser.weight;
+            updatedUser.height = dbUser.height;
+            updatedUser.fitnessTrack = dbUser.fitnessTrack;
+            updatedUser.secondaryTrack = dbUser.secondaryTrack;
+
             res.status(200).json(updatedUser.toJSON());
             return res.end();
           }
