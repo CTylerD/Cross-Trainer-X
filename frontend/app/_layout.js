@@ -2,11 +2,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
 import React, {useState} from "react";
 import ThemeContext from '../contexts/ThemeContext';
 import ExerciseContext from '../contexts/ExerciseContext';
-import PostExerciseModal from '../components/PostExerciseModal';
+import UserContext from '../contexts/userContext';
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,16 +54,20 @@ function RootLayoutNav() {
   const value = { theme, setTheme };
   const [workout, setWorkout] = useState({intro:true, workout:false});
   const value1 = { workout, setWorkout };
+  const [user, setUser] = useState("");
+  const value2 = {user, setUser};
 
   return (
     
     <ThemeContext.Provider value={value}>
       <ExerciseContext.Provider value={value1}>
+        <UserContext.Provider value={value2}>
         <Stack screenOptions={{
                 headerShown: true,
                 headerTitle: "",
                 headerTransparent: true}}>
                 </Stack>
+        </UserContext.Provider>       
       </ExerciseContext.Provider>
     </ThemeContext.Provider>
   );
