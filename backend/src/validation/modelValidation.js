@@ -112,12 +112,12 @@ function userInvalid(user) {
     [1, 2, 3, 4, 5].includes(user.avatarId);
   const firstNameValid = user.firstName && typeof user.firstName === "string";
   const lastNameValid = user.lastName && typeof user.lastName === "string";
-  const cityValid = user.city && typeof user.city === "string";
-  const stateValid = user.state && typeof user.state === "string";
-  const ageValid = user.age && typeof user.age === "number";
-  const genderValid = user.gender && typeof user.gender === "string";
-  const weightValid = user.weight && typeof user.age === "number";
-  const heightValid = user.height && typeof user.height === "number";
+  const cityValid = !user.city || (user.city && typeof user.city === "string");
+  const stateValid = !user.state || (user.state && typeof user.state === "string");
+  const ageValid = !user.age || (user.age && typeof user.age === "number");
+  const genderValid = !user.gender || (user.gender && typeof user.gender === "string");
+  const weightValid = !user.weight || (user.weight && typeof user.weight === "number");
+  const heightValid = !user.height || (user.height && typeof user.height === "number");
   const fitnessTrackValid =
     user.fitnessTrack && typeof user.fitnessTrack === "string" && 
     ["Strength", "Cardio", "Flexibility"].includes(user.fitnessTrack);
