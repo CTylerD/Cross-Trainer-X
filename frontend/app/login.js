@@ -2,11 +2,15 @@ import { StyleSheet, Pressable, TextInput, Text, View} from 'react-native';
 import React, {useContext} from 'react';
 import UserContext from '../contexts/userContext';
 import { router } from 'expo-router';
+import ThemeContext from '../contexts/ThemeContext';
+import Theme from '../components/Themes';
 
 
 export default function LoginScreen() {
 
   const {user, setUser} = useContext(UserContext);
+  const {theme, setTheme} = useContext(ThemeContext);
+  const themed = Theme(theme);
 
 
   const setToken = () => {
@@ -20,16 +24,16 @@ export default function LoginScreen() {
   const [text, onChangeText] = React.useState('');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Please Enter Your Auth Token:{'\n'}</Text>
+    <View style={[styles.container, themed.container]}>
+      <Text style={[styles.title, themed.text]}>Please Enter Your Auth Token:{'\n'}</Text>
 
       <TextInput
         style={styles.input}
         onChangeText={onChangeText}
         value={text}
       />
-        <Pressable style={styles.button} onPress={() => setToken()}>
-          <Text style={styles.text}>Login</Text>
+        <Pressable style={[styles.button, themed.button]} onPress={() => setToken()}>
+          <Text style={[styles.text, themed.text]}>Login</Text>
         </Pressable>
     </View>
   );
