@@ -7,6 +7,8 @@ node_modules/
 .expo/
 dist/
 web-build/
+__tests__/
+components/__tests__/
 
 # Native
 *.orig.*
