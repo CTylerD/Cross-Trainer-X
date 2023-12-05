@@ -1683,6 +1683,6 @@ CREATE TABLE Surveys (
     difficulty INT,
     duration INT,
     distance INT,
-    FOREIGN KEY (exercise_id) REFERENCES Exercises(id),
+    FOREIGN KEY (exercise_id) REFERENCES UserExercises(id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
