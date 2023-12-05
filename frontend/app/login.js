@@ -17,10 +17,9 @@ export default function LoginScreen() {
     console.log(text);
       setUser(text);
       console.log("token set: " + user);
-      setTimeout(() => router.replace('/dashboard'), 1000);
+      setTimeout(() => router.replace('/tabs'), 1000);
   }
   
-
   const [text, onChangeText] = React.useState('');
 
   return (
