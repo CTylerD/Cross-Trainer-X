@@ -1,62 +1,38 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, TextInput, Text, StyleSheet, Button, Pressable } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Dimensions, Pressable, ScrollView } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import UserContext from '../../contexts/userContext';
+import { router } from 'expo-router';
 
 
 
 export default function WelcomeSurvey() {
 
-  const [data, setData] = useState({});
   const {user, setUser} = useContext(UserContext);
+  const [userData, setUserData] = useState({})
 
-  const [firstName, setFirstName]=useState("");
-  const [lastName, setLastName]=useState("");
-  const [age, setAge]=useState("");
-  const [gender, setGender] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const [selectedExperience, setSelectedExperience] = useState("");
+  axios.defaults.headers.patch['Authorization'] = `Bearer ${user}`;
 
-  async function sendSurvey(firstName, lastName, age, gender, weight, height, selectedExperience, selectedPlan) {
-    axios.patch('http://localhost:8080/users/65512a7064e79113efca213b',
-    {   
-      "email": 'mock2@mock.com',  
-      "avatarId": 2,
-      "firstName": firstName,
-      "lastName": lastName,
-      "fitnessTrack": selectedPlan,
-      "age": age,
-      "gender": gender,
-      "height": height,
-      "weight": weight,
-      "experience": selectedExperience
-    },
-    {
-      headers: {
-        'authorization': `Bearer ${user}`
-      }}).then(response => response.data)
-      .then((data) => {
-          setData(data);
-      },
-      console.log(data)
-      )
-
+  const send = () => {
+    console.log(userData);
+    axios.patch('http://localhost:8080/exercises', userData);
+    setTimeout(() => router.replace('/dashboard'), 1000);
   }
 
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:'gray'}]}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={{alignItems:'center', paddingBottom:30}}>
       <Text style={styles.title}>Welcome Survey{'\n'}</Text>
 
       <View style={styles.surveyBox}>
       <Text>First Name</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setFirstName(text)}}
-      value={firstName}
+      placeholder='First Name'
+      onChangeText={text => setUserData({...userData, firstname:text })}
+      value={userData.firstName}
       />
       </View>
 
@@ -64,9 +40,9 @@ export default function WelcomeSurvey() {
       <Text>Last Name</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setLastName(text)}}
-      value={lastName}
+      placeholder='Last Name'
+      onChangeText={text => setUserData({...userData, lastname:text })}
+      value={userData.lastName}
       />
       </View>
       
@@ -74,9 +50,9 @@ export default function WelcomeSurvey() {
       <Text>Age</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setAge(text)}}
-      value={age}
+      placeholder='Age'
+      onChangeText={text => setUserData({...userData, age:Number(text)})}
+      value={userData.age}
       />
       </View>
 
@@ -84,9 +60,9 @@ export default function WelcomeSurvey() {
       <Text>Gender</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setGender(text)}}
-      value={gender}
+      placeholder='Gender'
+      onChangeText={text => setUserData({...userData, gender:text})}
+      value={userData.gender}
       />
       </View>
 
@@ -94,65 +70,95 @@ export default function WelcomeSurvey() {
       <Text>Weight (lbs)</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setWeight(text)}}
-      value={weight}
+      placeholder='Weight'
+      onChangeText={text => setUserData({...userData, weight:Number(text)})}
+      value={userData.weight}
       />
       </View>
 
       <View style={styles.surveyBox}>
-      <Text>Height</Text>
+      <Text>Height (inches)</Text>
       <TextInput
       style={styles.input}
-      placeholder='Placeholder'
-      onChangeText={(text)=>{setHeight(text)}}
-      value={height}
+      placeholder='Height'
+      onChangeText={text => setUserData({...userData, height:Number(text)})}
+      value={userData.height}
       />
       </View>
 
       <View style={styles.surveyBox}>
-        <Text>Please select which workout plan</Text>
+        <Text>Select fitness track</Text>
       <Picker style={styles.input}
-      selectedValue={selectedPlan}
-      onValueChange={(itemValue, itemIndex) =>
-        setSelectedPlan(itemValue)
+      selectedValue={userData.fitnessTrack}
+      onValueChange={(fitnesstrack) => setUserData({...userData, fitnessTrack:fitnesstrack})
       }>
-      <Picker.Item label="Weightlifting" value="weightlifting" />
-      <Picker.Item label="Cardio (Running)" value="running" />
-      <Picker.Item label="Cardio (Cycling)" value="cycling" />
-      <Picker.Item label="Flexibility (Yoga)" value="yoga" />
-      <Picker.Item label="Flexibility (Stretching)" value="stretching" />
+      <Picker.Item label="..." value={null} />
+      <Picker.Item label="Strength" value="Strength" />
+      <Picker.Item label="Cardio" value="Cardio" />
+      <Picker.Item label="Flexibility" value="Flexibility" />
     </Picker>
       </View>
 
-      <View style={styles.surveyBox}>
-        <Text>Please select experience level</Text>
+     {userData.fitnessTrack === 'Cardio' ? <View style={styles.surveyBox}>
+        <Text>Select secondary fitness track</Text>
       <Picker style={styles.input}
-      selectedValue={selectedExperience}
-      onValueChange={(itemValue, itemIndex) =>
-        setSelectedExperience(itemValue)
+      selectedValue={userData.secondaryTrack}
+      onValueChange={(sfitnesstrack) => setUserData({...userData, secondaryTrack:sfitnesstrack})
       }>
-      <Picker.Item label="Beginner" value="beginner" />
-      <Picker.Item label="Intermediate" value="intermediate" />
-      <Picker.Item label="Expert" value="expert" />
+      <Picker.Item label="..." value={null} />
+      <Picker.Item label="Running" value="Running" />
+      <Picker.Item label="Cycling" value="Cycling" />
     </Picker>
+      </View>:null}
+
+      {userData.fitnessTrack === 'Flexibility' ? <View style={styles.surveyBox}>
+        <Text>Select secondary fitness track</Text>
+      <Picker style={styles.input}
+      selectedValue={userData.secondaryTrack}
+      onValueChange={(sfitnesstrack) => setUserData({...userData, secondaryTrack:sfitnesstrack})
+      }>
+      <Picker.Item label="..." value={null} />
+      <Picker.Item label="Yoga" value="Yoga" />
+      <Picker.Item label="Stretching" value="Stretching" />
+    </Picker>
+      </View>:null}
+
+
+
+      <View style={styles.surveyBox}>
+      <Text>Difficulty</Text>
+      <Picker style={styles.input}
+      selectedValue={String(userData.experience)}
+      onValueChange={(experience) => setUserData({...userData, experience:Number(experience)})
+      }>
+      <Picker.Item label="..." value={null} />
+      <Picker.Item label="Beginner" value="1" />
+      <Picker.Item label="Intermediate" value="2" />
+      <Picker.Item label="Advanced" value="3" />
+      </Picker>
       </View>
 
       <View>
-        <Pressable href='tabs' onPressIn={() => sendSurvey(
-          firstName, lastName, age, gender, weight, height, selectedExperience, selectedPlan
-        )}>  <Text style={styles.text}>Welcome!</Text>
-        </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        style={[styles.button]}
+        onPress={() => send()}>
+        <Text style={styles.text}>Submit</Text>
+      </Pressable>
         </View>
+        </ScrollView>
     </View>
   )
 }
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 60
   },
   title: {
     fontSize: 20,
@@ -193,5 +199,9 @@ const styles = StyleSheet.create({
   surveyBox: {
     marginBottom: 10,
     marginTop: 10,
-  }
+  },
+  scrollView: {
+    marginHorizontal: 0,
+    width: screenWidth,
+  },
 });

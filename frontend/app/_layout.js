@@ -63,7 +63,7 @@ function RootLayoutNav() {
       <ExerciseContext.Provider value={value1}>
         <UserContext.Provider value={value2}>
         <Stack screenOptions={{
-                headerShown: true,
+                headerShown: false,
                 headerTitle: "",
                 headerTransparent: true}}>
                 </Stack>

@@ -13,10 +13,18 @@ export default function WelcomeScreen() {
   const themed = Theme(theme);
 
   const login = async () => {
-    const url = await axios.post("http://localhost:8080/login", []);
-    console.log(JSON.stringify(url))
-    let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    // const url = await axios.post("http://localhost:8080/login", []);
+    // console.log(JSON.stringify(url))
+    // let result = await WebBrowser.openBrowserAsync(`${url.data}`);
     setTimeout(() => router.replace('/login'), 500);
+
+  }
+
+  const create = async () => {
+    // const url = await axios.post("http://localhost:8080/login", []);
+    // console.log(JSON.stringify(url))
+    // let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    setTimeout(() => router.replace('/create'), 500);
 
   }
 
@@ -28,7 +36,7 @@ export default function WelcomeScreen() {
         <Pressable style={styles.button} accessibilityRole="button" onPress={() => login()}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Login</Text>
         </Pressable>
-        <Pressable style={styles.button} accessibilityRole="button" onPress={() => login()}>
+        <Pressable style={styles.button} accessibilityRole="button" onPress={() => create()}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Create Account</Text>
         </Pressable>
        <Link href="/nav">

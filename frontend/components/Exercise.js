@@ -30,6 +30,11 @@ export default function Exercises({exercises}) {
   return (
 
     <View style={[styles.container, themed.container]}>
+      <View style={[styles.container,{alignItems:'left',paddingTop:0, paddingLeft:10}]}>
+        <Link href="/dashboard" asChild>
+            <Text style={{fontSize:20, color:themed.text.color}}>⇦</Text>
+        </Link>
+        </View>
       <Text style={[styles.title, themed.text]}>Today's Workout</Text>
     <ScrollView contentContainerStyle={[styles.scrollView]}>
     {Object.values(exercises).map((exercise) => {
