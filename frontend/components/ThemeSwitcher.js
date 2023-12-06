@@ -7,11 +7,18 @@ export default function ThemeSwitcher(){
   return (
     
     <View style={[styles.container]}>
-      <Pressable style={[styles.button]} onPress={() => setTheme("pink")} accessibilityRole="button">
-        <Text>Pink</Text>
+      
+      <Pressable style={[styles.button,{backgroundColor:'black'}]} onPress={() => setTheme("default")} accessibilityRole="button">
+
       </Pressable>
-      <Pressable style={[styles.button]} onPress={() => setTheme("default")} accessibilityRole="button">
-       <Text>Gray</Text>
+      <Pressable style={[styles.button,{backgroundColor:'white'}]} onPress={() => setTheme("light")} accessibilityRole="button">
+
+      </Pressable>
+      <Pressable style={[styles.button,{backgroundColor:'royalblue'}]} onPress={() => setTheme("blue")} accessibilityRole="button">
+
+      </Pressable>
+      <Pressable style={[styles.button,{backgroundColor:'mistyrose'}]} onPress={() => setTheme("pink")} accessibilityRole="button">
+
       </Pressable>
     </View>
   );
@@ -27,10 +34,15 @@ const styles = StyleSheet.create({
       button: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 4,
+        borderRadius: 25,
         elevation: 3,
         backgroundColor: 'white',
-
+        margin:5,
+        borderWidth: 1,
+        paddingVertical: 2,
+        paddingHorizontal: 2,
+        width:30,
+        height:30
       }
 })
 

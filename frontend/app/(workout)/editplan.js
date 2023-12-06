@@ -6,6 +6,7 @@ import ThemeContext from '../../contexts/ThemeContext';
 import UserContext from '../../contexts/userContext';
 import AddModal from '../../components/AddModal';
 import axios from 'axios';
+import { Link } from 'expo-router';
 
 
 export default function EditPlanScreen() {
@@ -31,6 +32,11 @@ export default function EditPlanScreen() {
 
   return (
     <View style={[styles.container, themed.container]}>
+      <View style={[styles.container,{alignItems:'left',paddingTop:0, paddingLeft:17}]}>
+        <Link href="/dashboard" asChild>
+            <Text style={{fontSize:20, color:themed.text.color}}>⇦</Text>
+        </Link>
+        </View>
       <Text style={[styles.largetext, themed.text]}>Edit Fitness Plan</Text>
       <ScrollView style={[themed.container, styles.scrollView]} contentContainerStyle={{alignItems:'center', paddingBottom:30}}>
       <Text style={[styles.title, themed.text]}>Strength</Text>
@@ -73,12 +79,14 @@ export default function EditPlanScreen() {
 }
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'top',
+    width: screenWidth,
     paddingTop: 60
   },
   scrollView: {

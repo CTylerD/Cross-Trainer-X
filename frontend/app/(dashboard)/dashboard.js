@@ -18,128 +18,108 @@ export default function DashboardScreen() {
   <View style={[styles.container]}>
     <Text style={[styles.title]}>Dashboard</Text>
 
+    {workout.workoutComplete ? <View style={[styles.button, themed.button]}><Text style={[styles.text, themed.text]}>Workout Complete</Text></View>:
+                              <Link href='/workout' asChild style={[styles.button, themed.button]}><Pressable><Text style={themed.text}>Start Workout</Text></Pressable></Link>}
 
     <View style={styles.rowContainer}>
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Today's Workout</Card.Title>
-        <Card.Divider/>
-        <Text style={{ alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 50,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>
-
-                  Chest
-                </Text>
-        </Card>
-
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Days Completed</Card.Title>
-        <Card.Divider/>
-          <Text style={{ alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 50,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 50}}>18</Text>
-        </Card>
+      <View style={[styles.card_template, themed.card]}>
+        <Text style={[styles.text, themed.text]}>Today's Workout:</Text>
+        <Text style={{fontSize:80}}>🏋🏽‍♂️</Text>
+        <Text style={[styles.text, themed.text]}>{'\n'}Chest</Text>
+      </View>
+      <View style={[styles.card_template, themed.card]}>
+        <Text style={[styles.text, themed.text]}>Calories Burned:</Text>
+        <Text style={{fontSize:80}}>🔥</Text>
+        <Text style={[styles.text, themed.text]}>{'\n'}953</Text>
+            
+      </View>
     </View>
-    
+
     <View style={styles.rowContainer}>
-    <Card containerStyle={{width: 250, height: 250,}}>
-        <Card.Title>Stats</Card.Title>
-        <Card.Divider/>
-          <Text style={[styles.text, {color:'black'}]}>
-          Avg Workout Time: 54 min 
-          {"\n"}
-          Longest Workout: 93 min
-          {"\n"}
-          Grip Strength: 64 psi
-          {"\n"}
-
-          </Text>
-        </Card>
-
-        <Card containerStyle={{width: 250, height: 250}}>
-        <Card.Title>Calories Burned</Card.Title>
-
-        <Card.Divider/>
-          <Image style={{alignItems: 'center', justifyContent: 'center', width: 100, height: 100, marginLeft: 'auto', marginRight: 'auto'}} source={require('../../assets/images/fire.png')} />
-          <Text style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 25,
-                lineHeight: 21,
-                letterSpacing: 0.25,
-                color: 'black', marginLeft: 'auto', marginRight: 'auto', marginTop: 10
-
-  }}>953</Text>
-        </Card>
+    <View style={[styles.card_template, themed.card]}>
+      <Text style={[styles.text, themed.text]}>Your Stats</Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color:'limegreen'}]}>Avg Workout Time:</Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color:'limegreen'}]}>54 min </Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color:'skyblue'}]}>Longest Workout:</Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color:'skyblue'}]}>93 min</Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color: 'darksalmon'}]}>Grip Strength:</Text>
+      <Text style={[styles.text, themed.text,{fontSize:14, color: 'darksalmon'}]}>64 psi</Text>
     </View>
-
-    <Card containerStyle={{width: 530, height: 100}}>
-
-  <Text style={[{marginBottom: 10,}, [styles.text, themed.text, {color:'black'}]]}>
-  </Text>
-  {workout.workoutComplete ? <View style={[styles.button, themed.button]}><Text style={[styles.text, themed.text]}>Workout Complete</Text></View>:
-                              <Link href='/workout' asChild style={[styles.button, themed.button]}><Pressable><Text style={{color:'white'}}>Start Workout</Text></Pressable></Link>}
-                              
-  
-  </Card>
-  
+    <View style={[styles.card_template, themed.card]}>
+    <Text style={[styles.text, themed.text]}>Workouts Completed:</Text>
+    <Text style={[styles.text, themed.text,{fontSize:80}]}>10</Text>
+        
+    </View>
+    </View>
+    <View style={[styles.rowContainer,{margin:20}]}>
+    <Link style={styles.button} href="/editplan" asChild>
+      <Pressable style={themed.button}>
+        <Text style={[themed.text,styles.text]}>Fitness Plan</Text>
+      </Pressable>
+    </Link>
+    <Link style={styles.button} href="/profile" asChild>
+      <Pressable style={themed.button}>
+        <Text style={[themed.text,styles.text]}>Profile</Text>
+      </Pressable>
+    </Link>
+    </View>
+                            
   </View>
   </ImageBackground>
   );
 }
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    width: screenWidth,
+    paddingTop: 50
     
   },
   rowContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
   },
   title: {
-    fontSize: 50,
+    fontSize: 30,
     color: 'white',
     letterSpacing: 0.25,
     fontFamily:'Poppins',
   },
   text: {
     fontSize: 16,
-    lineHeight: 40,
-    letterSpacing: 0.25,
-    color: 'black',
+    flexWrap:'wrap'
     
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 4,
+    borderRadius: 12,
     elevation: 3,
     backgroundColor: 'white',
-    margin: 12,
+    marginBottom: 12,
     borderWidth: 1,
     paddingVertical: 12,
-    paddingHorizontal: 32,
-    fontWeight: 'bold'
+    paddingHorizontal: 25,
+    marginHorizontal:3
   },
-  cardbox: {
-    width: 250,
-    height: 250,
-  },
-  picture: {
-    paddingLeft: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-    height: 100,
+  card_template:{
+    width: screenWidth * .45,
+    height:screenHeight * .3,
+    margin: 3,
+    elevation: 3,
+    borderRadius: 15,
+    boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
+    flexDirection:'column',
+    paddingVertical: 15,
+    paddingHorizontal:5,
+    alignItems:'center',
+    opacity:.90,
+    borderWidth:1
   },
 });

@@ -30,12 +30,6 @@ export default function NavScreen() {
         </Pressable>
       </Link>
 
-      <Link href="/create" asChild>
-        <Pressable style={styles.button}>
-          <Text style={[themed.text,styles.text]}>Create Account</Text>
-        </Pressable>
-      </Link>
-
       <Link href="/dashboard" asChild>
         <Pressable style={styles.button}>
           <Text style={[themed.text,styles.text]}>Dashboard</Text>
@@ -48,30 +42,23 @@ export default function NavScreen() {
         </Pressable>
       </Link>
 
+      <Link href="/profile" asChild>
+        <Pressable style={styles.button}>
+          <Text style={[themed.text,styles.text]}>Profile</Text>
+        </Pressable>
+        </Link>
+
       <Link href="/workout" asChild>
         <Pressable style={styles.button}>
           <Text style={[themed.text,styles.text]}>Workout</Text>
         </Pressable>
         </Link>
 
-      <Link href="/tabs" asChild>
-      <Pressable style={styles.button}>
-        <Text style={[themed.text,styles.text]}>Bottom Tabs</Text>
-      </Pressable>
-      </Link>
-
       <Link href="/welcomesurvey" asChild>
       <Pressable style={styles.button}>
         <Text style={[themed.text,styles.text]}>Welcome Survey</Text>
       </Pressable>
       </Link>
-
-      <Link href="/postexercisesurvey" asChild>
-      <Pressable style={styles.button}>
-        <Text style={[themed.text,styles.text]}>Post Exercise Survey</Text>
-      </Pressable>
-      </Link>
-
     </View>
   );
 }

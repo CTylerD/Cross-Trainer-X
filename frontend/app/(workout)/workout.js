@@ -7,6 +7,7 @@ import ThemeContext from '../../contexts/ThemeContext';
 import ExerciseContext from '../../contexts/ExerciseContext';
 import UserContext from '../../contexts/userContext';
 import axios from 'axios';
+import { Link } from 'expo-router';
 
 
 export default function WorkoutScreen() {
