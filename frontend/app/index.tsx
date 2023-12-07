@@ -13,17 +13,17 @@ export default function WelcomeScreen() {
   const themed = Theme(theme);
 
   const login = async () => {
-    // const url = await axios.post("http://localhost:8080/login", []);
-    // console.log(JSON.stringify(url))
-    // let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    const url = await axios.post("http://localhost:8080/login", []);
+    console.log(JSON.stringify(url))
+    let result = await WebBrowser.openBrowserAsync(`${url.data}`);
     setTimeout(() => router.replace('/login'), 500);
 
   }
 
   const create = async () => {
-    // const url = await axios.post("http://localhost:8080/login", []);
-    // console.log(JSON.stringify(url))
-    // let result = await WebBrowser.openBrowserAsync(`${url.data}`);
+    const url = await axios.post("http://localhost:8080/login", []);
+    console.log(JSON.stringify(url))
+    let result = await WebBrowser.openBrowserAsync(`${url.data}`);
     setTimeout(() => router.replace('/create'), 500);
 
   }
