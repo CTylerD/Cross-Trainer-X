@@ -39,9 +39,6 @@ export default function WelcomeScreen() {
         <Pressable style={styles.button} accessibilityRole="button" onPress={() => create()}>
           <Text style={[styles.text, themed.text, {color:'black'} ]}>Create Account</Text>
         </Pressable>
-       <Link href="/nav">
-         <Text style={themed.text}>Nav Links For Dev</Text>
-       </Link>
     </View> 
     </ImageBackground>
   );

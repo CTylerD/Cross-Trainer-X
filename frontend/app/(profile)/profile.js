@@ -14,17 +14,17 @@ export default function ProfileScreen() {
   const {user, setUser} = useContext(UserContext);
   const {theme, setTheme} = useContext(ThemeContext);
   const themed = Theme(theme);
-  useEffect(() => {
-    axios.get(`http://localhost:8080/users/65512a7064e79113efca213b`, {
-      headers: {
-          'authorization': `Bearer ${user}`
-      }
-      })
-      .then(response => response.data)
-      .then((data) => {
-          setData(data);
-      });
-    },[])
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8080/users/65512a7064e79113efca213b`, {
+  //     headers: {
+  //         'authorization': `Bearer ${user}`
+  //     }
+  //     })
+  //     .then(response => response.data)
+  //     .then((data) => {
+  //         setData(data);
+  //     });
+  //   },[])
 
     return (
 
@@ -42,29 +42,29 @@ export default function ProfileScreen() {
         </View>
         <Text style={[styles.text, themed.text]}>Personal Information</Text>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Name: {data.firstName} {data.lastName}</Text>
+            <Text style={[styles.text, themed.text]}>Name: John Doe</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Location: {data.city}, {data.state}</Text>
+            <Text style={[styles.text, themed.text]}>Location: Dallas, Tx</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Email: {data.email}</Text>
+            <Text style={[styles.text, themed.text]}>Email: mockemail@email.com</Text>
         </View>
         <Text style={[styles.text, themed.text]}>Fitness Information</Text>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Fitness Track: {data.fitnessTrack}</Text>
+            <Text style={[styles.text, themed.text]}>Fitness Track: Strength</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Age: {data.age}</Text>
+            <Text style={[styles.text, themed.text]}>Age: 22</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Height: {data.height}</Text>
+            <Text style={[styles.text, themed.text]}>Height: 68 inches</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Weight: {data.weight}</Text>
+            <Text style={[styles.text, themed.text]}>Weight: 210 lbs</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
-            <Text style={[styles.text, themed.text]}>Gender: {data.gender}</Text>
+            <Text style={[styles.text, themed.text]}>Gender: Male</Text>
         </View>
         <View style={[styles.card_template, themed.card]}>
             <Text style={[styles.text, themed.text]}>Max Bench Press: 135</Text>

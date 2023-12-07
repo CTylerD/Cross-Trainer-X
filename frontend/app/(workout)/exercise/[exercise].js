@@ -53,7 +53,7 @@ export default function Page() {
           <StrengthTimer exercise={Exercise}/>:
           <FlexTimer exercise={Exercise} />}
       </View>
-      <View style={[styles.button, themed.button]}>
+      <View>
       <PostExerciseModal exercise={Exercise}/>
       </View>
     </View>
